@@ -53,8 +53,40 @@ class UdacityClient: NSObject {
                 return
             }
             
-            let newData = UdacityClient.subsetData(data)
-            UdacityClient.parseJSONWithCompletionHandler(newData, completionHandler: completionHandler)
+            UdacityClient.parseJSONWithCompletionHandler(UdacityClient.subsetData(data), completionHandler: completionHandler)
+        }
+        
+        task.resume()
+    }
+    
+    func startTaskForDELETEMethod(method: String, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
+        
+        let urlString = Constants.BaseURL + method
+        let url = NSURL(string: urlString)!
+        let request = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = HTTPMethods.DELETE
+        
+        var xsrfCookie: NSHTTPCookie? = nil
+        let sharedCookieStorage = NSHTTPCookieStorage.sharedHTTPCookieStorage()
+        for cookie in sharedCookieStorage.cookies! as [NSHTTPCookie] {
+            if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
+        }
+        if let xsrfCookie = xsrfCookie {
+            request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
+        }
+        
+        let task = session.dataTaskWithRequest(request) { data, response, error in
+            
+            guard error == nil else {
+                print("There was an error with your request: \(error)")
+                return
+            }
+            
+            guard let data = data else {
+                return
+            }
+            
+            UdacityClient.parseJSONWithCompletionHandler(UdacityClient.subsetData(data), completionHandler: completionHandler)
         }
         
         task.resume()
@@ -62,7 +94,7 @@ class UdacityClient: NSObject {
     
     // MARK: GET
     
-    func taskForGETMethod(method: String, parameters: [String: AnyObject], completionHandler: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
+    func startTaskForGETMethod(method: String, parameters: [String: AnyObject], completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
         
         let request = NSMutableURLRequest(URL: NSURL(string: Constants.BaseURL)!)
         
@@ -73,16 +105,14 @@ class UdacityClient: NSObject {
                 return
             }
             
-            guard data == nil else {
+            guard let data = data else {
                 return
             }
             
-            print(UdacityClient.subsetData(data!))
+            print(UdacityClient.subsetData(data))
         }
         
         task.resume()
-        
-        return task
     }
     
     // MARK: Helper Functions

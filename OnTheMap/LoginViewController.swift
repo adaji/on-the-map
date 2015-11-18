@@ -25,6 +25,10 @@ class LoginViewController: KeyboardHandlingViewController {
         passwordTextField.delegate = self
         
         setLoginButtonEnabled(false)
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         
         // Auto login if user has logged in from this device before
         let userDefaults = NSUserDefaults.standardUserDefaults()
@@ -33,7 +37,9 @@ class LoginViewController: KeyboardHandlingViewController {
             if let password = userDefaults.valueForKey("password") as? String {
                 passwordTextField.text = password
                 
-                login()
+                if !email.isEmpty && !password.isEmpty {
+                    login()
+                }
             }
         }
     }
@@ -57,25 +63,28 @@ class LoginViewController: KeyboardHandlingViewController {
                 userDefaults.setValue(self.passwordTextField.text!, forKey: "password")
                 userDefaults.synchronize()
 
-                self.completeLogin()
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.setControlsEnabled(true)
+                    
+                    let mainTBC = self.storyboard!.instantiateViewControllerWithIdentifier("MainTabBarController") as! UITabBarController
+                    self.presentViewController(mainTBC, animated: true, completion: nil)
+                })
             } else {
+                // Display error
+                let alertController = UIAlertController(title: nil, message: "Invalid Email or Password.", preferredStyle: UIAlertControllerStyle.Alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                self.presentViewController(alertController, animated: true, completion: nil)
+                
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.setControlsEnabled(true)
+                })
+
                 print(errorString)
             }
         }
     }
     
-    func completeLogin() {
-        dispatch_async(dispatch_get_main_queue(), {
-            self.setControlsEnabled(true)
-            
-            let mainNV = self.storyboard!.instantiateViewControllerWithIdentifier("MainNavigationController") as! UINavigationController
-            self.presentViewController(mainNV, animated: true, completion: nil)
-        })
-    }
-
-}
-
-extension LoginViewController {
+    // MARK: Helper Functions
     
     func setLoginButtonEnabled(enabled: Bool) {
         loginButton.enabled = enabled
@@ -93,6 +102,7 @@ extension LoginViewController {
         setLoginButtonEnabled(enabled)
         facebookLoginButton.enabled = enabled
     }
+    
 }
 
 extension LoginViewController: UITextFieldDelegate {

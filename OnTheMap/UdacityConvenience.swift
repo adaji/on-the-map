@@ -37,20 +37,35 @@ extension UdacityClient {
         
         startTaskForPOSTMethod(Methods.Session, httpBody: httpBody) { result, error in
             
-            if error != nil {
-                print(error)
-                completionHandler(success: false, sessionID: nil, errorString: "Login Failed (Session ID).")
-            } else {
-                if let session = (result[JSONResponseKeys.Session] as? [String: String]) {
-                    let sessionID = session[JSONResponseKeys.ID]
-                    completionHandler(success: true, sessionID: sessionID, errorString: nil)
-                } else {
-                    completionHandler(success: false, sessionID: nil, errorString: "Login Failed (Session ID).")
-                }
+            guard error == nil else {
+                print("Login Failed. Error: \(error)")
+                completionHandler(success: false, sessionID: nil, errorString: error!.description)
+                return
             }
             
+            guard let session = result[JSONResponseKeys.Session] as? [String: String] else {
+                completionHandler(success: false, sessionID: nil, errorString: "Login Failed (Session ID).")
+                return
+            }
+            
+            let sessionID = session[JSONResponseKeys.ID]
+            completionHandler(success: true, sessionID: sessionID, errorString: nil)
         }
     }
+    
+    func deleteSession(completionHandler: (success: Bool, errorString: String?) -> Void) {
+        startTaskForDELETEMethod(Methods.Session) { (result, error) -> Void in
+            
+            guard error == nil else {
+                print("Logout Failed. Error: \(error)")
+                completionHandler(success: false, errorString: "Logout Failed (Delete Session).")
+                return
+            }
+            
+            completionHandler(success: true, errorString: nil)
+        }
+    }
+    
 }
 
 
