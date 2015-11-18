@@ -39,7 +39,7 @@
                                 </constraints>
                                 <color key="textColor" red="0.93333333330000001" green="0.24313725489999999" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="17"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="next"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Cf6-Fo-Gwh" customClass="CustomTextField" customModule="OnTheMap" customModuleProvider="target">
                                 <rect key="frame" x="20" y="261" width="560" height="44"/>
@@ -47,7 +47,7 @@
                                 <color key="tintColor" red="0.93333333330000001" green="0.24313725489999999" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="textColor" red="0.93333333330000001" green="0.24313725489999999" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z3l-pJ-rx5">
                                 <rect key="frame" x="20" y="313" width="560" height="44"/>

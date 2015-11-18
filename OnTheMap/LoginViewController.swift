@@ -16,12 +16,15 @@ class LoginViewController: KeyboardHandlingViewController {
     @IBOutlet weak var signupButton: UIButton!
     @IBOutlet weak var facebookLoginButton: BorderedButton!
     
-    var session: NSURLSession!
-
     // MARK: Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
+        
+        setLoginButtonEnabled(false)
         
         // Auto login if user has logged in from this device before
         let userDefaults = NSUserDefaults.standardUserDefaults()
@@ -33,34 +36,27 @@ class LoginViewController: KeyboardHandlingViewController {
                 login()
             }
         }
-        
-        /* Get the shared URL session */
-        session = NSURLSession.sharedSession()
-        
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewWillAppear(animated)
     }
     
     // MARK: Actions
     
     @IBAction func loginButtonTouch(sender: UIButton) {
+        setControlsEnabled(false)
         login()
     }
     
     // MARK: Login
     
     func login() {
-        // Save/update email and password
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.setValue(emailTextField.text!, forKey: "email")
-        userDefaults.setValue(passwordTextField.text!, forKey: "password")
-        userDefaults.synchronize()
-        
         UdacityClient.sharedInstance().autheticateWithViewController(self) {
             success, errorString in
             if success {
+                // Save/update email and password
+                let userDefaults = NSUserDefaults.standardUserDefaults()
+                userDefaults.setValue(self.emailTextField.text!, forKey: "email")
+                userDefaults.setValue(self.passwordTextField.text!, forKey: "password")
+                userDefaults.synchronize()
+
                 self.completeLogin()
             } else {
                 print(errorString)
@@ -70,12 +66,78 @@ class LoginViewController: KeyboardHandlingViewController {
     
     func completeLogin() {
         dispatch_async(dispatch_get_main_queue(), {
+            self.setControlsEnabled(true)
+            
             let mainNV = self.storyboard!.instantiateViewControllerWithIdentifier("MainNavigationController") as! UINavigationController
             self.presentViewController(mainNV, animated: true, completion: nil)
         })
     }
 
 }
+
+extension LoginViewController {
+    
+    func setLoginButtonEnabled(enabled: Bool) {
+        loginButton.enabled = enabled
+        
+        if enabled {
+            loginButton.alpha = 1.0
+        } else {
+            loginButton.alpha = 0.5
+        }
+    }
+    
+    func setControlsEnabled(enabled: Bool) {
+        emailTextField.enabled = enabled
+        passwordTextField.enabled = enabled
+        setLoginButtonEnabled(enabled)
+        facebookLoginButton.enabled = enabled
+    }
+}
+
+extension LoginViewController: UITextFieldDelegate {
+    
+    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+        
+        // Clear password before editing begins
+        if textField == passwordTextField {
+            textField.text = ""
+            setLoginButtonEnabled(false)
+        }
+        
+        return true
+    }
+
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        
+        // Disable login button if email or password is empty
+        if !emailTextField.text!.isEmpty && !passwordTextField.text!.isEmpty && !(range.location == 0 && string == "") {
+            setLoginButtonEnabled(true)
+        } else {
+            setLoginButtonEnabled(false)
+        }
+        
+        return true
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        
+        if textField == emailTextField {
+            passwordTextField.becomeFirstResponder()
+        } else if textField == passwordTextField {
+            setControlsEnabled(false)
+            login()
+        }
+        
+        return true
+    }
+    
+}
+
+
+
+
+
 
 
 
