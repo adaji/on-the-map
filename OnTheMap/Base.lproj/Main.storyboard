@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="SF-UI-Text-Medium.otf">
+            <string>SFUIText-Medium</string>
+        </mutableArray>
+        <mutableArray key="SF-UI-Text-Regular.otf">
+            <string>SFUIText-Regular</string>
+            <string>SFUIText-Regular</string>
+            <string>SFUIText-Regular</string>
+            <string>SFUIText-Regular</string>
+            <string>SFUIText-Regular</string>
+        </mutableArray>
+    </customFonts>
+    <scenes>
+        <!--Login View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="LoginViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EXI-cc-Ub6" customClass="CustomTextField" customModule="OnTheMap" customModuleProvider="target">
+                                <rect key="frame" x="20" y="209" width="560" height="44"/>
+                                <color key="backgroundColor" red="0.97647058823529409" green="0.71764705882352942" blue="0.49411764705882355" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" red="0.93333333330000001" green="0.24313725489999999" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="OZm-0Y-7i7"/>
+                                </constraints>
+                                <color key="textColor" red="0.93333333330000001" green="0.24313725489999999" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="17"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                                        <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Cf6-Fo-Gwh" customClass="CustomTextField" customModule="OnTheMap" customModuleProvider="target">
+                                <rect key="frame" x="20" y="261" width="560" height="44"/>
+                                <color key="backgroundColor" red="0.97647058819999999" green="0.71764705880000002" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" red="0.93333333330000001" green="0.24313725489999999" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.93333333330000001" green="0.24313725489999999" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="17"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                                        <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z3l-pJ-rx5">
+                                <rect key="frame" x="20" y="313" width="560" height="44"/>
+                                <color key="backgroundColor" red="0.93333333330000001" green="0.24313725489999999" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="17"/>
+                                <state key="normal" title="Login">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="R0Y-vU-f1x">
+                                <rect key="frame" x="260" y="64" width="80" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="dxm-iI-T7R"/>
+                                    <constraint firstAttribute="width" constant="80" id="wVg-Nh-hql"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yyR-08-CW8">
+                                <rect key="frame" x="170" y="365" width="261" height="44"/>
+                                <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="17"/>
+                                <state key="normal" title="Don't have an account? Sign Up">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3WX-zf-Sar" customClass="BorderedButton" customModule="OnTheMap" customModuleProvider="target">
+                                <rect key="frame" x="20" y="536" width="560" height="44"/>
+                                <color key="backgroundColor" red="0.23137254900000001" green="0.34901960780000002" blue="0.59607843140000005" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="17"/>
+                                <state key="normal" title="Sign in with Facebook">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Login to Udacity" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OpS-j8-z8R">
+                                <rect key="frame" x="223" y="160" width="155" height="41"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="41" id="SV5-yC-9Zp"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="OpS-j8-z8R" firstAttribute="top" secondItem="R0Y-vU-f1x" secondAttribute="bottom" constant="16" id="16q-cw-acM"/>
+                            <constraint firstItem="EXI-cc-Ub6" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="2j6-QC-A9Q"/>
+                            <constraint firstItem="R0Y-vU-f1x" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="44" id="4eX-3h-SwH"/>
+                            <constraint firstItem="3WX-zf-Sar" firstAttribute="width" secondItem="EXI-cc-Ub6" secondAttribute="width" id="5Cv-GG-Bjf">
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                                        <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </constraint>
+                            <constraint firstItem="yyR-08-CW8" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="5tO-S4-ho9"/>
+                            <constraint firstItem="EXI-cc-Ub6" firstAttribute="top" secondItem="OpS-j8-z8R" secondAttribute="bottom" constant="8" id="BoH-Ki-r7L"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="3WX-zf-Sar" secondAttribute="bottom" constant="20" id="CqT-ay-bf9"/>
+                            <constraint firstItem="z3l-pJ-rx5" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="DFL-Mx-hs5"/>
+                            <constraint firstItem="R0Y-vU-f1x" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Gtm-Vg-drY"/>
+                            <constraint firstItem="z3l-pJ-rx5" firstAttribute="width" secondItem="EXI-cc-Ub6" secondAttribute="width" id="LsU-0h-EfT"/>
+                            <constraint firstItem="3WX-zf-Sar" firstAttribute="height" secondItem="EXI-cc-Ub6" secondAttribute="height" id="MXk-SA-Ss7"/>
+                            <constraint firstItem="Cf6-Fo-Gwh" firstAttribute="width" secondItem="EXI-cc-Ub6" secondAttribute="width" id="OOc-Vu-ofM"/>
+                            <constraint firstItem="EXI-cc-Ub6" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="Oc6-1d-XbZ"/>
+                            <constraint firstItem="Cf6-Fo-Gwh" firstAttribute="top" secondItem="EXI-cc-Ub6" secondAttribute="bottom" constant="8" id="Oza-Hs-EOG"/>
+                            <constraint firstItem="z3l-pJ-rx5" firstAttribute="top" secondItem="Cf6-Fo-Gwh" secondAttribute="bottom" constant="8" id="SNn-Ro-vaG"/>
+                            <constraint firstItem="OpS-j8-z8R" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="SOC-iR-qpy"/>
+                            <constraint firstItem="yyR-08-CW8" firstAttribute="height" secondItem="EXI-cc-Ub6" secondAttribute="height" id="UUc-Uq-cfk"/>
+                            <constraint firstItem="Cf6-Fo-Gwh" firstAttribute="height" secondItem="EXI-cc-Ub6" secondAttribute="height" id="ZRD-QJ-duz"/>
+                            <constraint firstItem="3WX-zf-Sar" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="hWu-iv-nDZ"/>
+                            <constraint firstItem="z3l-pJ-rx5" firstAttribute="height" secondItem="EXI-cc-Ub6" secondAttribute="height" id="mnH-tN-3ML"/>
+                            <constraint firstItem="yyR-08-CW8" firstAttribute="top" secondItem="z3l-pJ-rx5" secondAttribute="bottom" constant="8" id="o5b-TC-bdg"/>
+                            <constraint firstItem="Cf6-Fo-Gwh" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="xJC-li-wwa"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="emailTextField" destination="EXI-cc-Ub6" id="Jhx-qo-NXI"/>
+                        <outlet property="facebookLoginButton" destination="3WX-zf-Sar" id="PHJ-eZ-oHt"/>
+                        <outlet property="loginButton" destination="z3l-pJ-rx5" id="4KK-Yr-io7"/>
+                        <outlet property="passwordTextField" destination="Cf6-Fo-Gwh" id="PU9-nB-x9m"/>
+                        <outlet property="signupButton" destination="yyR-08-CW8" id="dAW-G3-ece"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="280" y="337"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="logo" width="700" height="701"/>
+    </resources>
+</document>
