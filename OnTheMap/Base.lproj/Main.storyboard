@@ -40,11 +40,6 @@
                                 <color key="textColor" red="0.93333333330000001" green="0.24313725489999999" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="17"/>
                                 <textInputTraits key="textInputTraits"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
-                                        <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Cf6-Fo-Gwh" customClass="CustomTextField" customModule="OnTheMap" customModuleProvider="target">
                                 <rect key="frame" x="20" y="261" width="560" height="44"/>
@@ -52,12 +47,7 @@
                                 <color key="tintColor" red="0.93333333330000001" green="0.24313725489999999" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="textColor" red="0.93333333330000001" green="0.24313725489999999" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="17"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
-                                        <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z3l-pJ-rx5">
                                 <rect key="frame" x="20" y="313" width="560" height="44"/>
@@ -66,6 +56,9 @@
                                 <state key="normal" title="Login">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="loginButtonTouch:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0nZ-Fx-LLm"/>
+                                </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="R0Y-vU-f1x">
                                 <rect key="frame" x="260" y="64" width="80" height="80"/>
@@ -134,7 +127,7 @@
                     <connections>
                         <outlet property="emailTextField" destination="EXI-cc-Ub6" id="Jhx-qo-NXI"/>
                         <outlet property="facebookLoginButton" destination="3WX-zf-Sar" id="PHJ-eZ-oHt"/>
-                        <outlet property="loginButton" destination="z3l-pJ-rx5" id="4KK-Yr-io7"/>
+                        <outlet property="loginButton" destination="z3l-pJ-rx5" id="xvz-RO-nSf"/>
                         <outlet property="passwordTextField" destination="Cf6-Fo-Gwh" id="PU9-nB-x9m"/>
                         <outlet property="signupButton" destination="yyR-08-CW8" id="dAW-G3-ece"/>
                     </connections>
@@ -142,6 +135,76 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="280" y="337"/>
+        </scene>
+        <!--Udacity Auth View Controller-->
+        <scene sceneID="TD8-T8-emb">
+            <objects>
+                <viewController id="Q48-cv-sxq" customClass="UdacityAuthViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="wd1-Bn-Fgt"/>
+                        <viewControllerLayoutGuide type="bottom" id="ece-GM-9Vs"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="jVI-m7-bOW">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Euw-kd-hLP">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
+                            </webView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Euw-kd-hLP" firstAttribute="leading" secondItem="jVI-m7-bOW" secondAttribute="leadingMargin" constant="-20" id="HgD-Zj-RaU"/>
+                            <constraint firstItem="Euw-kd-hLP" firstAttribute="top" secondItem="jVI-m7-bOW" secondAttribute="topMargin" id="TUV-wl-7Uo"/>
+                            <constraint firstItem="ece-GM-9Vs" firstAttribute="top" secondItem="Euw-kd-hLP" secondAttribute="bottom" id="XrR-t5-msS"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Euw-kd-hLP" secondAttribute="trailing" constant="-20" id="cgr-Cb-Au8"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="webView" destination="Euw-kd-hLP" id="6ns-B2-5s7"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2U7-Pr-8wd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1005" y="-370"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="A3J-5F-IH4">
+            <objects>
+                <viewController id="Rm2-V3-l8x" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Ru3-eB-Axz"/>
+                        <viewControllerLayoutGuide type="bottom" id="nAe-r2-Lmc"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="N2F-Re-rvG">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="kGg-nx-af7"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="e4K-4K-j3n" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1817" y="337"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="QNk-Et-cCZ">
+            <objects>
+                <navigationController storyboardIdentifier="MainNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="RIF-oM-8fm" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="rit-7u-RG4">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Rm2-V3-l8x" kind="relationship" relationship="rootViewController" id="9WZ-XD-zo6"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0WH-Xv-NwE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1005" y="337"/>
         </scene>
     </scenes>
     <resources>
