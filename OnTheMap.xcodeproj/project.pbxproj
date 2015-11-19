@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		60533FB01BFE327E00B33F92 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60533FAF1BFE327E00B33F92 /* PostViewController.swift */; };
 		60ECE8C11BFC32F600D5B165 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ECE8C01BFC32F600D5B165 /* AppDelegate.swift */; };
 		60ECE8C31BFC32F600D5B165 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ECE8C21BFC32F600D5B165 /* ViewController.swift */; };
 		60ECE8C61BFC32F600D5B165 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60ECE8C41BFC32F600D5B165 /* Main.storyboard */; };
@@ -46,6 +47,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		60533FAF1BFE327E00B33F92 /* PostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		60ECE8BD1BFC32F600D5B165 /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60ECE8C01BFC32F600D5B165 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		60ECE8C21BFC32F600D5B165 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -184,6 +186,7 @@
 		60ECE8FD1BFC785D00D5B165 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				60533FAF1BFE327E00B33F92 /* PostViewController.swift */,
 				60ECE9101BFCFEF500D5B165 /* MapViewController.swift */,
 				60ECE9121BFD094200D5B165 /* ListViewController.swift */,
 				60ECE8EE1BFC44A900D5B165 /* LoginViewController.swift */,
@@ -362,6 +365,7 @@
 				60ECE8C31BFC32F600D5B165 /* ViewController.swift in Sources */,
 				60ECE9111BFCFEF500D5B165 /* MapViewController.swift in Sources */,
 				60F1E7C31BFDB1A20070F8FE /* NetworkingDataHandler.swift in Sources */,
+				60533FB01BFE327E00B33F92 /* PostViewController.swift in Sources */,
 				60ECE8FB1BFC542300D5B165 /* BorderedButton.swift in Sources */,
 				60ECE8C11BFC32F600D5B165 /* AppDelegate.swift in Sources */,
 				60ECE90D1BFC8E8E00D5B165 /* StudentLocation.swift in Sources */,

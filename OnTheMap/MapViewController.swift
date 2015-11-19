@@ -15,7 +15,6 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -26,7 +25,7 @@ class MapViewController: UIViewController {
         }
     }
     
-    @IBAction func LogoutButtonTouch(sender: UIBarButtonItem) {
+    @IBAction func LogoutButtonTouchUp(sender: UIBarButtonItem) {
         UdacityClient.sharedInstance().deleteUdacitySession { (success, errorString) -> Void in
             if success {
                 // Delete password when logout
@@ -41,11 +40,11 @@ class MapViewController: UIViewController {
         }
     }
     
-    @IBAction func postButtonTouch(sender: UIBarButtonItem) {
+    @IBAction func postButtonTouchUp(sender: UIBarButtonItem) {
         
     }
     
-    @IBAction func refreshButtonTouch(sender: UIBarButtonItem) {
+    @IBAction func refreshButtonTouchUp(sender: UIBarButtonItem) {
         getStudentLocations()
     }
     

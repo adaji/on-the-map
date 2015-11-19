@@ -187,7 +187,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Efm-fJ-BqI">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Efm-fJ-BqI">
                                 <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                                 <connections>
                                     <outlet property="delegate" destination="Rm2-V3-l8x" id="Ytt-NG-1af"/>
@@ -202,25 +202,27 @@
                             <constraint firstItem="nAe-r2-Lmc" firstAttribute="top" secondItem="Efm-fJ-BqI" secondAttribute="bottom" id="Rj9-iI-aNL"/>
                         </constraints>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" id="kGg-nx-af7">
-                        <barButtonItem key="leftBarButtonItem" image="logout" id="52p-OS-U2f">
+                        <barButtonItem key="leftBarButtonItem" image="logout" id="iU5-Yh-Eod">
                             <connections>
-                                <action selector="LogoutButtonTouch:" destination="Rm2-V3-l8x" id="WzC-XL-sNA"/>
+                                <action selector="LogoutButtonTouchUp:" destination="Rm2-V3-l8x" id="JMn-XY-L0u"/>
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
-                            <barButtonItem systemItem="refresh" id="ws4-hv-K92">
+                            <barButtonItem systemItem="refresh" id="0wa-oy-Rw2">
                                 <connections>
-                                    <action selector="refreshButtonTouch:" destination="Rm2-V3-l8x" id="BN3-LG-o9B"/>
+                                    <action selector="refreshButtonTouchUp:" destination="Rm2-V3-l8x" id="oWl-ay-nXl"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem image="marker" id="8vD-AF-u9X">
+                            <barButtonItem image="marker" id="LW5-C4-XEH">
                                 <connections>
-                                    <action selector="postButtonTouch:" destination="Rm2-V3-l8x" id="qnb-7m-QLG"/>
+                                    <action selector="postButtonTouchUp:" destination="Rm2-V3-l8x" id="ga3-Gd-FFr"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="mapView" destination="Efm-fJ-BqI" id="8iu-M5-iha"/>
                     </connections>
@@ -229,10 +231,28 @@
             </objects>
             <point key="canvasLocation" x="2629" y="337"/>
         </scene>
+        <!--Post View Controller-->
+        <scene sceneID="Wrp-vh-jbW">
+            <objects>
+                <viewController id="CeH-Ry-pNb" customClass="PostViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="fNa-vH-6sZ"/>
+                        <viewControllerLayoutGuide type="bottom" id="BAf-zR-lVR"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="OHB-jh-YHC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PSB-00-cDU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3361" y="337"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="QNk-Et-cCZ">
             <objects>
-                <navigationController storyboardIdentifier="MainNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="RIF-oM-8fm" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MapNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="RIF-oM-8fm" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="map" id="Uy7-tQ-hBO"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="rit-7u-RG4">
@@ -274,18 +294,18 @@
                     <navigationItem key="navigationItem" id="xtR-fC-C96">
                         <barButtonItem key="leftBarButtonItem" image="logout" id="bLl-08-sDH">
                             <connections>
-                                <action selector="logoutButtonTouch:" destination="Es1-XK-Dhh" id="AUb-4K-DZk"/>
+                                <action selector="logoutButtonTouchUp:" destination="Es1-XK-Dhh" id="Dti-yy-Cru"/>
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
                             <barButtonItem systemItem="refresh" id="BjU-n1-JkG">
                                 <connections>
-                                    <action selector="refreshButtonTouch:" destination="Es1-XK-Dhh" id="tmT-Za-ybK"/>
+                                    <action selector="refreshButtonTouchUp:" destination="Es1-XK-Dhh" id="9og-bV-VhI"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem image="marker" id="Iim-ib-6Qv">
                                 <connections>
-                                    <action selector="postButtonTouch:" destination="Es1-XK-Dhh" id="3gD-aX-VPL"/>
+                                    <action selector="postButtonTouchUp:" destination="Es1-XK-Dhh" id="adr-zT-PlF"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
@@ -316,7 +336,7 @@
         <!--Navigation Controller-->
         <scene sceneID="eek-dZ-THF">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Y0F-Al-fpy" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="ListNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="Y0F-Al-fpy" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="list" id="UHH-Jv-kB3"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="1kl-tC-VOj">

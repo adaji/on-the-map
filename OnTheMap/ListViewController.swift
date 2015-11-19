@@ -31,7 +31,7 @@ class ListViewController: UIViewController {
     
     // MARK: Actions
     
-    @IBAction func logoutButtonTouch(sender: UIBarButtonItem) {
+    @IBAction func logoutButtonTouchUp(sender: UIBarButtonItem) {
         UdacityClient.sharedInstance().deleteUdacitySession { (success, errorString) -> Void in
             if success {
                 // Delete password when logout
@@ -46,11 +46,11 @@ class ListViewController: UIViewController {
         }
     }
     
-    @IBAction func postButtonTouch(sender: UIBarButtonItem) {
+    @IBAction func postButtonTouchUp(sender: UIBarButtonItem) {
         
     }
     
-    @IBAction func refreshButtonTouch(sender: UIBarButtonItem) {
+    @IBAction func refreshButtonTouchUp(sender: UIBarButtonItem) {
         getStudentLocations()
     }
     
