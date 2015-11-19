@@ -21,14 +21,28 @@ class LoginViewController: KeyboardHandlingViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setLoginButtonEnabled(false)
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        // Auto login if user has logged in from this device before
+        setControlsEnabled(true)
+        setLoginButtonEnabled(false)
+        
+        tryAutoLogin()
+    }
+    
+    // MARK: Actions
+    
+    @IBAction func loginButtonTouch(sender: UIButton) {
+        setControlsEnabled(false)
+        login()
+    }
+    
+    // MARK: Login
+    
+    // Login automatically if user has logged in from this device before
+    func tryAutoLogin() {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         if let email = userDefaults.valueForKey("email") as? String {
             emailTextField.text = email
@@ -42,18 +56,9 @@ class LoginViewController: KeyboardHandlingViewController {
         }
     }
     
-    // MARK: Actions
-    
-    @IBAction func loginButtonTouch(sender: UIButton) {
-        setControlsEnabled(false)
-        login()
-    }
-    
-    // MARK: Login
-    
-    func login() {        
+    func login() {
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
-        hud!.labelText = "Logging in..."
+        hud.labelText = "Logging in..."
         
         UdacityClient.sharedInstance().autheticateUdacityWithViewController(self) {
             success, errorString in
@@ -66,7 +71,6 @@ class LoginViewController: KeyboardHandlingViewController {
 
                 dispatch_async(dispatch_get_main_queue(), {
                     hud.hide(true)
-                    self.setControlsEnabled(true)
                     
                     let mainTBC = self.storyboard!.instantiateViewControllerWithIdentifier("MainTabBarController") as! UITabBarController
                     mainTBC.tabBar.tintColor = UIColor.orangeColor() // Change tab bar tint color to orange
@@ -76,7 +80,6 @@ class LoginViewController: KeyboardHandlingViewController {
             } else {
                 dispatch_async(dispatch_get_main_queue(), {
                     hud.hide(true)
-                    self.setControlsEnabled(true)
                 })
                 
                 // Display error

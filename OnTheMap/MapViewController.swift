@@ -24,11 +24,15 @@ class MapViewController: UIViewController {
         if UdacityClient.sharedInstance().studentLocations == nil {
             getStudentLocations()
         }
+        else {
+            self.mapView.addAnnotations(self.annotationsFromStudentLocations(UdacityClient.sharedInstance().studentLocations!))
+        }
     }
     
     @IBAction func LogoutButtonTouchUp(sender: UIBarButtonItem) {
+        MBProgressHUD.hideAllHUDsForView(view, animated: true)
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
-        hud!.labelText = "Logging out..."
+        hud.labelText = "Logging out..."
 
         UdacityClient.sharedInstance().deleteUdacitySession { (success, errorString) -> Void in
             if success {
@@ -61,7 +65,7 @@ class MapViewController: UIViewController {
     // Get StudentLocations
     func getStudentLocations() {
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
-        hud!.labelText = "Loading..."
+        hud.labelText = "Loading..."
 
         let parameters = [UdacityClient.ParameterKeys.LimitKey: 100]
         UdacityClient.sharedInstance().getStudentLocations(parameters) { (success, studentLocations, errorString) -> Void in
