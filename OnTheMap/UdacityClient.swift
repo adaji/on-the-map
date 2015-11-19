@@ -18,6 +18,8 @@ class UdacityClient: NSObject {
     
     var sessionID: String? = nil
     
+    var studentLocations: [StudentLocation]? = nil
+    
     // MARK: Initializers
     
     override init() {

@@ -15,25 +15,14 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-                
-        let parameters = [UdacityClient.ParameterKeys.LimitKey: 200]
-        UdacityClient.sharedInstance().getStudentLocations(parameters) { (success, studentLocations, errorString) -> Void in
-            
-            if success {
-                self.mapView.addAnnotations(self.annotationsFromStudentLocations(studentLocations!))
-                
-                print("Student locations: \(studentLocations)")
-            }
-            else {
-                print(errorString)
-            }
-        }
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-//        UdacityClient.sharedInstance().get
+        if UdacityClient.sharedInstance().studentLocations == nil {
+            getStudentLocations()
+        }
     }
     
     @IBAction func LogoutButtonTouch(sender: UIBarButtonItem) {
@@ -53,6 +42,22 @@ class MapViewController: UIViewController {
     
     // MARK: Helper Functions
     
+    // Get StudentLocations
+    func getStudentLocations() {
+        let parameters = [UdacityClient.ParameterKeys.LimitKey: 100]
+        UdacityClient.sharedInstance().getStudentLocations(parameters) { (success, studentLocations, errorString) -> Void in
+            
+            if success {
+                self.mapView.addAnnotations(self.annotationsFromStudentLocations(studentLocations!))
+                
+                print("Student locations: \(studentLocations)")
+            }
+            else {
+                print(errorString)
+            }
+        }
+    }
+    
     // Get an array of annotations from an array of StudentLocation
     func annotationsFromStudentLocations(studentLocations: [StudentLocation]) -> [MKPointAnnotation] {
         var annotations = [MKPointAnnotation]()
@@ -65,7 +70,7 @@ class MapViewController: UIViewController {
             
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
-            annotation.title = "\(location.firstName) \(location.lastName)"
+            annotation.title = location.fullName
             annotation.subtitle = location.mediaURL
             
             annotations.append(annotation)

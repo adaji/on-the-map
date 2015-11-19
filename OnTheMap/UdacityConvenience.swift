@@ -97,6 +97,7 @@ extension UdacityClient {
             }
             
             let studentLocations = StudentLocation.locationsFromResults(results)
+            self.studentLocations = studentLocations
             completionHandler(success: true, studentLocations: studentLocations, errorString: nil)
         }
     }

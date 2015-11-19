@@ -14,8 +14,7 @@ struct StudentLocation {
     
     var objectId = ""
     var uniqueKey = ""
-    var firstName = ""
-    var lastName = ""
+    var fullName = ""
     var mapString = ""
     var mediaURL = ""
     var latitude = 0.0
@@ -29,8 +28,9 @@ struct StudentLocation {
         
         objectId = dictionary[UdacityClient.JSONResponseKeys.ObjectId] as! String
         uniqueKey = dictionary[UdacityClient.JSONResponseKeys.UniqueKey] as! String // Udacity account (user) id
-        firstName = dictionary[UdacityClient.JSONResponseKeys.FirstName] as! String
-        lastName = dictionary[UdacityClient.JSONResponseKeys.LastName] as! String
+        let firstName = dictionary[UdacityClient.JSONResponseKeys.FirstName] as! String
+        let lastName = dictionary[UdacityClient.JSONResponseKeys.LastName] as! String
+        fullName = "\(firstName) \(lastName)"
         mapString = dictionary[UdacityClient.JSONResponseKeys.MapString] as! String
         mediaURL = dictionary[UdacityClient.JSONResponseKeys.MediaURL] as! String
         latitude = dictionary[UdacityClient.JSONResponseKeys.Latitude] as! Double
