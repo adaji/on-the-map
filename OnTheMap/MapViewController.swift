@@ -15,6 +15,7 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -38,6 +39,14 @@ class MapViewController: UIViewController {
                 print(errorString)
             }
         }
+    }
+    
+    @IBAction func postButtonTouch(sender: UIBarButtonItem) {
+        
+    }
+    
+    @IBAction func refreshButtonTouch(sender: UIBarButtonItem) {
+        getStudentLocations()
     }
     
     // MARK: Helper Functions

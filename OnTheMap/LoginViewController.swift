@@ -64,6 +64,8 @@ class LoginViewController: KeyboardHandlingViewController {
                     self.setControlsEnabled(true)
                     
                     let mainTBC = self.storyboard!.instantiateViewControllerWithIdentifier("MainTabBarController") as! UITabBarController
+                    mainTBC.tabBar.tintColor = UIColor.orangeColor() // Change tab bar tint color to orange
+
                     self.presentViewController(mainTBC, animated: true, completion: nil)
                 })
             } else {

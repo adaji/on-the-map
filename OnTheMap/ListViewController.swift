@@ -46,6 +46,16 @@ class ListViewController: UIViewController {
         }
     }
     
+    @IBAction func postButtonTouch(sender: UIBarButtonItem) {
+        
+    }
+    
+    @IBAction func refreshButtonTouch(sender: UIBarButtonItem) {
+        getStudentLocations()
+    }
+    
+    // MARK: Helper Functions
+    
     // Get StudentLocations
     func getStudentLocations() {
         let parameters = [UdacityClient.ParameterKeys.LimitKey: 100]
