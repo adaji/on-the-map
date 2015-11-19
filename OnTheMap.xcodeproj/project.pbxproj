@@ -9,9 +9,6 @@
 /* Begin PBXBuildFile section */
 		480B4FDDBDE596D1306F65E2 /* Pods_OnTheMap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E1577941877556B0355C4A2 /* Pods_OnTheMap.framework */; };
 		60533FB01BFE327E00B33F92 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60533FAF1BFE327E00B33F92 /* PostViewController.swift */; };
-		60B11E791BFE819C0002196A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60B11E781BFE819C0002196A /* Foundation.framework */; };
-		60B11E7B1BFE81A50002196A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60B11E7A1BFE81A50002196A /* UIKit.framework */; };
-		60B11E7D1BFE81AE0002196A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60B11E7C1BFE81AE0002196A /* CoreGraphics.framework */; };
 		60ECE8C11BFC32F600D5B165 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ECE8C01BFC32F600D5B165 /* AppDelegate.swift */; };
 		60ECE8C31BFC32F600D5B165 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ECE8C21BFC32F600D5B165 /* ViewController.swift */; };
 		60ECE8C61BFC32F600D5B165 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60ECE8C41BFC32F600D5B165 /* Main.storyboard */; };
@@ -52,9 +49,6 @@
 
 /* Begin PBXFileReference section */
 		60533FAF1BFE327E00B33F92 /* PostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
-		60B11E781BFE819C0002196A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		60B11E7A1BFE81A50002196A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		60B11E7C1BFE81AE0002196A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		60B11E7F1BFE84CF0002196A /* OnTheMap-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OnTheMap-Bridging-Header.h"; sourceTree = "<group>"; };
 		60ECE8BD1BFC32F600D5B165 /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60ECE8C01BFC32F600D5B165 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -93,9 +87,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				60B11E7D1BFE81AE0002196A /* CoreGraphics.framework in Frameworks */,
-				60B11E7B1BFE81A50002196A /* UIKit.framework in Frameworks */,
-				60B11E791BFE819C0002196A /* Foundation.framework in Frameworks */,
 				480B4FDDBDE596D1306F65E2 /* Pods_OnTheMap.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -142,15 +133,12 @@
 		60ECE8BF1BFC32F600D5B165 /* OnTheMap */ = {
 			isa = PBXGroup;
 			children = (
-				60ECE8C01BFC32F600D5B165 /* AppDelegate.swift */,
 				60ECE9021BFC874500D5B165 /* Model */,
 				60ECE8F61BFC529500D5B165 /* View */,
 				60ECE8FD1BFC785D00D5B165 /* Controller */,
 				60ECE8C41BFC32F600D5B165 /* Main.storyboard */,
-				60ECE8C91BFC32F600D5B165 /* LaunchScreen.storyboard */,
 				60ECE8C71BFC32F600D5B165 /* Assets.xcassets */,
 				60ECE8F01BFC491A00D5B165 /* Supporting Files */,
-				60B11E7F1BFE84CF0002196A /* OnTheMap-Bridging-Header.h */,
 			);
 			path = OnTheMap;
 			sourceTree = "<group>";
@@ -176,7 +164,10 @@
 		60ECE8F01BFC491A00D5B165 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				60ECE8C01BFC32F600D5B165 /* AppDelegate.swift */,
+				60B11E7F1BFE84CF0002196A /* OnTheMap-Bridging-Header.h */,
 				60ECE8CC1BFC32F600D5B165 /* Info.plist */,
+				60ECE8C91BFC32F600D5B165 /* LaunchScreen.storyboard */,
 				60ECE8F31BFC4CCC00D5B165 /* Fonts */,
 			);
 			name = "Supporting Files";
@@ -255,9 +246,6 @@
 		C7AFC19567CF43AED234F163 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				60B11E7C1BFE81AE0002196A /* CoreGraphics.framework */,
-				60B11E7A1BFE81A50002196A /* UIKit.framework */,
-				60B11E781BFE819C0002196A /* Foundation.framework */,
 				9E1577941877556B0355C4A2 /* Pods_OnTheMap.framework */,
 			);
 			name = Frameworks;
