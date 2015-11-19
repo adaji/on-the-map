@@ -186,8 +186,8 @@
 			children = (
 				60ECE9101BFCFEF500D5B165 /* MapViewController.swift */,
 				60ECE9121BFD094200D5B165 /* ListViewController.swift */,
-				60ECE8FE1BFC7D3700D5B165 /* KeyboardHandlingViewController.swift */,
 				60ECE8EE1BFC44A900D5B165 /* LoginViewController.swift */,
+				60ECE8FE1BFC7D3700D5B165 /* KeyboardHandlingViewController.swift */,
 				60ECE8C21BFC32F600D5B165 /* ViewController.swift */,
 			);
 			name = Controller;

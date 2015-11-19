@@ -21,9 +21,6 @@ class LoginViewController: KeyboardHandlingViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        emailTextField.delegate = self
-        passwordTextField.delegate = self
-        
         setLoginButtonEnabled(false)
     }
     
