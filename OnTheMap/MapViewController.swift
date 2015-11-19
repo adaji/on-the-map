@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import MBProgressHUD
 
 class MapViewController: UIViewController {
     
@@ -26,8 +27,15 @@ class MapViewController: UIViewController {
     }
     
     @IBAction func LogoutButtonTouchUp(sender: UIBarButtonItem) {
+        let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
+        hud!.labelText = "Logging out..."
+
         UdacityClient.sharedInstance().deleteUdacitySession { (success, errorString) -> Void in
             if success {
+                dispatch_async(dispatch_get_main_queue(), {
+                    hud.hide(true)
+                })
+
                 // Delete password when logout
                 let userDefaults = NSUserDefaults.standardUserDefaults()
                 userDefaults.setValue("", forKey: "password")
@@ -52,11 +60,17 @@ class MapViewController: UIViewController {
     
     // Get StudentLocations
     func getStudentLocations() {
+        let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
+        hud!.labelText = "Loading..."
+
         let parameters = [UdacityClient.ParameterKeys.LimitKey: 100]
         UdacityClient.sharedInstance().getStudentLocations(parameters) { (success, studentLocations, errorString) -> Void in
             
             if success {
-                self.mapView.addAnnotations(self.annotationsFromStudentLocations(studentLocations!))
+                dispatch_async(dispatch_get_main_queue(), {
+                    hud.hide(true)
+                    self.mapView.addAnnotations(self.annotationsFromStudentLocations(studentLocations!))
+                })
                 
                 print("Student locations: \(studentLocations)")
             }

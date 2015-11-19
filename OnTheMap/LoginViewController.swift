@@ -16,7 +16,7 @@ class LoginViewController: KeyboardHandlingViewController {
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var signupButton: UIButton!
     @IBOutlet weak var facebookLoginButton: BorderedButton!
-    
+        
     // MARK: Life Cycle
     
     override func viewDidLoad() {
@@ -51,7 +51,10 @@ class LoginViewController: KeyboardHandlingViewController {
     
     // MARK: Login
     
-    func login() {
+    func login() {        
+        let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
+        hud!.labelText = "Logging in..."
+        
         UdacityClient.sharedInstance().autheticateUdacityWithViewController(self) {
             success, errorString in
             if success {
@@ -62,6 +65,7 @@ class LoginViewController: KeyboardHandlingViewController {
                 userDefaults.synchronize()
 
                 dispatch_async(dispatch_get_main_queue(), {
+                    hud.hide(true)
                     self.setControlsEnabled(true)
                     
                     let mainTBC = self.storyboard!.instantiateViewControllerWithIdentifier("MainTabBarController") as! UITabBarController
@@ -70,15 +74,16 @@ class LoginViewController: KeyboardHandlingViewController {
                     self.presentViewController(mainTBC, animated: true, completion: nil)
                 })
             } else {
+                dispatch_async(dispatch_get_main_queue(), {
+                    hud.hide(true)
+                    self.setControlsEnabled(true)
+                })
+                
                 // Display error
                 let alertController = UIAlertController(title: nil, message: "Invalid Email or Password.", preferredStyle: UIAlertControllerStyle.Alert)
                 alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
                 self.presentViewController(alertController, animated: true, completion: nil)
                 
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.setControlsEnabled(true)
-                })
-
                 print(errorString)
             }
         }

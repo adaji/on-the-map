@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class ListViewController: UIViewController {
     
@@ -32,8 +33,15 @@ class ListViewController: UIViewController {
     // MARK: Actions
     
     @IBAction func logoutButtonTouchUp(sender: UIBarButtonItem) {
+        let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
+        hud!.labelText = "Logging out..."
+
         UdacityClient.sharedInstance().deleteUdacitySession { (success, errorString) -> Void in
             if success {
+                dispatch_async(dispatch_get_main_queue(), {
+                    hud.hide(true)
+                })
+
                 // Delete password when logout
                 let userDefaults = NSUserDefaults.standardUserDefaults()
                 userDefaults.setValue("", forKey: "password")
@@ -58,10 +66,17 @@ class ListViewController: UIViewController {
     
     // Get StudentLocations
     func getStudentLocations() {
+        let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
+        hud!.labelText = "Loading..."
+
         let parameters = [UdacityClient.ParameterKeys.LimitKey: 100]
         UdacityClient.sharedInstance().getStudentLocations(parameters) { (success, studentLocations, errorString) -> Void in
             
             if success {
+                dispatch_async(dispatch_get_main_queue(), {
+                    hud.hide(true)
+                })
+
                 self.studentLocations = studentLocations!
                 print("Student locations: \(studentLocations)")
             }
