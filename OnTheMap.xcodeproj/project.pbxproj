@@ -25,6 +25,7 @@
 		60ECE90F1BFC9B5700D5B165 /* UdacityAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ECE90E1BFC9B5700D5B165 /* UdacityAuthViewController.swift */; };
 		60ECE9111BFCFEF500D5B165 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ECE9101BFCFEF500D5B165 /* MapViewController.swift */; };
 		60ECE9131BFD094200D5B165 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ECE9121BFD094200D5B165 /* ListViewController.swift */; };
+		60F1E7C31BFDB1A20070F8FE /* NetworkingDataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F1E7C21BFDB1A20070F8FE /* NetworkingDataHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 		60ECE90E1BFC9B5700D5B165 /* UdacityAuthViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityAuthViewController.swift; sourceTree = "<group>"; };
 		60ECE9101BFCFEF500D5B165 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		60ECE9121BFD094200D5B165 /* ListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
+		60F1E7C21BFDB1A20070F8FE /* NetworkingDataHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkingDataHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -194,6 +196,7 @@
 		60ECE9021BFC874500D5B165 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				60F1E7C21BFDB1A20070F8FE /* NetworkingDataHandler.swift */,
 				60ECE9031BFC875C00D5B165 /* Clients */,
 			);
 			name = Model;
@@ -211,10 +214,10 @@
 			isa = PBXGroup;
 			children = (
 				60ECE90C1BFC8E8E00D5B165 /* StudentLocation.swift */,
+				60ECE9081BFC87C900D5B165 /* UdacityClient.swift */,
 				60ECE9061BFC879A00D5B165 /* UdacityConstants.swift */,
 				60ECE90A1BFC8A8300D5B165 /* UdacityConvenience.swift */,
 				60ECE90E1BFC9B5700D5B165 /* UdacityAuthViewController.swift */,
-				60ECE9081BFC87C900D5B165 /* UdacityClient.swift */,
 			);
 			name = Udacity;
 			sourceTree = "<group>";
@@ -358,6 +361,7 @@
 				60ECE8FF1BFC7D3700D5B165 /* KeyboardHandlingViewController.swift in Sources */,
 				60ECE8C31BFC32F600D5B165 /* ViewController.swift in Sources */,
 				60ECE9111BFCFEF500D5B165 /* MapViewController.swift in Sources */,
+				60F1E7C31BFDB1A20070F8FE /* NetworkingDataHandler.swift in Sources */,
 				60ECE8FB1BFC542300D5B165 /* BorderedButton.swift in Sources */,
 				60ECE8C11BFC32F600D5B165 /* AppDelegate.swift in Sources */,
 				60ECE90D1BFC8E8E00D5B165 /* StudentLocation.swift in Sources */,
@@ -591,6 +595,7 @@
 				60ECE8E71BFC32F600D5B165 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		60ECE8E81BFC32F600D5B165 /* Build configuration list for PBXNativeTarget "OnTheMapTests" */ = {
 			isa = XCConfigurationList;
@@ -599,6 +604,7 @@
 				60ECE8EA1BFC32F600D5B165 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		60ECE8EB1BFC32F600D5B165 /* Build configuration list for PBXNativeTarget "OnTheMapUITests" */ = {
 			isa = XCConfigurationList;
@@ -607,6 +613,7 @@
 				60ECE8ED1BFC32F600D5B165 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

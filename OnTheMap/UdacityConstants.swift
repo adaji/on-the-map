@@ -17,7 +17,7 @@ extension UdacityClient {
         static let ParseAPIKey: String = "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY" // Parse REST API Key
         static let FacebookAppID = "365362206864879" // Facebook App ID
         
-        static let BaseURL: String = "https://www.udacity.com/api/"
+        static let UdacityBaseURL: String = "https://www.udacity.com/api/"
         static let ParseBaseURL: String = "https://api.parse.com/1/classes/StudentLocation"
     }
     
@@ -32,6 +32,14 @@ extension UdacityClient {
         
         static let Session = "session"
         static let UsersId = "users/<user id>" // GETting Public User Data
+    }
+    
+    struct ParameterKeys {
+        
+        // Get Student Locations (Optional)
+        static let LimitKey = "limit" // (Number) specifies the maximum number of StudentLocation objects to return in the JSON response
+        static let SkipKey = "skip" // (Number) use this parameter with limit to paginate through results
+        static let OrderKey = "order" // (String) a comma-separate list of key names that specify the sorted order of the results
     }
     
     struct HTTPHeaderKeys {
@@ -54,10 +62,16 @@ extension UdacityClient {
     
     struct JSONResponseKeys {
         
+        // Udacity Session
+        
         static let Session = "session"
+        
         static let ID = "id"
         
-        // MARK: Student Location
+        // Student Location
+        
+        static let Results = "results"
+        
         static let CreatedAt = "createdAt"
         static let FirstName = "firstName"
         static let LastName = "lastName"

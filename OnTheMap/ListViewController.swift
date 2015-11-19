@@ -11,7 +11,7 @@ import UIKit
 class ListViewController: UITableViewController {
     
     @IBAction func logoutButtonTouch(sender: UIBarButtonItem) {
-        UdacityClient.sharedInstance().deleteSession { (success, errorString) -> Void in
+        UdacityClient.sharedInstance().deleteUdacitySession { (success, errorString) -> Void in
             if success {
                 // Delete password when logout
                 let userDefaults = NSUserDefaults.standardUserDefaults()

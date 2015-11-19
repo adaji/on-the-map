@@ -54,7 +54,7 @@ class LoginViewController: KeyboardHandlingViewController {
     // MARK: Login
     
     func login() {
-        UdacityClient.sharedInstance().autheticateWithViewController(self) {
+        UdacityClient.sharedInstance().autheticateUdacityWithViewController(self) {
             success, errorString in
             if success {
                 // Save/update email and password

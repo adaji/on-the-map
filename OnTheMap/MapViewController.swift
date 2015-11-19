@@ -16,7 +16,17 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        let parameters = [
+            UdacityClient.ParameterKeys.LimitKey: 200
+        ]
+        UdacityClient.sharedInstance().getStudentLocations(parameters) { (success, studentLocations, errorString) -> Void in
+            if success {
+                print("Student locations: \(studentLocations)")
+            } else {
+                print(errorString)
+            }
+            
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -26,7 +36,7 @@ class MapViewController: UIViewController {
     }
     
     @IBAction func LogoutButtonTouch(sender: UIBarButtonItem) {
-        UdacityClient.sharedInstance().deleteSession { (success, errorString) -> Void in
+        UdacityClient.sharedInstance().deleteUdacitySession { (success, errorString) -> Void in
             if success {
                 // Delete password when logout
                 let userDefaults = NSUserDefaults.standardUserDefaults()
@@ -41,3 +51,14 @@ class MapViewController: UIViewController {
     }
     
 }
+
+
+
+
+
+
+
+
+
+
+
