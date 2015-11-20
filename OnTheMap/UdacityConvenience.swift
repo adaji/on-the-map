@@ -90,7 +90,7 @@ extension UdacityClient {
         }
     }
     
-    func getUdacityPublicUserData(completionHandler: (success: Bool, udacityUser: UdacityUser?, errorString: String?) -> Void) {
+    func getUdacityUser(completionHandler: (success: Bool, udacityUser: UdacityUser?, errorString: String?) -> Void) {
         let method = UdacityClient.substituteKeyInMethod(Methods.UserData, key: URLKeys.UserId, value: String(UdacityClient.sharedInstance().userID!))
         
         startTaskForUdacityGETMethod(method) { (result, error) -> Void in
@@ -113,6 +113,7 @@ extension UdacityClient {
                 return
             }
             
+            print("user: \(user)")
             let udacityUser = UdacityUser(dictionary: user)
             self.udacityUser = udacityUser
             completionHandler(success: true, udacityUser: udacityUser, errorString: nil)

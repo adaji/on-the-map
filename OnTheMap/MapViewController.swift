@@ -53,15 +53,7 @@ class MapViewController: UIViewController {
     }
     
     @IBAction func postButtonTouchUp(sender: UIBarButtonItem) {
-        UdacityClient.sharedInstance().getUdacityPublicUserData { (success, udacityUser, errorString) -> Void in
-            
-            if success {
-                print("Udacity user: \(udacityUser)")
-            }
-            else {
-                print(errorString)
-            }
-        }
+        
     }
     
     @IBAction func refreshButtonTouchUp(sender: UIBarButtonItem) {
@@ -79,12 +71,19 @@ class MapViewController: UIViewController {
         UdacityClient.sharedInstance().getStudentLocations(parameters) { (success, studentLocations, errorString) -> Void in
             
             if success {
-                dispatch_async(dispatch_get_main_queue(), {
-                    hud.hide(true)
-                    self.mapView.addAnnotations(self.annotationsFromStudentLocations(studentLocations!))
-                })
-                
-                print("Student locations: \(studentLocations)")
+                if let studentLocations = studentLocations {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        hud.hide(true)
+                        self.mapView.addAnnotations(self.annotationsFromStudentLocations(studentLocations))
+                    })
+                    
+                    print("Student locations: \(studentLocations)")
+                }
+                else {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        hud.hide(true)
+                    })
+                }
             }
             else {
                 print(errorString)

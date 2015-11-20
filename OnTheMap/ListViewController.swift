@@ -13,6 +13,8 @@ class ListViewController: UIViewController {
     
     // MARK: Properties
     
+    @IBOutlet weak var locationsTableView: UITableView!
+    
     var studentLocations = [StudentLocation]()
     
     override func viewDidLoad() {
@@ -74,12 +76,21 @@ class ListViewController: UIViewController {
         UdacityClient.sharedInstance().getStudentLocations(parameters) { (success, studentLocations, errorString) -> Void in
             
             if success {
-                dispatch_async(dispatch_get_main_queue(), {
-                    hud.hide(true)
-                })
+                if let studentLocations = studentLocations {
+                    self.studentLocations = studentLocations
 
-                self.studentLocations = studentLocations!
-                print("Student locations: \(studentLocations)")
+                    dispatch_async(dispatch_get_main_queue(), {
+                        hud.hide(true)
+                        self.locationsTableView.reloadData()
+                    })
+
+                    print("Student locations: \(studentLocations)")
+                }
+                else {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        hud.hide(true)
+                    })
+                }
             }
             else {
                 print(errorString)
