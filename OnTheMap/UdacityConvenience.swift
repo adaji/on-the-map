@@ -37,8 +37,7 @@ extension UdacityClient {
     
     func getUdacitySessionID(parameters: [String: String], completionHandler: (success: Bool, sessionID: String?, userID: String?, errorString: String?) -> Void) {
         
-        let httpBodyString = "{\"\(HTTPBodyKeys.Udacity)\": {\"\(HTTPBodyKeys.Username)\": \"<\(HTTPBodyKeys.Username)>\", \"\(HTTPBodyKeys.Password)\": \"<\(HTTPBodyKeys.Password)>\"}}"
-        let httpBody = UdacityClient.substituteKeysInHTTPBody(httpBodyString, parameters: parameters)
+        let httpBody = "{\"\(HTTPBodyKeys.Udacity)\": \(UdacityClient.jsonBodyWithParameters(parameters))}"
         
         startTaskForUdacityPOSTMethod(Methods.Session, httpBody: httpBody) { result, error in
             
@@ -74,6 +73,15 @@ extension UdacityClient {
             }
             
             completionHandler(success: true, sessionID: sessionID, userID: userID, errorString: nil)
+        }
+    }
+    
+    func postStudentLocation(parameters: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
+        let httpBodyString = UdacityClient.jsonBodyWithParameters(parameters)
+        
+        startTaskForParsePOSTMethod(httpBodyString) { (result, error) -> Void in
+            
+            
         }
     }
     
@@ -120,7 +128,7 @@ extension UdacityClient {
         }
     }
     
-    // MARK: Student Locations
+    // MARK: Student Location(s)
     
     // Optional parameters: limit, skip, order
     func getStudentLocations(parameters: [String: AnyObject], completionHandler: (success: Bool, studentLocations: [StudentLocation]?, errorString: String?) -> Void) {

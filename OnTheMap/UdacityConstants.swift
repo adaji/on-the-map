@@ -69,6 +69,20 @@ extension UdacityClient {
         static let AccessToken = "access_token"
     }
     
+    struct StudentLocationKeys {
+        
+        static let ObjectId = "objectId"
+        static let UniqueKey = "uniqueKey"
+        static let FirstName = "firstName"
+        static let LastName = "lastName"
+        static let MapString = "mapString"
+        static let MediaURL = "mediaURL"
+        static let Latitude = "latitude"
+        static let Longitude = "longitude"
+        static let CreatedAt = "createdAt"
+        static let UpdatedAt = "updatedAt"
+    }
+    
     struct JSONResponseKeys {
         
         // Udacity Session

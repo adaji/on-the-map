@@ -14,6 +14,8 @@ struct StudentLocation {
     
     var objectId = ""
     var uniqueKey = ""
+    var firstName = ""
+    var lastName = ""
     var fullName = ""
     var mapString = ""
     var mediaURL = ""
@@ -26,23 +28,35 @@ struct StudentLocation {
     
     init(dictionary: [String: AnyObject]) {
         
-        objectId = dictionary[UdacityClient.JSONResponseKeys.LocationObjectId] as! String
-        uniqueKey = dictionary[UdacityClient.JSONResponseKeys.LocationUniqueKey] as! String // Udacity account (user) id
-        let firstName = dictionary[UdacityClient.JSONResponseKeys.LocationFirstName] as! String
-        let lastName = dictionary[UdacityClient.JSONResponseKeys.LocationLastName] as! String
+        objectId = dictionary[UdacityClient.StudentLocationKeys.ObjectId] as! String
+        uniqueKey = dictionary[UdacityClient.StudentLocationKeys.UniqueKey] as! String // Udacity account (user) id
+        firstName = dictionary[UdacityClient.StudentLocationKeys.FirstName] as! String
+        lastName = dictionary[UdacityClient.StudentLocationKeys.LastName] as! String
         fullName = "\(firstName) \(lastName)"
-        mapString = dictionary[UdacityClient.JSONResponseKeys.LocationMapString] as! String
-        mediaURL = dictionary[UdacityClient.JSONResponseKeys.LocationMediaURL] as! String
-        latitude = dictionary[UdacityClient.JSONResponseKeys.LocationLatitude] as! Double
-        longitude = dictionary[UdacityClient.JSONResponseKeys.LocationLongitude] as! Double
+        mapString = dictionary[UdacityClient.StudentLocationKeys.MapString] as! String
+        mediaURL = dictionary[UdacityClient.StudentLocationKeys.MediaURL] as! String
+        latitude = dictionary[UdacityClient.StudentLocationKeys.Latitude] as! Double
+        longitude = dictionary[UdacityClient.StudentLocationKeys.Longitude] as! Double
         
         // Parse date
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        let createdAtString = dictionary[UdacityClient.JSONResponseKeys.LocationCreatedAt] as! String
+        let createdAtString = dictionary[UdacityClient.StudentLocationKeys.CreatedAt] as! String
         createdAt = dateFormatter.dateFromString(createdAtString)!
-        let updatedAtString = dictionary[UdacityClient.JSONResponseKeys.LocationUpdatedAt] as! String
+        let updatedAtString = dictionary[UdacityClient.StudentLocationKeys.UpdatedAt] as! String
         updatedAt = dateFormatter.dateFromString(updatedAtString)!
+    }
+    
+    static func dictionaryFromStudentLocation(studentLocation: StudentLocation) -> [String: AnyObject] {
+        return [
+            UdacityClient.StudentLocationKeys.UniqueKey: studentLocation.uniqueKey,
+            UdacityClient.StudentLocationKeys.FirstName: studentLocation.firstName,
+            UdacityClient.StudentLocationKeys.LastName: studentLocation.lastName,
+            UdacityClient.StudentLocationKeys.MapString: studentLocation.mapString,
+            UdacityClient.StudentLocationKeys.MediaURL: studentLocation.mediaURL,
+            UdacityClient.StudentLocationKeys.Latitude: studentLocation.latitude,
+            UdacityClient.StudentLocationKeys.Longitude: studentLocation.longitude
+        ]
     }
     
     // Given an array of dictionaries, convert them to an array of StudentLocation objects

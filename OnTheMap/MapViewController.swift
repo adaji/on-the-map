@@ -69,12 +69,10 @@ class MapViewController: UIViewController {
                     let message = "User \"\(studentLocation.fullName)\" has already posted a Student Location. Would you like to overwrite the location?"
                     let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
                     alertController.addAction(UIAlertAction(title: "Overwrite", style: .Default, handler: { (action) -> Void in
-                        self.post()
+                        self.post(StudentLocation.dictionaryFromStudentLocation(studentLocation))
                     }))
                     alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
                     self.presentViewController(alertController, animated: true, completion: nil)
-                    
-                    print("Student location: \(studentLocation)")
                 }
             }
             else {
@@ -83,8 +81,10 @@ class MapViewController: UIViewController {
         }
     }
     
-    func post() {
-        
+    func post(parameters: [String: AnyObject]) {
+        UdacityClient.sharedInstance().postStudentLocation(parameters) { (success, errorString) -> Void in
+            
+        }
     }
     
     @IBAction func refreshButtonTouchUp(sender: UIBarButtonItem) {
