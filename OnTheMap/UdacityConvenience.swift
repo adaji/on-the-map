@@ -177,15 +177,15 @@ extension UdacityClient {
     
     // Function: postStudentLocation
     // Parameters:
-    // - parameters: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaURL": "<mediaURL>", "latitude": "<latitude>", "longitude": "<longitude>"]
+    // - locationDictionary: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaURL": "<mediaURL>", "latitude": "<latitude>", "longitude": "<longitude>"] (StudentLocation.dictionaryFromStudentLocation(studentLocation))
     // completionHandler
     //
     // POSTing a StudentLocation
     // Required parameters (in HTTPBody): parameters
     //
-    func postStudentLocation(parameters: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
+    func postStudentLocation(locationDictionary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
         
-        startTaskForParsePOSTMethod(parameters) { (result, error) -> Void in
+        startTaskForParsePOSTMethod(locationDictionary) { (result, error) -> Void in
             
             
         }

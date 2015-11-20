@@ -13,7 +13,7 @@ struct StudentLocation {
     // MARK: Properties
     
     var objectId = ""
-    var uniqueKey = ""
+    var uniqueKey = "" // Udacity account (user) id
     var firstName = ""
     var lastName = ""
     var fullName = ""
@@ -21,30 +21,48 @@ struct StudentLocation {
     var mediaURL = ""
     var latitude = 0.0
     var longitude = 0.0
-    var createdAt: NSDate
-    var updatedAt: NSDate
+    var createdAt = NSDate()
+    var updatedAt = NSDate()
     
     // MARK: Initializers
     
     init(dictionary: [String: AnyObject]) {
         
-        objectId = dictionary[UdacityClient.StudentLocationKeys.ObjectId] as! String
-        uniqueKey = dictionary[UdacityClient.StudentLocationKeys.UniqueKey] as! String // Udacity account (user) id
-        firstName = dictionary[UdacityClient.StudentLocationKeys.FirstName] as! String
-        lastName = dictionary[UdacityClient.StudentLocationKeys.LastName] as! String
+        if let objectId = dictionary[UdacityClient.StudentLocationKeys.ObjectId] as? String {
+            self.objectId = objectId
+        }
+        if let uniqueKey = dictionary[UdacityClient.StudentLocationKeys.UniqueKey] as? String {
+            self.uniqueKey = uniqueKey
+        }
+        if let firstName = dictionary[UdacityClient.StudentLocationKeys.FirstName] as? String {
+            self.firstName = firstName
+        }
+        if let lastName = dictionary[UdacityClient.StudentLocationKeys.LastName] as? String {
+            self.lastName = lastName
+        }
         fullName = "\(firstName) \(lastName)"
-        mapString = dictionary[UdacityClient.StudentLocationKeys.MapString] as! String
-        mediaURL = dictionary[UdacityClient.StudentLocationKeys.MediaURL] as! String
-        latitude = dictionary[UdacityClient.StudentLocationKeys.Latitude] as! Double
-        longitude = dictionary[UdacityClient.StudentLocationKeys.Longitude] as! Double
+        if let mapString = dictionary[UdacityClient.StudentLocationKeys.MapString] as? String {
+            self.mapString = mapString
+        }
+        if let mediaURL = dictionary[UdacityClient.StudentLocationKeys.MediaURL] as? String {
+            self.mediaURL = mediaURL
+        }
+        if let latitude = dictionary[UdacityClient.StudentLocationKeys.Latitude] as? Double {
+            self.latitude = latitude
+        }
+        if let longitude = dictionary[UdacityClient.StudentLocationKeys.Longitude] as? Double {
+            self.longitude = longitude
+        }
         
         // Parse date
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        let createdAtString = dictionary[UdacityClient.StudentLocationKeys.CreatedAt] as! String
-        createdAt = dateFormatter.dateFromString(createdAtString)!
-        let updatedAtString = dictionary[UdacityClient.StudentLocationKeys.UpdatedAt] as! String
-        updatedAt = dateFormatter.dateFromString(updatedAtString)!
+        if let createdAtString = dictionary[UdacityClient.StudentLocationKeys.CreatedAt] as? String {
+            createdAt = dateFormatter.dateFromString(createdAtString)!
+        }
+        if let updatedAtString = dictionary[UdacityClient.StudentLocationKeys.UpdatedAt] as? String {
+            updatedAt = dateFormatter.dateFromString(updatedAtString)!
+        }
     }
     
     static func dictionaryFromStudentLocation(studentLocation: StudentLocation) -> [String: AnyObject] {

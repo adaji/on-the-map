@@ -53,12 +53,35 @@ class MapViewController: UIViewController {
     }
     
     @IBAction func postButtonTouchUp(sender: UIBarButtonItem) {
-        let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
-        hud.labelText = "Checking..."
         
+        checkForPreviousPost { (hasPosted, studentLocation) -> Void in
+            
+            // If user has posted location before, ask user whether to overwrite
+            if hasPosted {
+                if let studentLocation = studentLocation {
+                    let message = "User \"\(studentLocation.fullName)\" has already posted a Student Location. Would you like to overwrite the location?"
+                    let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                    alertController.addAction(UIAlertAction(title: "Overwrite", style: .Default, handler: { (action) -> Void in
+                        
+                        self.presentPostViewController(studentLocation)
+                    }))
+                    alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+                    self.presentViewController(alertController, animated: true, completion: nil)
+                }
+            }
+            else {
+                self.presentPostViewController(nil)
+            }
+        }
+    }
+    
+    // Check if user has posted location before
+    func checkForPreviousPost(completionHandler: (hasPosted: Bool, studentLocation: StudentLocation?) -> Void) {
+        let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
+
         let parameters = [UdacityClient.ParameterKeys.WhereKey: "{\"\(UdacityClient.ParameterKeys.UniqueKey)\":\"\(UdacityClient.sharedInstance().userID!)\"}"]
         UdacityClient.sharedInstance().queryForStudentLocation(parameters) { (success, studentLocation, errorString) -> Void in
-
+            
             if success {
                 dispatch_async(dispatch_get_main_queue(), {
                     hud.hide(true)
@@ -66,25 +89,27 @@ class MapViewController: UIViewController {
                 
                 // Ask user whether to overwrite previous post data
                 if let studentLocation = studentLocation {
-                    let message = "User \"\(studentLocation.fullName)\" has already posted a Student Location. Would you like to overwrite the location?"
-                    let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-                    alertController.addAction(UIAlertAction(title: "Overwrite", style: .Default, handler: { (action) -> Void in
-                        self.post(StudentLocation.dictionaryFromStudentLocation(studentLocation))
-                    }))
-                    alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
-                    self.presentViewController(alertController, animated: true, completion: nil)
+                    completionHandler(hasPosted: true, studentLocation: studentLocation)
+                }
+                else {
+                    completionHandler(hasPosted: false, studentLocation: nil)
                 }
             }
             else {
+                completionHandler(hasPosted: false, studentLocation: nil)
                 print(errorString)
             }
         }
     }
     
-    func post(parameters: [String: AnyObject]) {
-        UdacityClient.sharedInstance().postStudentLocation(parameters) { (success, errorString) -> Void in
-            
+    // Present post view controller
+    // If user has posted location before, pass in the location
+    func presentPostViewController(studentLocation: StudentLocation?) {
+        let postVC = self.storyboard!.instantiateViewControllerWithIdentifier("PostViewController") as! PostViewController
+        if let studentLocation = studentLocation {
+            postVC.studentLocation = studentLocation
         }
+        presentViewController(postVC, animated: true, completion: nil)
     }
     
     @IBAction func refreshButtonTouchUp(sender: UIBarButtonItem) {
