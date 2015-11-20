@@ -57,7 +57,7 @@ class MapViewController: UIViewController {
         hud.labelText = "Checking..."
         
         let parameters = [UdacityClient.ParameterKeys.WhereKey: "{\"\(UdacityClient.ParameterKeys.UniqueKey)\":\"\(UdacityClient.sharedInstance().userID!)\"}"]
-        UdacityClient.sharedInstance().getStudentLocation(parameters) { (success, studentLocation, errorString) -> Void in
+        UdacityClient.sharedInstance().queryForStudentLocation(parameters) { (success, studentLocation, errorString) -> Void in
 
             if success {
                 dispatch_async(dispatch_get_main_queue(), {

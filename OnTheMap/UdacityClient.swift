@@ -29,48 +29,28 @@ class UdacityClient: NSObject {
         super.init()
     }
     
-    // MARK: Udacity HTTP Methods
+    // MARK: Tasks for Udacity HTTP Methods
     
     // POST
-    func startTaskForUdacityPOSTMethod(method: String, httpBody: String, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
-        
-        startTaskForUdacityPOSTMethod(method, parameters: [String: AnyObject](), httpBody: httpBody, completionHandler: completionHandler)
-    }
-    
-    // POST
-    func startTaskForUdacityPOSTMethod(method: String, parameters: [String: AnyObject], httpBody: String, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
+    func startTaskForUdacityPOSTMethod(method: String, jsonBody: [String: AnyObject], completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
         
         let urlString = Constants.UdacityBaseURL + method
-        let url = NSURL(string: urlString)!
-        let request = NSMutableURLRequest(URL: url)
+        let request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
         request.HTTPMethod = HTTPMethods.POST
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.HTTPBody = httpBody.dataUsingEncoding(NSUTF8StringEncoding)
-        
-        let task = session.dataTaskWithRequest(request) { data, response, error in
-            
-            guard error == nil else {
-                print("There was an error with your request: \(error)")
-                return
-            }
-            
-            guard let data = data else {
-                return
-            }
-            
-            NetworkingDataHandler.parseJSONWithCompletionHandler(UdacityClient.subsetData(data), completionHandler: completionHandler)
+        do {
+            request.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(jsonBody, options: .PrettyPrinted)
         }
         
-        task.resume()
+        startTaskForUdacityHTTPMethod(request, completionHandler: completionHandler)
     }
     
     // DELETE
     func startTaskForUdacityDELETEMethod(method: String, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
         
         let urlString = Constants.UdacityBaseURL + method
-        let url = NSURL(string: urlString)!
-        let request = NSMutableURLRequest(URL: url)
+        let request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
         request.HTTPMethod = HTTPMethods.DELETE
         
         var xsrfCookie: NSHTTPCookie? = nil
@@ -82,28 +62,19 @@ class UdacityClient: NSObject {
             request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
         }
         
-        let task = session.dataTaskWithRequest(request) { data, response, error in
-            
-            guard error == nil else {
-                print("There was an error with your request: \(error)")
-                return
-            }
-            
-            guard let data = data else {
-                return
-            }
-            
-            NetworkingDataHandler.parseJSONWithCompletionHandler(UdacityClient.subsetData(data), completionHandler: completionHandler)
-        }
-        
-        task.resume()
+        startTaskForUdacityHTTPMethod(request, completionHandler: completionHandler)
     }
     
+    // GET
     func startTaskForUdacityGETMethod(method: String, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
         
         let urlString = Constants.UdacityBaseURL + method
-        let request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
+        let request = NSURLRequest(URL: NSURL(string: urlString)!)
         
+        startTaskForUdacityHTTPMethod(request, completionHandler: completionHandler)
+    }
+    
+    func startTaskForUdacityHTTPMethod(request: NSURLRequest, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
         let task = session.dataTaskWithRequest(request) { (data, response, error) -> Void in
             
             guard error == nil else {
@@ -121,43 +92,53 @@ class UdacityClient: NSObject {
         task.resume()
     }
     
-    // MARK: Parse HTTP Methods
+    // MARK: Tasks for Parse HTTP Methods
     
     // GET
-    func startTaskForParseGETMethod(parameters: [String: AnyObject], completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
+    func startTaskForParseGETMethod(optionalParameters: [String: AnyObject]?, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
 
-        let urlString = Constants.ParseBaseURL + NetworkingDataHandler.escapedParameters(parameters)
+        var urlString = Constants.ParseBaseURL
+        if let parameters = optionalParameters {
+            urlString += NetworkingDataHandler.escapedParameters(parameters)
+        }
         let request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
         request.addValue(Constants.ParseAppID, forHTTPHeaderField: HTTPHeaderKeys.ParseAppIdKey)
         request.addValue(Constants.ParseAPIKey, forHTTPHeaderField: HTTPHeaderKeys.ParseAPIKey)
         
-        let task = session.dataTaskWithRequest(request) { data, response, error in
-            
-            guard error == nil else {
-                print("There was an error with your request: \(error)")
-                return
-            }
-            
-            guard let data = data else {
-                return
-            }
-            
-            NetworkingDataHandler.parseJSONWithCompletionHandler(data, completionHandler: completionHandler)
-        }
-        
-        task.resume()
+        startTaskForParseHTTPMethod(request, completionHandler: completionHandler)
     }
     
     // POST
-    func startTaskForParsePOSTMethod(httpBody: String, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
+    func startTaskForParsePOSTMethod(jsonBody: [String: AnyObject], completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
         
         let urlString = Constants.ParseBaseURL
         let request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
         request.HTTPMethod = HTTPMethods.POST
         request.addValue(Constants.ParseAppID, forHTTPHeaderField: HTTPHeaderKeys.ParseAppIdKey)
         request.addValue(Constants.ParseAPIKey, forHTTPHeaderField: HTTPHeaderKeys.ParseAPIKey)
-        request.HTTPBody = httpBody.dataUsingEncoding(NSUTF8StringEncoding)
+        do {
+            request.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(jsonBody, options: .PrettyPrinted)
+        }
         
+        startTaskForParseHTTPMethod(request, completionHandler: completionHandler)
+    }
+    
+    // PUT
+    func startTaskForParsePUTMethod(method: String, jsonBody: [String: AnyObject], completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
+        
+        let urlString = Constants.ParseBaseURL + method
+        let request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
+        request.HTTPMethod = HTTPMethods.PUT
+        request.addValue(Constants.ParseAppID, forHTTPHeaderField: HTTPHeaderKeys.ParseAppIdKey)
+        request.addValue(Constants.ParseAPIKey, forHTTPHeaderField: HTTPHeaderKeys.ParseAPIKey)
+        do {
+            request.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(jsonBody, options: .PrettyPrinted)
+        }
+        
+        startTaskForParseHTTPMethod(request, completionHandler: completionHandler)
+    }
+    
+    func startTaskForParseHTTPMethod(request: NSURLRequest, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
         let task = session.dataTaskWithRequest(request) { data, response, error in
             
             guard error == nil else {
@@ -175,33 +156,7 @@ class UdacityClient: NSObject {
         task.resume()
     }
     
-    // TODO: PUT
-    
-    
     // MARK: Helper Functions
-    
-    // Substitute keys and values in JSON body
-    class func jsonBodyWithParameters(parameters: [String: AnyObject]) -> String {
-        var jsonBody = "{"
-        for (key, value) in parameters {
-            jsonBody += "\"\(key)\": \"\(value)\", "
-        }
-        
-        let end = jsonBody.endIndex.advancedBy(-2)
-        return jsonBody.substringToIndex(end) + "}"
-    }
-    
-    // Substitute values in HTTP body
-    class func substituteKeysInHTTPBody(httpBody: String, parameters: [String: String]) -> String {
-        var result = httpBody
-        for key in parameters.keys {
-            if result.rangeOfString("<\(key)>") != nil {
-                result = result.stringByReplacingOccurrencesOfString("<\(key)>", withString: parameters[key]!)
-            }
-        }
-        
-        return result
-    }
     
     /* Helper: Substitute the key for the value that is contained within the method name */
     class func substituteKeyInMethod(method: String, key: String, value: String) -> String {

@@ -18,7 +18,7 @@ extension UdacityClient {
     func autheticateUdacityWithViewController(hostViewController: UIViewController, completionHandler: (success: Bool, errorString: String?) -> Void) {
         
         if let loginVC = hostViewController as? LoginViewController {
-            getUdacitySessionID([HTTPBodyKeys.Username: loginVC.emailTextField.text!, HTTPBodyKeys.Password: loginVC.passwordTextField.text!]) { success, sessionID, userID, errorString in
+            getUdacitySessionID([UdacityClient.JSONBodyKeys.Username: loginVC.emailTextField.text!, UdacityClient.JSONBodyKeys.Password: loginVC.passwordTextField.text!]) { success, sessionID, userID, errorString in
                 
                 if success {
                     if let sessionID = sessionID {
@@ -35,11 +35,20 @@ extension UdacityClient {
         
     }
     
+    // Function: getUdacitySessionID
+    // Parameters: 
+    // - parameters: ["username": "<username>", "password": "<password>"]
+    // - completionHandler
+    //
+    // POSTing (Creating) a Session
+    // Method: session
+    // Required parameters (in HTTPBody): ["udacity": parameters]
+    //
     func getUdacitySessionID(parameters: [String: String], completionHandler: (success: Bool, sessionID: String?, userID: String?, errorString: String?) -> Void) {
         
-        let httpBody = "{\"\(HTTPBodyKeys.Udacity)\": \(UdacityClient.jsonBodyWithParameters(parameters))}"
+        let jsonBody = [UdacityClient.JSONBodyKeys.Udacity: parameters]
         
-        startTaskForUdacityPOSTMethod(Methods.Session, httpBody: httpBody) { result, error in
+        startTaskForUdacityPOSTMethod(Methods.Session, jsonBody: jsonBody) { result, error in
             
             guard error == nil else {
                 print("Login Failed. Error: \(error)")
@@ -76,15 +85,11 @@ extension UdacityClient {
         }
     }
     
-    func postStudentLocation(parameters: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
-        let httpBodyString = UdacityClient.jsonBodyWithParameters(parameters)
-        
-        startTaskForParsePOSTMethod(httpBodyString) { (result, error) -> Void in
-            
-            
-        }
-    }
-    
+    // Function: deleteUdacitySession
+    //
+    // DELETEing (Logging Out Of) a Session
+    // Method: session
+    //
     func deleteUdacitySession(completionHandler: (success: Bool, errorString: String?) -> Void) {
         startTaskForUdacityDELETEMethod(Methods.Session) { (result, error) -> Void in
             
@@ -98,6 +103,11 @@ extension UdacityClient {
         }
     }
     
+    // Function: getUdacityUser
+    //
+    // GETting Public User Data
+    // Method: users/<userId>
+    //
     func getUdacityUser(completionHandler: (success: Bool, udacityUser: UdacityUser?, errorString: String?) -> Void) {
         let method = UdacityClient.substituteKeyInMethod(Methods.UserData, key: URLKeys.UserId, value: String(UdacityClient.sharedInstance().userID!))
         
@@ -130,10 +140,16 @@ extension UdacityClient {
     
     // MARK: Student Location(s)
     
-    // Optional parameters: limit, skip, order
-    func getStudentLocations(parameters: [String: AnyObject], completionHandler: (success: Bool, studentLocations: [StudentLocation]?, errorString: String?) -> Void) {
+    // Function: getStudentLocations
+    // Parameters:
+    // - optionalParameters: ["limit": 100, "skip": 400, "order": -updatedAt]
+    // - completionHandler
+    //
+    // GETting StudentLocations
+    // Optional parameters: "limit", "skip", "order"
+    func getStudentLocations(optionalParameters: [String: AnyObject]?, completionHandler: (success: Bool, studentLocations: [StudentLocation]?, errorString: String?) -> Void) {
         
-        startTaskForParseGETMethod(parameters) { (result, error) -> Void in
+        startTaskForParseGETMethod(optionalParameters) { (result, error) -> Void in
             
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
@@ -159,8 +175,31 @@ extension UdacityClient {
         }
     }
     
-    // Required parameters: where
-    func getStudentLocation(parameters: [String: AnyObject], completionHandler: (success: Bool, studentLocation: StudentLocation?, errorString: String?) -> Void) {
+    // Function: postStudentLocation
+    // Parameters:
+    // - parameters: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaURL": "<mediaURL>", "latitude": "<latitude>", "longitude": "<longitude>"]
+    // completionHandler
+    //
+    // POSTing a StudentLocation
+    // Required parameters (in HTTPBody): parameters
+    //
+    func postStudentLocation(parameters: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
+        
+        startTaskForParsePOSTMethod(parameters) { (result, error) -> Void in
+            
+            
+        }
+    }
+    
+    // Function: queryForStudentLocation
+    // Parameters:
+    // - parameters: [where: "\"uniqueKey\":\"<uniqueKey>\""]
+    // - completionHandler
+    //
+    // Querying for a StudentLocation
+    // Required parameters: "where"
+    //
+    func queryForStudentLocation(parameters: [String: AnyObject], completionHandler: (success: Bool, studentLocation: StudentLocation?, errorString: String?) -> Void) {
         
         startTaskForParseGETMethod(parameters) { (result, error) -> Void in
             
@@ -184,6 +223,15 @@ extension UdacityClient {
             
             let studentLocation = StudentLocation(dictionary: results[0])
             completionHandler(success: true, studentLocation: studentLocation, errorString: nil)
+        }
+    }
+    
+    func updateStudentLocation(parameters: [String: AnyObject], completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
+        let method = UdacityClient.substituteKeyInMethod(Methods.UpdateStudentLocation, key: URLKeys.ObjectId, value: String(UdacityClient.sharedInstance().userID!))
+
+        startTaskForParsePUTMethod(method, jsonBody: parameters) { (result, error) -> Void in
+            
+            
         }
     }
     

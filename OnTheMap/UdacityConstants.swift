@@ -26,17 +26,23 @@ extension UdacityClient {
         static let POST = "POST"
         static let GET = "GET"
         static let DELETE = "DELETE"
+        static let PUT = "PUT"
     }
     
     struct Methods {
         
+        // Udacity
         static let Session = "session"
-        static let UserData = "users/<user_id>" // GETting Public User Data
+        static let UserData = "users/<userId>" // GETting Public User Data
+        
+        // Parse
+        static let UpdateStudentLocation = "<objectId>" // PUTing (Updating) a StudentLocation
     }
     
     struct URLKeys {
         
-        static let UserId = "user_id"
+        static let UserId = "userId"
+        static let ObjectId = "objectId"
     }
     
     struct ParameterKeys {
@@ -58,6 +64,18 @@ extension UdacityClient {
     }
     
     struct HTTPBodyKeys {
+        
+        // Udacity Auth
+        static let Udacity = "udacity"
+        static let Username = "username"
+        static let Password = "password"
+        
+        // Facebook Auth
+        static let FacebookMobile = "facebook_mobile"
+        static let AccessToken = "access_token"
+    }
+    
+    struct JSONBodyKeys {
         
         // Udacity Auth
         static let Udacity = "udacity"
