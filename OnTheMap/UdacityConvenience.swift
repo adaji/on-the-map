@@ -122,6 +122,7 @@ extension UdacityClient {
     
     // MARK: Student Locations
     
+    // Optional parameters: limit, skip, order
     func getStudentLocations(parameters: [String: AnyObject], completionHandler: (success: Bool, studentLocations: [StudentLocation]?, errorString: String?) -> Void) {
         
         startTaskForParseGETMethod(parameters) { (result, error) -> Void in
@@ -147,6 +148,34 @@ extension UdacityClient {
             let studentLocations = StudentLocation.locationsFromResults(results)
             self.studentLocations = studentLocations
             completionHandler(success: true, studentLocations: studentLocations, errorString: nil)
+        }
+    }
+    
+    // Required parameters: where
+    func getStudentLocation(parameters: [String: AnyObject], completionHandler: (success: Bool, studentLocation: StudentLocation?, errorString: String?) -> Void) {
+        
+        startTaskForParseGETMethod(parameters) { (result, error) -> Void in
+            
+            guard error == nil else {
+                print("There was an error processing request. Error: \(error)")
+                completionHandler(success: false, studentLocation: nil, errorString: error!.description)
+                return
+            }
+            
+            guard let result = result else {
+                print("No result returned.")
+                completionHandler(success: false, studentLocation: nil, errorString: "No result returned.")
+                return
+            }
+            
+            guard let results = result[JSONResponseKeys.Results] as? [[String: AnyObject]] else {
+                print("No valid data returned.")
+                completionHandler(success: false, studentLocation: nil, errorString: "Could not find key \(JSONResponseKeys.Results) in \(result)")
+                return
+            }
+            
+            let studentLocation = StudentLocation(dictionary: results[0])
+            completionHandler(success: true, studentLocation: studentLocation, errorString: nil)
         }
     }
     

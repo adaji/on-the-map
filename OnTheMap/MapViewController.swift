@@ -53,6 +53,37 @@ class MapViewController: UIViewController {
     }
     
     @IBAction func postButtonTouchUp(sender: UIBarButtonItem) {
+        let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
+        hud.labelText = "Checking..."
+        
+        let parameters = [UdacityClient.ParameterKeys.WhereKey: "{\"\(UdacityClient.ParameterKeys.UniqueKey)\":\"\(UdacityClient.sharedInstance().userID!)\"}"]
+        UdacityClient.sharedInstance().getStudentLocation(parameters) { (success, studentLocation, errorString) -> Void in
+
+            if success {
+                dispatch_async(dispatch_get_main_queue(), {
+                    hud.hide(true)
+                })
+                
+                // Ask user whether to overwrite previous post data
+                if let studentLocation = studentLocation {
+                    let message = "User \"\(studentLocation.fullName)\" has already posted a Student Location. Would you like to overwrite the location?"
+                    let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                    alertController.addAction(UIAlertAction(title: "Overwrite", style: .Default, handler: { (action) -> Void in
+                        self.post()
+                    }))
+                    alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+                    self.presentViewController(alertController, animated: true, completion: nil)
+                    
+                    print("Student location: \(studentLocation)")
+                }
+            }
+            else {
+                print(errorString)
+            }
+        }
+    }
+    
+    func post() {
         
     }
     
@@ -76,8 +107,6 @@ class MapViewController: UIViewController {
                         hud.hide(true)
                         self.mapView.addAnnotations(self.annotationsFromStudentLocations(studentLocations))
                     })
-                    
-                    print("Student locations: \(studentLocations)")
                 }
                 else {
                     dispatch_async(dispatch_get_main_queue(), {

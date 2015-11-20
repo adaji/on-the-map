@@ -45,6 +45,10 @@ extension UdacityClient {
         static let LimitKey = "limit" // (Number) specifies the maximum number of StudentLocation objects to return in the JSON response
         static let SkipKey = "skip" // (Number) use this parameter with limit to paginate through results
         static let OrderKey = "order" // (String) a comma-separate list of key names that specify the sorted order of the results
+        
+        // Get Student Location (Required)
+        static let WhereKey = "where"
+        static let UniqueKey = "uniqueKey" // Udacity user id
     }
     
     struct HTTPHeaderKeys {
@@ -77,7 +81,7 @@ extension UdacityClient {
         static let Session = "session"
         static let SessionID = "id"
         
-        // Student Location
+        // Student Location(s)
         
         static let Results = "results"
         

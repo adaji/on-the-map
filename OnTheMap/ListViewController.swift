@@ -83,8 +83,6 @@ class ListViewController: UIViewController {
                         hud.hide(true)
                         self.locationsTableView.reloadData()
                     })
-
-                    print("Student locations: \(studentLocations)")
                 }
                 else {
                     dispatch_async(dispatch_get_main_queue(), {
