@@ -53,7 +53,15 @@ class MapViewController: UIViewController {
     }
     
     @IBAction func postButtonTouchUp(sender: UIBarButtonItem) {
-        
+        UdacityClient.sharedInstance().getUdacityPublicUserData { (success, udacityUser, errorString) -> Void in
+            
+            if success {
+                print("Udacity user: \(udacityUser)")
+            }
+            else {
+                print(errorString)
+            }
+        }
     }
     
     @IBAction func refreshButtonTouchUp(sender: UIBarButtonItem) {

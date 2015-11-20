@@ -26,22 +26,22 @@ struct StudentLocation {
     
     init(dictionary: [String: AnyObject]) {
         
-        objectId = dictionary[UdacityClient.JSONResponseKeys.ObjectId] as! String
-        uniqueKey = dictionary[UdacityClient.JSONResponseKeys.UniqueKey] as! String // Udacity account (user) id
-        let firstName = dictionary[UdacityClient.JSONResponseKeys.FirstName] as! String
-        let lastName = dictionary[UdacityClient.JSONResponseKeys.LastName] as! String
+        objectId = dictionary[UdacityClient.JSONResponseKeys.LocationObjectId] as! String
+        uniqueKey = dictionary[UdacityClient.JSONResponseKeys.LocationUniqueKey] as! String // Udacity account (user) id
+        let firstName = dictionary[UdacityClient.JSONResponseKeys.LocationFirstName] as! String
+        let lastName = dictionary[UdacityClient.JSONResponseKeys.LocationLastName] as! String
         fullName = "\(firstName) \(lastName)"
-        mapString = dictionary[UdacityClient.JSONResponseKeys.MapString] as! String
-        mediaURL = dictionary[UdacityClient.JSONResponseKeys.MediaURL] as! String
-        latitude = dictionary[UdacityClient.JSONResponseKeys.Latitude] as! Double
-        longitude = dictionary[UdacityClient.JSONResponseKeys.Longitude] as! Double
+        mapString = dictionary[UdacityClient.JSONResponseKeys.LocationMapString] as! String
+        mediaURL = dictionary[UdacityClient.JSONResponseKeys.LocationMediaURL] as! String
+        latitude = dictionary[UdacityClient.JSONResponseKeys.LocationLatitude] as! Double
+        longitude = dictionary[UdacityClient.JSONResponseKeys.LocationLongitude] as! Double
         
         // Parse date
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        let createdAtString = dictionary[UdacityClient.JSONResponseKeys.CreatedAt] as! String
+        let createdAtString = dictionary[UdacityClient.JSONResponseKeys.LocationCreatedAt] as! String
         createdAt = dateFormatter.dateFromString(createdAtString)!
-        let updatedAtString = dictionary[UdacityClient.JSONResponseKeys.UpdatedAt] as! String
+        let updatedAtString = dictionary[UdacityClient.JSONResponseKeys.LocationUpdatedAt] as! String
         updatedAt = dateFormatter.dateFromString(updatedAtString)!
     }
     
@@ -55,6 +55,7 @@ struct StudentLocation {
         
         return locations
     }
+    
 }
 
 

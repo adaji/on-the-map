@@ -18,10 +18,15 @@ extension UdacityClient {
     func autheticateUdacityWithViewController(hostViewController: UIViewController, completionHandler: (success: Bool, errorString: String?) -> Void) {
         
         if let loginVC = hostViewController as? LoginViewController {
-            getUdacitySessionID([HTTPBodyKeys.Username: loginVC.emailTextField.text!, HTTPBodyKeys.Password: loginVC.passwordTextField.text!]) { success, sessionID, errorString in
+            getUdacitySessionID([HTTPBodyKeys.Username: loginVC.emailTextField.text!, HTTPBodyKeys.Password: loginVC.passwordTextField.text!]) { success, sessionID, userID, errorString in
                 
                 if success {
-                    self.sessionID = sessionID
+                    if let sessionID = sessionID {
+                        self.sessionID = sessionID
+                    }
+                    if let userID = userID {
+                        self.userID = Int(userID)
+                    }
                 }
                 
                 completionHandler(success: success, errorString: errorString)
@@ -30,32 +35,45 @@ extension UdacityClient {
         
     }
     
-    func getUdacitySessionID(parameters: [String: String], completionHandler: (success: Bool, sessionID: String?, errorString: String?) -> Void) {
+    func getUdacitySessionID(parameters: [String: String], completionHandler: (success: Bool, sessionID: String?, userID: String?, errorString: String?) -> Void) {
         
         let httpBodyString = "{\"\(HTTPBodyKeys.Udacity)\": {\"\(HTTPBodyKeys.Username)\": \"<\(HTTPBodyKeys.Username)>\", \"\(HTTPBodyKeys.Password)\": \"<\(HTTPBodyKeys.Password)>\"}}"
-        let httpBody = UdacityClient.substitutedHTTPBody(httpBodyString, parameters: parameters)
+        let httpBody = UdacityClient.substituteKeysInHTTPBody(httpBodyString, parameters: parameters)
         
         startTaskForUdacityPOSTMethod(Methods.Session, httpBody: httpBody) { result, error in
             
             guard error == nil else {
                 print("Login Failed. Error: \(error)")
-                completionHandler(success: false, sessionID: nil, errorString: error!.description)
+                completionHandler(success: false, sessionID: nil, userID: nil, errorString: error!.description)
                 return
             }
             
             guard let result = result else {
                 print("No result returned.")
-                completionHandler(success: false, sessionID: nil, errorString: "No result returned.")
+                completionHandler(success: false, sessionID: nil, userID: nil, errorString: "No result returned.")
                 return
             }
             
             guard let session = result[JSONResponseKeys.Session] as? [String: String] else {
-                completionHandler(success: false, sessionID: nil, errorString: "Login Failed (Session ID).")
+                completionHandler(success: false, sessionID: nil, userID: nil, errorString: "Login Failed (Session ID).")
                 return
             }
             
-            let sessionID = session[JSONResponseKeys.ID]
-            completionHandler(success: true, sessionID: sessionID, errorString: nil)
+            let sessionID = session[JSONResponseKeys.SessionID]
+            
+            guard let account = result[JSONResponseKeys.Account] as? [String: AnyObject] else {
+                print("Could not find key \(JSONResponseKeys.Account)")
+                completionHandler(success: false, sessionID: nil, userID: nil, errorString: "Login Failed (User ID).")
+                return
+            }
+            
+            guard let userID = account[JSONResponseKeys.AccountKey] as? String else {
+                print("Could not get user id")
+                completionHandler(success: false, sessionID: nil, userID: nil, errorString: "Login Failed (User ID).")
+                return
+            }
+            
+            completionHandler(success: true, sessionID: sessionID, userID: userID, errorString: nil)
         }
     }
     
@@ -69,6 +87,35 @@ extension UdacityClient {
             }
             
             completionHandler(success: true, errorString: nil)
+        }
+    }
+    
+    func getUdacityPublicUserData(completionHandler: (success: Bool, udacityUser: UdacityUser?, errorString: String?) -> Void) {
+        let method = UdacityClient.substituteKeyInMethod(Methods.UserData, key: URLKeys.UserId, value: String(UdacityClient.sharedInstance().userID!))
+        
+        startTaskForUdacityGETMethod(method) { (result, error) -> Void in
+            
+            guard error == nil else {
+                print("There was an error processing request. Error: \(error)")
+                completionHandler(success: false, udacityUser: nil, errorString: error!.description)
+                return
+            }
+            
+            guard let result = result else {
+                print("No result returned.")
+                completionHandler(success: false, udacityUser: nil, errorString: "No result returned.")
+                return
+            }
+            
+            guard let user = result[JSONResponseKeys.User] as? [String: AnyObject] else {
+                print("No valid data returned.")
+                completionHandler(success: false, udacityUser: nil, errorString: "Could not find key \(JSONResponseKeys.User) in \(result)")
+                return
+            }
+            
+            let udacityUser = UdacityUser(dictionary: user)
+            self.udacityUser = udacityUser
+            completionHandler(success: true, udacityUser: udacityUser, errorString: nil)
         }
     }
     

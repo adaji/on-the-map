@@ -29,6 +29,7 @@ class LoginViewController: KeyboardHandlingViewController {
         setControlsEnabled(true)
         setLoginButtonEnabled(false)
         
+        // Try auto login
         tryAutoLogin()
     }
     
@@ -37,6 +38,12 @@ class LoginViewController: KeyboardHandlingViewController {
     @IBAction func loginButtonTouch(sender: UIButton) {
         setControlsEnabled(false)
         login()
+    }
+    
+    // Clicking on the Sign Up link will open Safari to the Udacity sign-in page.
+    @IBAction func signupButtonTouchUp(sender: UIButton) {
+        let app = UIApplication.sharedApplication()
+        app.openURL(NSURL(string: "https://www.udacity.com/account/auth#!/signin")!)
     }
     
     // MARK: Login

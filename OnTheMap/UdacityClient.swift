@@ -17,8 +17,10 @@ class UdacityClient: NSObject {
     var session: NSURLSession
     
     var sessionID: String? = nil
+    var userID: Int? = nil
     
     var studentLocations: [StudentLocation]? = nil
+    var udacityUser: UdacityUser? = nil
     
     // MARK: Initializers
     
@@ -94,6 +96,28 @@ class UdacityClient: NSObject {
         task.resume()
     }
     
+    func startTaskForUdacityGETMethod(method: String, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
+        
+        let urlString = Constants.UdacityBaseURL + method
+        let request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
+        
+        let task = session.dataTaskWithRequest(request) { (data, response, error) -> Void in
+            
+            guard error == nil else {
+                print("There was an error with your request: \(error)")
+                return
+            }
+            
+            guard let data = data else {
+                return
+            }
+            
+            NetworkingDataHandler.parseJSONWithCompletionHandler(UdacityClient.subsetData(data), completionHandler: completionHandler)
+        }
+        
+        task.resume()
+    }
+    
     // MARK: Parse HTTP Methods
     
     func startTaskForParseGETMethod(parameters: [String: AnyObject], completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
@@ -123,7 +147,7 @@ class UdacityClient: NSObject {
     // MARK: Helper Functions
     
     // Substitute values in HTTP body
-    class func substitutedHTTPBody(httpBody: String, parameters: [String: String]) -> String {
+    class func substituteKeysInHTTPBody(httpBody: String, parameters: [String: String]) -> String {
         var result = httpBody
         for key in parameters.keys {
             if result.rangeOfString("<\(key)>") != nil {
@@ -132,6 +156,16 @@ class UdacityClient: NSObject {
         }
         
         return result
+    }
+    
+    /* Helper: Substitute the key for the value that is contained within the method name */
+    class func substituteKeyInMethod(method: String, key: String, value: String) -> String {
+        if method.rangeOfString("<\(key)>") != nil {
+            return method.stringByReplacingOccurrencesOfString("<\(key)>", withString: value)
+        }
+        else {
+            return method
+        }
     }
     
     // Subset response data from Udacity

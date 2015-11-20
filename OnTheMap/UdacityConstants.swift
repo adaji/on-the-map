@@ -31,7 +31,12 @@ extension UdacityClient {
     struct Methods {
         
         static let Session = "session"
-        static let UsersId = "users/<user id>" // GETting Public User Data
+        static let UserData = "users/<user_id>" // GETting Public User Data
+    }
+    
+    struct URLKeys {
+        
+        static let UserId = "user_id"
     }
     
     struct ParameterKeys {
@@ -64,23 +69,37 @@ extension UdacityClient {
         
         // Udacity Session
         
+        // User id
+        static let Account = "account"
+        static let AccountKey = "key"
+
+        // Session id
         static let Session = "session"
-        
-        static let ID = "id"
+        static let SessionID = "id"
         
         // Student Location
         
         static let Results = "results"
         
-        static let CreatedAt = "createdAt"
-        static let FirstName = "firstName"
-        static let LastName = "lastName"
-        static let Latitude = "latitude"
-        static let Longitude = "longitude"
-        static let MapString = "mapString"
-        static let MediaURL = "mediaURL"
-        static let ObjectId = "objectId"
-        static let UniqueKey = "uniqueKey"
-        static let UpdatedAt = "updatedAt"
+        static let LocationObjectId = "objectId"
+        static let LocationUniqueKey = "uniqueKey"
+        static let LocationFirstName = "firstName"
+        static let LocationLastName = "lastName"
+        static let LocationMapString = "mapString"
+        static let LocationMediaURL = "mediaURL"
+        static let LocationLatitude = "latitude"
+        static let LocationLongitude = "longitude"
+        static let LocationCreatedAt = "createdAt"
+        static let LocationUpdatedAt = "updatedAt"
+        
+        // Udacity User
+        
+        static let User = "user"
+
+        static let UserFirstName = "first_name"
+        static let UserLastName = "last_name"
+        static let UserLocation = "location"
+        static let UserWebsiteUrl = "website_url"
     }
+    
 }
