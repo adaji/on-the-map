@@ -26,12 +26,12 @@ class PostViewController: UIViewController {
     
     @IBOutlet weak var textLabel: UILabel!
     @IBOutlet weak var locationTextView: UITextView!
-    @IBOutlet weak var findButton: UIButton!
+    @IBOutlet weak var findButton: BorderedButton!
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var topCoverView: UIView!
     @IBOutlet weak var urlTextView: UITextView!
-    @IBOutlet weak var submitButton: UIButton!
+    @IBOutlet weak var submitButton: BorderedButton!
     
     var delegate: PostViewControllerDelegate?
     
@@ -41,6 +41,8 @@ class PostViewController: UIViewController {
     let locationPlaceholderText = "Enter Your Location Here"
     let urlPlaceholderText = "Enter a Link to Share Here"
     let placeholderTextColor = UIColor(red: 217/255.0, green: 217/255.0, blue: 213/255.0, alpha: 1)
+    
+    var tapRecognizer: UITapGestureRecognizer? = nil
     
     // Actions
     
@@ -112,7 +114,12 @@ class PostViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        configureUI()
+
         initData()
+
+        tapRecognizer = UITapGestureRecognizer(target: self, action: "handleSingleTap:")
+        tapRecognizer?.numberOfTapsRequired = 1
     }
     
     // Initialize data (myStudentLocation, hasPosted)
@@ -133,9 +140,35 @@ class PostViewController: UIViewController {
         super.viewWillAppear(animated)
         
         configureUIForEnteringLocation()
+        
+        addKeyboardDismissRecognizer()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        removeKeyboardDismissRecognizer()
     }
     
     // MARK: Configure UI
+    
+    func configureUI() {
+        
+        let attributedText = NSMutableAttributedString()
+        attributedText.appendAttributedString(NSAttributedString(string: "Where are you\n", attributes: [NSFontAttributeName: UIFont(name: "AppleSDGothicNeo-Thin", size: 28)!]))
+        attributedText.appendAttributedString(NSAttributedString(string: "studying\n", attributes: [NSFontAttributeName: UIFont(name: "AppleSDGothicNeo-Regular", size: 28)!]))
+        attributedText.appendAttributedString(NSAttributedString(string: "today?", attributes: [NSFontAttributeName: UIFont(name: "AppleSDGothicNeo-Thin", size: 28)!]))
+        attributedText.addAttribute(NSForegroundColorAttributeName, value: UIColor.orangeColor(), range: NSRangeFromString(attributedText.string))
+        textLabel.attributedText = attributedText
+        
+        for button in [findButton, submitButton] {
+            button.setTitleColor(UIColor.orangeColor(), forState: .Normal)
+            button.setTitleColor(UIColor.orangeColor().colorWithAlphaComponent(0.5), forState: .Highlighted)
+            button.backgroundColor = UIColor.whiteColor()
+            button.backingColor = UIColor.whiteColor()
+            button.highlightedBackingColor = UIColor.whiteColor()
+        }
+    }
     
     // Configure UI for entering location
     func configureUIForEnteringLocation() {
@@ -197,7 +230,6 @@ class PostViewController: UIViewController {
     //
     // If submission succeeds, update myStudentLocation stored in UdacityClient
     func submitStudentLocation() {
-        MBProgressHUD.hideAllHUDsForView(view, animated: true)
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
         
         let locationDictionary = StudentLocation.dictionaryFromStudentLocation(myStudentLocation!)
@@ -236,6 +268,20 @@ class PostViewController: UIViewController {
         self.presentViewController(alertController, animated: true, completion: nil)
     }
 
+    // MARK: Show/Hide Keyboard
+    
+    func addKeyboardDismissRecognizer() {
+        view.addGestureRecognizer(tapRecognizer!)
+    }
+    
+    func removeKeyboardDismissRecognizer() {
+        view.removeGestureRecognizer(tapRecognizer!)
+    }
+    
+    func handleSingleTap(recognizer: UITapGestureRecognizer) {
+        view.endEditing(true)
+    }
+    
 }
 
 // MARK: - PostViewController: UITextViewDelegate

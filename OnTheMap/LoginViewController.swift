@@ -13,7 +13,7 @@ class LoginViewController: KeyboardHandlingViewController {
     
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var loginButton: BorderedButton!
     @IBOutlet weak var signupButton: UIButton!
     @IBOutlet weak var facebookLoginButton: BorderedButton!
         
@@ -21,6 +21,8 @@ class LoginViewController: KeyboardHandlingViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        configureUI()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -103,7 +105,16 @@ class LoginViewController: KeyboardHandlingViewController {
         }
     }
     
-    // MARK: Helper Functions
+    // MARK: Configure UI
+    
+    func configureUI() {
+        facebookLoginButton.backgroundColor = UIColor(red: 59/255.0, green: 89/255.0, blue: 152/255.0, alpha: 1.0)
+        facebookLoginButton.backingColor = UIColor(red: 59/255.0, green: 89/255.0, blue: 152/255.0, alpha: 1.0)
+        
+        loginButton.backgroundColor = UIColor(red: 238/255.0, green: 62/255.0, blue: 10/255.0, alpha: 1.0)
+        loginButton.backingColor = UIColor(red: 238/255.0, green: 62/255.0, blue: 10/255.0, alpha: 1.0)
+        loginButton.highlightedBackingColor = UIColor.redColor()
+    }
     
     func setLoginButtonEnabled(enabled: Bool) {
         loginButton.enabled = enabled

@@ -66,8 +66,6 @@
 		60ECE8E01BFC32F600D5B165 /* OnTheMapUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnTheMapUITests.swift; sourceTree = "<group>"; };
 		60ECE8E21BFC32F600D5B165 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		60ECE8EE1BFC44A900D5B165 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		60ECE8F11BFC494B00D5B165 /* SF-UI-Text-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Text-Regular.otf"; sourceTree = "<group>"; };
-		60ECE8F21BFC49B300D5B165 /* SF-UI-Text-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Text-Medium.otf"; sourceTree = "<group>"; };
 		60ECE8F91BFC542300D5B165 /* BorderedButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BorderedButton.swift; path = OnTheMap/BorderedButton.swift; sourceTree = "<group>"; };
 		60ECE8FA1BFC542300D5B165 /* CustomTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomTextField.swift; path = OnTheMap/CustomTextField.swift; sourceTree = "<group>"; };
 		60ECE8FE1BFC7D3700D5B165 /* KeyboardHandlingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardHandlingViewController.swift; sourceTree = "<group>"; };
@@ -170,18 +168,8 @@
 				60B11E7F1BFE84CF0002196A /* OnTheMap-Bridging-Header.h */,
 				60ECE8CC1BFC32F600D5B165 /* Info.plist */,
 				60ECE8C91BFC32F600D5B165 /* LaunchScreen.storyboard */,
-				60ECE8F31BFC4CCC00D5B165 /* Fonts */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		60ECE8F31BFC4CCC00D5B165 /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-				60ECE8F11BFC494B00D5B165 /* SF-UI-Text-Regular.otf */,
-				60ECE8F21BFC49B300D5B165 /* SF-UI-Text-Medium.otf */,
-			);
-			name = Fonts;
 			sourceTree = "<group>";
 		};
 		60ECE8F61BFC529500D5B165 /* View */ = {

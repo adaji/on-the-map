@@ -12,8 +12,6 @@ import UIKit
 
 class BorderedButton: UIButton {
     
-    // TODO: Check why text color changes when button is touched
-    
     // MARK: Properties
     
     /* Constants for styling and configuration */

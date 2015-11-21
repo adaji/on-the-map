@@ -6,14 +6,7 @@
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <mutableArray key="SF-UI-Text-Medium.otf">
-            <string>SFUIText-Medium</string>
-        </mutableArray>
         <mutableArray key="SF-UI-Text-Regular.otf">
-            <string>SFUIText-Regular</string>
-            <string>SFUIText-Regular</string>
-            <string>SFUIText-Regular</string>
-            <string>SFUIText-Regular</string>
             <string>SFUIText-Regular</string>
         </mutableArray>
     </customFonts>
@@ -38,7 +31,7 @@
                                     <constraint firstAttribute="height" constant="44" id="OZm-0Y-7i7"/>
                                 </constraints>
                                 <color key="textColor" red="0.93333333330000001" green="0.24313725489999999" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="next"/>
                                 <connections>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="xGe-if-fRE"/>
@@ -49,16 +42,15 @@
                                 <color key="backgroundColor" red="0.97647058819999999" green="0.71764705880000002" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="tintColor" red="0.93333333330000001" green="0.24313725489999999" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="textColor" red="0.93333333330000001" green="0.24313725489999999" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES"/>
                                 <connections>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="GyY-wf-dYB"/>
                                 </connections>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z3l-pJ-rx5">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z3l-pJ-rx5" customClass="BorderedButton" customModule="OnTheMap" customModuleProvider="target">
                                 <rect key="frame" x="20" y="313" width="560" height="44"/>
                                 <color key="backgroundColor" red="0.93333333330000001" green="0.24313725489999999" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="17"/>
                                 <state key="normal" title="Login">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -73,9 +65,9 @@
                                     <constraint firstAttribute="width" constant="80" id="wVg-Nh-hql"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yyR-08-CW8">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yyR-08-CW8">
                                 <rect key="frame" x="170" y="365" width="261" height="44"/>
-                                <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                 <state key="normal" title="Don't have an account? Sign Up">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -83,15 +75,12 @@
                                     <action selector="signupButtonTouchUp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qHZ-o6-Mu1"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3WX-zf-Sar" customClass="BorderedButton" customModule="OnTheMap" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3WX-zf-Sar" customClass="BorderedButton" customModule="OnTheMap" customModuleProvider="target">
                                 <rect key="frame" x="20" y="536" width="560" height="44"/>
                                 <color key="backgroundColor" red="0.23137254900000001" green="0.34901960780000002" blue="0.59607843140000005" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="17"/>
-                                <state key="normal" title="Sign in with Facebook">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
+                                <state key="normal" title="Sign in with Facebook"/>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Login to Udacity" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OpS-j8-z8R">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Login to Udacity" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OpS-j8-z8R">
                                 <rect key="frame" x="223" y="160" width="155" height="41"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="41" id="SV5-yC-9Zp"/>
@@ -263,16 +252,6 @@
                                     <outlet property="delegate" destination="CeH-Ry-pNb" id="kwC-qt-MeH"/>
                                 </connections>
                             </textView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Where are you studying today?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YGt-0k-DWu">
-                                <rect key="frame" x="231" y="60" width="139" height="100"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="139" id="0Ns-rF-NaG"/>
-                                    <constraint firstAttribute="height" constant="100" id="mrA-Lg-xM9"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <color key="textColor" red="1" green="0.41960784309999999" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Enter Your Location Here" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="3Hd-ij-BzG">
                                 <rect key="frame" x="0.0" y="173" width="600" height="327"/>
                                 <color key="backgroundColor" red="1" green="0.41960784309999999" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -294,19 +273,25 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lBJ-Qx-IkM">
                                 <rect key="frame" x="0.0" y="500" width="600" height="100"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IlR-Pc-1rW">
-                                        <rect key="frame" x="227" y="32" width="146" height="36"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IlR-Pc-1rW" customClass="BorderedButton" customModule="OnTheMap" customModuleProvider="target">
+                                        <rect key="frame" x="202" y="32" width="196" height="36"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="36" id="ZCe-E8-bM1"/>
+                                            <constraint firstAttribute="width" constant="196" id="m8H-DZ-a5V"/>
+                                        </constraints>
                                         <state key="normal" title="Find on the Map"/>
                                         <connections>
                                             <action selector="findButtonTouchUp:" destination="CeH-Ry-pNb" eventType="touchUpInside" id="vPE-T6-gQu"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TZf-kt-tGU">
-                                        <rect key="frame" x="268" y="32" width="64" height="36"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TZf-kt-tGU" customClass="BorderedButton" customModule="OnTheMap" customModuleProvider="target">
+                                        <rect key="frame" x="243" y="32" width="114" height="36"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="114" id="I7B-S7-Qof"/>
+                                            <constraint firstAttribute="height" constant="36" id="Qto-fy-yoL"/>
+                                        </constraints>
                                         <state key="normal" title="Submit"/>
                                         <connections>
                                             <action selector="submitButtonTouchUp:" destination="CeH-Ry-pNb" eventType="touchUpInside" id="gj1-Ol-Dbx"/>
@@ -322,10 +307,20 @@
                                     <constraint firstItem="IlR-Pc-1rW" firstAttribute="centerY" secondItem="lBJ-Qx-IkM" secondAttribute="centerY" id="sqE-Ct-8Rr"/>
                                 </constraints>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Where are you studying today?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YGt-0k-DWu">
+                                <rect key="frame" x="206" y="58" width="189" height="107"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="189" id="0Ns-rF-NaG"/>
+                                    <constraint firstAttribute="height" constant="107" id="mrA-Lg-xM9"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AppleSDGothicNeo-Thin" family="Apple SD Gothic Neo" pointSize="28"/>
+                                <color key="textColor" red="1" green="0.41960784309999999" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.85098039219999999" green="0.85098039219999999" blue="0.83529411760000005" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="3Hd-ij-BzG" firstAttribute="top" secondItem="YGt-0k-DWu" secondAttribute="bottom" constant="13" id="09k-o2-f2N"/>
+                            <constraint firstItem="3Hd-ij-BzG" firstAttribute="top" secondItem="YGt-0k-DWu" secondAttribute="bottom" constant="8" id="09k-o2-f2N"/>
                             <constraint firstItem="jX8-a4-4uK" firstAttribute="top" secondItem="OHB-jh-YHC" secondAttribute="topMargin" id="4US-eB-g9l"/>
                             <constraint firstItem="z2h-dP-5k6" firstAttribute="top" secondItem="fNa-vH-6sZ" secondAttribute="bottom" constant="38" id="6zg-he-ixr"/>
                             <constraint firstItem="hUO-3o-ak2" firstAttribute="top" secondItem="fNa-vH-6sZ" secondAttribute="bottom" id="7T7-kR-YUx"/>
@@ -335,7 +330,7 @@
                             <constraint firstItem="3Hd-ij-BzG" firstAttribute="leading" secondItem="OHB-jh-YHC" secondAttribute="leadingMargin" constant="-20" id="KHX-jf-0Om"/>
                             <constraint firstAttribute="trailingMargin" secondItem="lBJ-Qx-IkM" secondAttribute="trailing" constant="-20" id="KJd-Xh-eSL"/>
                             <constraint firstAttribute="trailingMargin" secondItem="3Hd-ij-BzG" secondAttribute="trailing" constant="-20" id="LRK-md-8je"/>
-                            <constraint firstItem="YGt-0k-DWu" firstAttribute="top" secondItem="fNa-vH-6sZ" secondAttribute="bottom" constant="40" id="RrY-0g-aoN"/>
+                            <constraint firstItem="YGt-0k-DWu" firstAttribute="top" secondItem="fNa-vH-6sZ" secondAttribute="bottom" constant="38" id="RrY-0g-aoN"/>
                             <constraint firstItem="lBJ-Qx-IkM" firstAttribute="top" secondItem="3Hd-ij-BzG" secondAttribute="bottom" id="SXe-RC-AIM"/>
                             <constraint firstItem="z2h-dP-5k6" firstAttribute="leading" secondItem="OHB-jh-YHC" secondAttribute="leadingMargin" constant="-20" id="Tcd-dJ-Drd"/>
                             <constraint firstItem="BAf-zR-lVR" firstAttribute="top" secondItem="lBJ-Qx-IkM" secondAttribute="bottom" id="Te7-eU-vI8"/>
