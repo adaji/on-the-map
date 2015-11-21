@@ -15,6 +15,7 @@ class ListViewController: UIViewController {
     
     @IBOutlet weak var locationsTableView: UITableView!
     
+    var shouldReloadData: Bool = false
     var studentLocations = [StudentLocation]()
     
     override func viewDidLoad() {
@@ -24,17 +25,28 @@ class ListViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        if UdacityClient.sharedInstance().studentLocations != nil {
-            studentLocations = UdacityClient.sharedInstance().studentLocations!
+        if shouldReloadData {
+            getStudentLocations()
+            shouldReloadData = false
+            
+            return
+        }
+        
+        // If there are StudentLocations saved locally, show them on map
+        // If there are not, get StudentLocations
+        if UdacityClient.sharedInstance().studentLocations == nil {
+            getStudentLocations()
         }
         else {
-            getStudentLocations()
+            studentLocations = UdacityClient.sharedInstance().studentLocations!
+            locationsTableView.reloadData()
         }
     }
     
     // MARK: Actions
     
     @IBAction func logoutButtonTouchUp(sender: UIBarButtonItem) {
+        
         MBProgressHUD.hideAllHUDsForView(view, animated: true)
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
         hud.labelText = "Logging out..."
@@ -51,51 +63,140 @@ class ListViewController: UIViewController {
                 userDefaults.synchronize()
                 
                 self.dismissViewControllerAnimated(true, completion: nil)
-            } else {
+            }
+            else {
+                dispatch_async(dispatch_get_main_queue(), {
+                    hud.hide(true)
+                    self.showAlert("There was a problem logging out.")
+                })
+                
                 print(errorString)
             }
         }
     }
     
+    // Check if user has posted location before
+    // If so, ask user whether to overwrite
+    // If not, present post view controller
     @IBAction func postButtonTouchUp(sender: UIBarButtonItem) {
         
+        checkIfHasPosted { (hasPosted, studentLocation) -> Void in
+            
+            // If user has posted location before, ask user whether to overwrite
+            if hasPosted {
+                if let studentLocation = studentLocation {
+                    let message = "User \"\(studentLocation.fullName)\" has already posted a Student Location. Would you like to overwrite the location?"
+                    let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                    alertController.addAction(UIAlertAction(title: "Overwrite", style: .Default, handler: { (action) -> Void in
+                        self.presentPostViewController()
+                    }))
+                    alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.presentViewController(alertController, animated: true, completion: nil)
+                    })
+                }
+            }
+            else {
+                self.presentPostViewController()
+            }
+        }
+    }
+    
+    // Present post view controller
+    func presentPostViewController() {
+        let postVC = self.storyboard!.instantiateViewControllerWithIdentifier("PostViewController") as! PostViewController
+        postVC.delegate = self
+        presentViewController(postVC, animated: true, completion: nil)
     }
     
     @IBAction func refreshButtonTouchUp(sender: UIBarButtonItem) {
         getStudentLocations()
     }
     
-    // MARK: Helper Functions
+    // MARK: Manipulate Data
     
     // Get StudentLocations
     func getStudentLocations() {
+        MBProgressHUD.hideAllHUDsForView(view, animated: true)
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
-        hud.labelText = "Loading..."
-
+        
         let parameters = [UdacityClient.ParameterKeys.LimitKey: 100]
         UdacityClient.sharedInstance().getStudentLocations(parameters) { (success, studentLocations, errorString) -> Void in
             
             if success {
                 if let studentLocations = studentLocations {
-                    self.studentLocations = studentLocations
-
+                    
                     dispatch_async(dispatch_get_main_queue(), {
                         hud.hide(true)
+                        
+                        self.studentLocations = studentLocations // Put this in the block because it must be done before table view reloads data
                         self.locationsTableView.reloadData()
                     })
                 }
                 else {
                     dispatch_async(dispatch_get_main_queue(), {
                         hud.hide(true)
+                        self.showAlert(errorString)
                     })
                 }
             }
             else {
+                dispatch_async(dispatch_get_main_queue(), {
+                    hud.hide(true)
+                    self.showAlert(errorString)
+                })
                 print(errorString)
             }
         }
     }
-
+    
+    // Check if user has posted location before
+    func checkIfHasPosted(completionHandler: (hasPosted: Bool, studentLocation: StudentLocation?) -> Void) {
+        
+        // Check if user's StudentLocation has been saved locally (as myStudentLocation)
+        let myLocation = UdacityClient.sharedInstance().myStudentLocation
+        if myLocation != nil {
+            completionHandler(hasPosted: true, studentLocation: myLocation)
+        }
+        else {
+            // Query for user's StudentLocation
+            
+            MBProgressHUD.hideAllHUDsForView(view, animated: true)
+            let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
+            
+            let parameters = [UdacityClient.ParameterKeys.WhereKey: "{\"\(UdacityClient.ParameterKeys.UniqueKey)\":\"\(UdacityClient.sharedInstance().userID!)\"}"]
+            UdacityClient.sharedInstance().queryForStudentLocation(parameters) { (success, studentLocation, errorString) -> Void in
+                
+                if success {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        hud.hide(true)
+                    })
+                    
+                    if let studentLocation = studentLocation {
+                        completionHandler(hasPosted: true, studentLocation: studentLocation)
+                    }
+                    else {
+                        completionHandler(hasPosted: false, studentLocation: nil)
+                    }
+                }
+                else {
+                    completionHandler(hasPosted: false, studentLocation: nil)
+                    print(errorString)
+                }
+            }
+        }
+    }
+    
+    // MARK: Helper Functions
+    
+    func showAlert(message: String?) {
+        let message = !message!.isEmpty ? message : "An unknown error has occurred."
+        let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
 }
 
 extension ListViewController: UITableViewDataSource, UITableViewDelegate {
@@ -139,6 +240,18 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
             let app = UIApplication.sharedApplication()
             app.openURL(NSURL(string: studentLocation.mediaURL)!)
         }
+    }
+    
+}
+
+// MARK: - ListViewController: PostViewControllerDelegate
+
+extension ListViewController: PostViewControllerDelegate {
+    
+    // If user has just successfully submitted StudentLocation in PostViewController,
+    // reload StudentLocations data when the view appears
+    func didSubmitStudentLocation() {
+        shouldReloadData = true
     }
     
 }

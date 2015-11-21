@@ -66,6 +66,11 @@ class MapViewController: UIViewController {
                 self.dismissViewControllerAnimated(true, completion: nil)
             }
             else {
+                dispatch_async(dispatch_get_main_queue(), {
+                    hud.hide(true)
+                    self.showAlert("There was a problem logging out.")
+                })
+
                 print(errorString)
             }
         }
@@ -131,12 +136,14 @@ class MapViewController: UIViewController {
                 else {
                     dispatch_async(dispatch_get_main_queue(), {
                         hud.hide(true)
+                        self.showAlert(errorString)
                     })
                 }
             }
             else {
                 dispatch_async(dispatch_get_main_queue(), {
                     hud.hide(true)
+                    self.showAlert(errorString)
                 })
                 print(errorString)
             }
@@ -205,22 +212,11 @@ class MapViewController: UIViewController {
     
     // MARK: Helper Functions
     
-    func showAlert(message: String) {
+    func showAlert(message: String?) {
+        let message = !message!.isEmpty ? message : "An unknown error has occurred."
         let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
         self.presentViewController(alertController, animated: true, completion: nil)
-    }
-    
-}
-
-// MARK: - PostViewControllerDelegate
-
-extension MapViewController: PostViewControllerDelegate {
-    
-    // If user has just successfully submitted StudentLocation in PostViewController,
-    // reload StudentLocations data when the view appears
-    func didSubmitStudentLocation() {
-        shouldReloadData = true
     }
     
 }
@@ -261,6 +257,18 @@ extension MapViewController: MKMapViewDelegate {
                 }
             }
         }
+    }
+    
+}
+
+// MARK: - MapViewController: PostViewControllerDelegate
+
+extension MapViewController: PostViewControllerDelegate {
+    
+    // If user has just successfully submitted StudentLocation in PostViewController,
+    // reload StudentLocations data when the view appears
+    func didSubmitStudentLocation() {
+        shouldReloadData = true
     }
     
 }

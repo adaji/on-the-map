@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import MBProgressHUD
 
 // MARK: Protocols
 
@@ -196,11 +197,18 @@ class PostViewController: UIViewController {
     //
     // If submission succeeds, update myStudentLocation stored in UdacityClient
     func submitStudentLocation() {
+        MBProgressHUD.hideAllHUDsForView(view, animated: true)
+        let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
+        
         let locationDictionary = StudentLocation.dictionaryFromStudentLocation(myStudentLocation!)
         
         UdacityClient.sharedInstance().submitStudentLocation(hasPosted, locationDictionary: locationDictionary) { (success, errorString) -> Void in
             
             if success {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    hud.hide(true)
+                })
+                
                 self.delegate!.didSubmitStudentLocation()
                 
                 self.dismissViewControllerAnimated(true, completion: nil)
@@ -209,6 +217,11 @@ class PostViewController: UIViewController {
                 print("Update Location Succeed.")
             }
             else {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    hud.hide(true)
+                    self.showAlert(errorString)
+                })
+                
                 print(errorString)
             }
         }
@@ -216,7 +229,8 @@ class PostViewController: UIViewController {
     
     // MARK: Helper Functions
     
-    func showAlert(message: String) {
+    func showAlert(message: String?) {
+        let message = !message!.isEmpty ? message : "An unknown error has occurred."
         let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
         self.presentViewController(alertController, animated: true, completion: nil)
