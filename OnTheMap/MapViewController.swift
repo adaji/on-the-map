@@ -12,7 +12,13 @@ import MBProgressHUD
 
 class MapViewController: UIViewController {
     
+    // MARK: Properties
+    
     @IBOutlet weak var mapView: MKMapView!
+    
+    var shouldReloadData: Bool = false
+        
+    // MARK: Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,15 +27,25 @@ class MapViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        if shouldReloadData {
+            getStudentLocations()
+            return
+        }
+        
+        // If there are StudentLocations saved locally, show them on map
+        // If there are not, get StudentLocations
         if UdacityClient.sharedInstance().studentLocations == nil {
             getStudentLocations()
         }
         else {
-            self.mapView.addAnnotations(self.annotationsFromStudentLocations(UdacityClient.sharedInstance().studentLocations!))
+            showStudentLocationsOnMap(UdacityClient.sharedInstance().studentLocations!)
         }
     }
     
+    // MARK: Actions
+    
     @IBAction func LogoutButtonTouchUp(sender: UIBarButtonItem) {
+        
         MBProgressHUD.hideAllHUDsForView(view, animated: true)
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
         hud.labelText = "Logging out..."
@@ -46,15 +62,19 @@ class MapViewController: UIViewController {
                 userDefaults.synchronize()
 
                 self.dismissViewControllerAnimated(true, completion: nil)
-            } else {
+            }
+            else {
                 print(errorString)
             }
         }
     }
     
+    // Check if user has posted location before
+    // If so, ask user whether to overwrite
+    // If not, present post view controller
     @IBAction func postButtonTouchUp(sender: UIBarButtonItem) {
         
-        checkForPreviousPost { (hasPosted, studentLocation) -> Void in
+        checkIfHasPosted { (hasPosted, studentLocation) -> Void in
             
             // If user has posted location before, ask user whether to overwrite
             if hasPosted {
@@ -62,53 +82,22 @@ class MapViewController: UIViewController {
                     let message = "User \"\(studentLocation.fullName)\" has already posted a Student Location. Would you like to overwrite the location?"
                     let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
                     alertController.addAction(UIAlertAction(title: "Overwrite", style: .Default, handler: { (action) -> Void in
-                        
-                        self.presentPostViewController(studentLocation)
+                        self.presentPostViewController()
                     }))
                     alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
                     self.presentViewController(alertController, animated: true, completion: nil)
                 }
             }
             else {
-                self.presentPostViewController(nil)
-            }
-        }
-    }
-    
-    // Check if user has posted location before
-    func checkForPreviousPost(completionHandler: (hasPosted: Bool, studentLocation: StudentLocation?) -> Void) {
-        let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
-
-        let parameters = [UdacityClient.ParameterKeys.WhereKey: "{\"\(UdacityClient.ParameterKeys.UniqueKey)\":\"\(UdacityClient.sharedInstance().userID!)\"}"]
-        UdacityClient.sharedInstance().queryForStudentLocation(parameters) { (success, studentLocation, errorString) -> Void in
-            
-            if success {
-                dispatch_async(dispatch_get_main_queue(), {
-                    hud.hide(true)
-                })
-                
-                // Ask user whether to overwrite previous post data
-                if let studentLocation = studentLocation {
-                    completionHandler(hasPosted: true, studentLocation: studentLocation)
-                }
-                else {
-                    completionHandler(hasPosted: false, studentLocation: nil)
-                }
-            }
-            else {
-                completionHandler(hasPosted: false, studentLocation: nil)
-                print(errorString)
+                self.presentPostViewController()
             }
         }
     }
     
     // Present post view controller
-    // If user has posted location before, pass in the location
-    func presentPostViewController(studentLocation: StudentLocation?) {
+    func presentPostViewController() {
         let postVC = self.storyboard!.instantiateViewControllerWithIdentifier("PostViewController") as! PostViewController
-        if let studentLocation = studentLocation {
-            postVC.studentLocation = studentLocation
-        }
+        postVC.delegate = self
         presentViewController(postVC, animated: true, completion: nil)
     }
     
@@ -116,12 +105,12 @@ class MapViewController: UIViewController {
         getStudentLocations()
     }
     
-    // MARK: Helper Functions
+    // MARK: Manipulate Data
     
     // Get StudentLocations
     func getStudentLocations() {
+        MBProgressHUD.hideAllHUDsForView(view, animated: true)
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
-        hud.labelText = "Loading..."
 
         let parameters = [UdacityClient.ParameterKeys.LimitKey: 100]
         UdacityClient.sharedInstance().getStudentLocations(parameters) { (success, studentLocations, errorString) -> Void in
@@ -130,7 +119,8 @@ class MapViewController: UIViewController {
                 if let studentLocations = studentLocations {
                     dispatch_async(dispatch_get_main_queue(), {
                         hud.hide(true)
-                        self.mapView.addAnnotations(self.annotationsFromStudentLocations(studentLocations))
+                        self.showStudentLocationsOnMap(studentLocations)
+                        print("Get StudentLocations Succeed.")
                     })
                 }
                 else {
@@ -145,8 +135,46 @@ class MapViewController: UIViewController {
         }
     }
     
-    // Get an array of annotations from an array of StudentLocation
-    func annotationsFromStudentLocations(studentLocations: [StudentLocation]) -> [MKPointAnnotation] {
+    // Check if user has posted location before
+    func checkIfHasPosted(completionHandler: (hasPosted: Bool, studentLocation: StudentLocation?) -> Void) {
+        
+        // Check if user's StudentLocation has been saved locally (as myStudentLocation)
+        let myLocation = UdacityClient.sharedInstance().myStudentLocation
+        if myLocation != nil {
+            completionHandler(hasPosted: true, studentLocation: myLocation)
+        }
+        else {
+            // Query for user's StudentLocation
+            
+            MBProgressHUD.hideAllHUDsForView(view, animated: true)
+            let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
+            
+            let parameters = [UdacityClient.ParameterKeys.WhereKey: "{\"\(UdacityClient.ParameterKeys.UniqueKey)\":\"\(UdacityClient.sharedInstance().userID!)\"}"]
+            UdacityClient.sharedInstance().queryForStudentLocation(parameters) { (success, studentLocation, errorString) -> Void in
+                
+                if success {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        hud.hide(true)
+                    })
+                    
+                    if let studentLocation = studentLocation {
+                        completionHandler(hasPosted: true, studentLocation: studentLocation)
+                    }
+                    else {
+                        completionHandler(hasPosted: false, studentLocation: nil)
+                    }
+                }
+                else {
+                    completionHandler(hasPosted: false, studentLocation: nil)
+                    print(errorString)
+                }
+            }
+        }
+    }
+    
+    // MARK: Show StudentLocations on Map
+    
+    func showStudentLocationsOnMap(studentLocations: [StudentLocation]) {
         var annotations = [MKPointAnnotation]()
         
         for location in studentLocations {
@@ -163,7 +191,27 @@ class MapViewController: UIViewController {
             annotations.append(annotation)
         }
         
-        return annotations
+        mapView.addAnnotations(annotations)
+    }
+    
+    // MARK: Helper Functions
+    
+    func showAlert(message: String) {
+        let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+}
+
+// MARK: - PostViewControllerDelegate
+
+extension MapViewController: PostViewControllerDelegate {
+    
+    // If user has just successfully submitted StudentLocation in PostViewController,
+    // reload StudentLocations data when the view appears
+    func didSubmitStudentLocation() {
+        shouldReloadData = true
     }
     
 }
@@ -191,17 +239,21 @@ extension MapViewController: MKMapViewDelegate {
         return pinView
     }
     
-    // This delegate method is implemented to respond to taps. It opens the system browser
-    // to the URL specified in the annotationViews subtitle property.
+    // Open the system browser to the URL specified in the annotationViews subtitle property
+    // If the URL is invalid, alert user
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         
         if control == view.rightCalloutAccessoryView {
             let app = UIApplication.sharedApplication()
             if let urlString = view.annotation?.subtitle! {
-                app.openURL(NSURL(string: urlString)!)
+                let valid = app.openURL(NSURL(string: urlString)!)
+                if !valid {
+                    showAlert("Invalid Link")
+                }
             }
         }
     }
+    
 }
 
 

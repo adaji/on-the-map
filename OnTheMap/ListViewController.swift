@@ -121,8 +121,6 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
             cell.textLabel!.text =  studentLocation.fullName
             cell.detailTextLabel!.text = studentLocation.mediaURL
             cell.detailTextLabel!.textColor = UIColor.lightGrayColor()
-            cell.imageView!.image = UIImage(named: "marker")
-            cell.imageView!.tintColor = UIColor.orangeColor()
         }
         
         return cell

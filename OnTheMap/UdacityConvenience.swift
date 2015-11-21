@@ -175,10 +175,22 @@ extension UdacityClient {
         }
     }
     
+    // Submit StudentLocation
+    // If user has posted location before, update the location
+    // If not, post it
+    func submitStudentLocation(hasPosted: Bool, locationDictionary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
+        if hasPosted {
+            updateStudentLocation(locationDictionary, completionHandler: completionHandler)
+        }
+        else {
+            postStudentLocation(locationDictionary, completionHandler: completionHandler)
+        }
+    }
+    
     // Function: postStudentLocation
     // Parameters:
     // - locationDictionary: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaURL": "<mediaURL>", "latitude": "<latitude>", "longitude": "<longitude>"] (StudentLocation.dictionaryFromStudentLocation(studentLocation))
-    // completionHandler
+    // - completionHandler
     //
     // POSTing a StudentLocation
     // Required parameters (in HTTPBody): parameters
@@ -187,7 +199,36 @@ extension UdacityClient {
         
         startTaskForParsePOSTMethod(locationDictionary) { (result, error) -> Void in
             
+            guard error == nil else {
+                print("There was an error processing request. Error: \(error)")
+                completionHandler(success: false, errorString: error!.description)
+                return
+            }
             
+            completionHandler(success: true, errorString: nil)
+        }
+    }
+    
+    // Function: updateStudentLocation
+    // Parameters:
+    // - locationDictionary: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaURL": "<mediaURL>", "latitude": "<latitude>", "longitude": "<longitude>"] (StudentLocation.dictionaryFromStudentLocation(studentLocation))
+    // - completionHandler
+    //
+    // PUTting a StudentLocation
+    // Required parameters (in HTTPBody): parameters
+    //
+    func updateStudentLocation(locationDicationary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
+        let method = UdacityClient.substituteKeyInMethod(Methods.UpdateStudentLocation, key: URLKeys.ObjectId, value: String(UdacityClient.sharedInstance().userID!))
+        
+        startTaskForParsePUTMethod(method, jsonBody: locationDicationary) { (result, error) -> Void in
+            
+            guard error == nil else {
+                print("There was an error processing request. Error: \(error)")
+                completionHandler(success: false, errorString: error!.description)
+                return
+            }
+            
+            completionHandler(success: true, errorString: nil)
         }
     }
     
@@ -222,16 +263,8 @@ extension UdacityClient {
             }
             
             let studentLocation = StudentLocation(dictionary: results[0])
+            self.myStudentLocation = studentLocation
             completionHandler(success: true, studentLocation: studentLocation, errorString: nil)
-        }
-    }
-    
-    func updateStudentLocation(parameters: [String: AnyObject], completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
-        let method = UdacityClient.substituteKeyInMethod(Methods.UpdateStudentLocation, key: URLKeys.ObjectId, value: String(UdacityClient.sharedInstance().userID!))
-
-        startTaskForParsePUTMethod(method, jsonBody: parameters) { (result, error) -> Void in
-            
-            
         }
     }
     
