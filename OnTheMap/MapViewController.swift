@@ -29,6 +29,8 @@ class MapViewController: UIViewController {
         
         if shouldReloadData {
             getStudentLocations()
+            shouldReloadData = false
+            
             return
         }
         
@@ -85,7 +87,10 @@ class MapViewController: UIViewController {
                         self.presentPostViewController()
                     }))
                     alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
-                    self.presentViewController(alertController, animated: true, completion: nil)
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.presentViewController(alertController, animated: true, completion: nil)
+                    })
                 }
             }
             else {
@@ -130,6 +135,9 @@ class MapViewController: UIViewController {
                 }
             }
             else {
+                dispatch_async(dispatch_get_main_queue(), {
+                    hud.hide(true)
+                })
                 print(errorString)
             }
         }
@@ -191,6 +199,7 @@ class MapViewController: UIViewController {
             annotations.append(annotation)
         }
         
+        mapView.removeAnnotations(mapView.annotations)
         mapView.addAnnotations(annotations)
     }
     

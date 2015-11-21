@@ -79,11 +79,14 @@ class UdacityClient: NSObject {
         let task = session.dataTaskWithRequest(request) { (data, response, error) -> Void in
             
             guard error == nil else {
+                completionHandler(result: nil, error: error)
                 print("There was an error with your request: \(error)")
                 return
             }
             
             guard let data = data else {
+                let userInfo = [NSLocalizedDescriptionKey : "No data received."]
+                completionHandler(result: nil, error: NSError(domain: "startTaskForUdacityHTTPMethod", code: 1, userInfo: userInfo))
                 return
             }
             
@@ -143,14 +146,17 @@ class UdacityClient: NSObject {
         let task = session.dataTaskWithRequest(request) { data, response, error in
             
             guard error == nil else {
+                completionHandler(result: nil, error: error)
                 print("There was an error with your request: \(error)")
                 return
             }
             
             guard let data = data else {
+                let userInfo = [NSLocalizedDescriptionKey : "No data received."]
+                completionHandler(result: nil, error: NSError(domain: "startTaskForParseHTTPMethod", code: 1, userInfo: userInfo))
                 return
             }
-            
+
             NetworkingDataHandler.parseJSONWithCompletionHandler(data, completionHandler: completionHandler)
         }
         

@@ -76,23 +76,27 @@ class LoginViewController: KeyboardHandlingViewController {
                 userDefaults.setValue(self.passwordTextField.text!, forKey: "password")
                 userDefaults.synchronize()
 
+                let mainTBC = self.storyboard!.instantiateViewControllerWithIdentifier("MainTabBarController") as! UITabBarController
+                
                 dispatch_async(dispatch_get_main_queue(), {
                     hud.hide(true)
                     
-                    let mainTBC = self.storyboard!.instantiateViewControllerWithIdentifier("MainTabBarController") as! UITabBarController
                     mainTBC.tabBar.tintColor = UIColor.orangeColor() // Change tab bar tint color to orange
-
                     self.presentViewController(mainTBC, animated: true, completion: nil)
                 })
             } else {
+                // Display error
+                let alertController = UIAlertController(title: nil, message: errorString, preferredStyle: UIAlertControllerStyle.Alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
+                    self.setControlsEnabled(true)
+                    self.setLoginButtonEnabled(false)
+                }))
+
                 dispatch_async(dispatch_get_main_queue(), {
                     hud.hide(true)
+                    
+                    self.presentViewController(alertController, animated: true, completion: nil)
                 })
-                
-                // Display error
-                let alertController = UIAlertController(title: nil, message: "Invalid Email or Password.", preferredStyle: UIAlertControllerStyle.Alert)
-                alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                self.presentViewController(alertController, animated: true, completion: nil)
                 
                 print(errorString)
             }

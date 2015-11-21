@@ -52,13 +52,22 @@ extension UdacityClient {
             
             guard error == nil else {
                 print("Login Failed. Error: \(error)")
-                completionHandler(success: false, sessionID: nil, userID: nil, errorString: error!.description)
+                var errorMessage = ""
+                switch error!.code {
+                case -1009:
+                    errorMessage = "The Internet connection appears to be offline."
+                    break
+                default:
+                    errorMessage = "Invalid username or password."
+                    break
+                }
+                completionHandler(success: false, sessionID: nil, userID: nil, errorString: errorMessage)
                 return
             }
             
             guard let result = result else {
                 print("No result returned.")
-                completionHandler(success: false, sessionID: nil, userID: nil, errorString: "No result returned.")
+                completionHandler(success: false, sessionID: nil, userID: nil, errorString: "Login Failed (Session ID).")
                 return
             }
             
@@ -115,23 +124,22 @@ extension UdacityClient {
             
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
-                completionHandler(success: false, udacityUser: nil, errorString: error!.description)
+                completionHandler(success: false, udacityUser: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             
             guard let result = result else {
                 print("No result returned.")
-                completionHandler(success: false, udacityUser: nil, errorString: "No result returned.")
+                completionHandler(success: false, udacityUser: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             
             guard let user = result[JSONResponseKeys.User] as? [String: AnyObject] else {
-                print("No valid data returned.")
-                completionHandler(success: false, udacityUser: nil, errorString: "Could not find key \(JSONResponseKeys.User) in \(result)")
+                print("Could not find key \(JSONResponseKeys.User) in \(result).")
+                completionHandler(success: false, udacityUser: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             
-            print("user: \(user)")
             let udacityUser = UdacityUser(dictionary: user)
             self.udacityUser = udacityUser
             completionHandler(success: true, udacityUser: udacityUser, errorString: nil)
@@ -153,19 +161,19 @@ extension UdacityClient {
             
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
-                completionHandler(success: false, studentLocations: nil, errorString: error!.description)
+                completionHandler(success: false, studentLocations: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             
             guard let result = result else {
                 print("No result returned.")
-                completionHandler(success: false, studentLocations: nil, errorString: "No result returned.")
+                completionHandler(success: false, studentLocations: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             
             guard let results = result[JSONResponseKeys.Results] as? [[String: AnyObject]] else {
-                print("No valid data returned.")
-                completionHandler(success: false, studentLocations: nil, errorString: "Could not find key \(JSONResponseKeys.Results) in \(result)")
+                print("Could not find key \(JSONResponseKeys.Results) in \(result)")
+                completionHandler(success: false, studentLocations: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             
@@ -180,7 +188,11 @@ extension UdacityClient {
     // If not, post it
     func submitStudentLocation(hasPosted: Bool, locationDictionary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
         if hasPosted {
-            updateStudentLocation(locationDictionary, completionHandler: completionHandler)
+            // TODO: Check if there is a bug
+            // Somehow updateStudentLocation doesn't update user's location returned in getStudentLocations
+            // Let's use postStudentLocation for now
+            // updateStudentLocation(locationDictionary, completionHandler: completionHandler)
+            postStudentLocation(locationDictionary, completionHandler: completionHandler)
         }
         else {
             postStudentLocation(locationDictionary, completionHandler: completionHandler)
@@ -201,7 +213,7 @@ extension UdacityClient {
             
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
-                completionHandler(success: false, errorString: error!.description)
+                completionHandler(success: false, errorString: "There was an error posting student data.")
                 return
             }
             
@@ -224,7 +236,7 @@ extension UdacityClient {
             
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
-                completionHandler(success: false, errorString: error!.description)
+                completionHandler(success: false, errorString: "There was an error updating student data.")
                 return
             }
             
@@ -246,19 +258,19 @@ extension UdacityClient {
             
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
-                completionHandler(success: false, studentLocation: nil, errorString: error!.description)
+                completionHandler(success: false, studentLocation: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             
             guard let result = result else {
                 print("No result returned.")
-                completionHandler(success: false, studentLocation: nil, errorString: "No result returned.")
+                completionHandler(success: false, studentLocation: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             
             guard let results = result[JSONResponseKeys.Results] as? [[String: AnyObject]] else {
-                print("No valid data returned.")
-                completionHandler(success: false, studentLocation: nil, errorString: "Could not find key \(JSONResponseKeys.Results) in \(result)")
+                print("Could not find key \(JSONResponseKeys.Results) in \(result).")
+                completionHandler(success: false, studentLocation: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             

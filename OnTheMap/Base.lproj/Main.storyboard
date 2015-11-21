@@ -106,13 +106,7 @@
                             <constraint firstItem="OpS-j8-z8R" firstAttribute="top" secondItem="R0Y-vU-f1x" secondAttribute="bottom" constant="16" id="16q-cw-acM"/>
                             <constraint firstItem="EXI-cc-Ub6" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="2j6-QC-A9Q"/>
                             <constraint firstItem="R0Y-vU-f1x" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="44" id="4eX-3h-SwH"/>
-                            <constraint firstItem="3WX-zf-Sar" firstAttribute="width" secondItem="EXI-cc-Ub6" secondAttribute="width" id="5Cv-GG-Bjf">
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
-                                        <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </constraint>
+                            <constraint firstItem="3WX-zf-Sar" firstAttribute="width" secondItem="EXI-cc-Ub6" secondAttribute="width" id="5Cv-GG-Bjf"/>
                             <constraint firstItem="yyR-08-CW8" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="5tO-S4-ho9"/>
                             <constraint firstItem="EXI-cc-Ub6" firstAttribute="top" secondItem="OpS-j8-z8R" secondAttribute="bottom" constant="8" id="BoH-Ki-r7L"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="3WX-zf-Sar" secondAttribute="bottom" constant="20" id="CqT-ay-bf9"/>
@@ -213,7 +207,7 @@
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
-                            <barButtonItem systemItem="refresh" id="0wa-oy-Rw2">
+                            <barButtonItem image="refresh" id="0wa-oy-Rw2">
                                 <connections>
                                     <action selector="refreshButtonTouchUp:" destination="Rm2-V3-l8x" id="oWl-ay-nXl"/>
                                 </connections>
@@ -438,7 +432,7 @@
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
-                            <barButtonItem systemItem="refresh" id="BjU-n1-JkG">
+                            <barButtonItem image="refresh" id="BjU-n1-JkG">
                                 <connections>
                                     <action selector="refreshButtonTouchUp:" destination="Es1-XK-Dhh" id="9og-bV-VhI"/>
                                 </connections>
@@ -502,6 +496,7 @@
         <image name="logout" width="25" height="25"/>
         <image name="map" width="25" height="25"/>
         <image name="marker" width="25" height="25"/>
+        <image name="refresh" width="25" height="25"/>
     </resources>
     <color key="tintColor" red="1" green="0.50196081399917603" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
 </document>

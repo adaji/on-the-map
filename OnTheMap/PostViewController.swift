@@ -60,7 +60,7 @@ class PostViewController: UIViewController {
                 
                 if success {
                     if let placemark = placemark {
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        dispatch_async(dispatch_get_main_queue(), {
                             self.configureUIForSubmit(placemark)
                         })
                         
@@ -70,10 +70,13 @@ class PostViewController: UIViewController {
                     }
                 }
                 else {
-                    self.showAlert("Could not find the location.")
+                    let alertController = UIAlertController(title: nil, message: "Could not find the location.", preferredStyle: UIAlertControllerStyle.Alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.presentViewController(alertController, animated: true, completion: nil)
+                    })
                     print("Could not find \"\(self.locationTextView.text)\" on map. Error: \(errorString)")
-                    
-                    print(errorString)
                 }
             })
         }
