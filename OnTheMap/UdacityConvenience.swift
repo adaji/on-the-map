@@ -72,7 +72,7 @@ extension UdacityClient {
             }
             
             self.sessionID = session[JSONResponseKeys.SessionID] as? String
-            self.userID = Int(account[JSONResponseKeys.AccountKey] as! String)
+            self.userID = account[JSONResponseKeys.AccountKey] as? String
             
             completionHandler(success: true, errorString: nil)
         }
@@ -100,8 +100,8 @@ extension UdacityClient {
     // GETting Public User Data
     // Method: users/<userId>
     //
-    func getUdacityUser(completionHandler: (success: Bool, udacityUser: UdacityUser?, errorString: String?) -> Void) {
-        let method = UdacityClient.substituteKeyInMethod(Methods.UserData, key: URLKeys.UserId, value: String(UdacityClient.sharedInstance().userID!))
+    func getUdacityUser(userId: String, completionHandler: (success: Bool, udacityUser: UdacityUser?, errorString: String?) -> Void) {
+        let method = UdacityClient.substituteKeyInMethod(Methods.UserData, key: UdacityClient.URLKeys.UserId, value: userId)
         startTaskForUdacityGETMethod(method) { (result, error) -> Void in
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
@@ -121,8 +121,8 @@ extension UdacityClient {
                 return
             }
             
+            print("user dictionary: \(user)")
             let udacityUser = UdacityUser(dictionary: user)
-            self.udacityUser = udacityUser
             completionHandler(success: true, udacityUser: udacityUser, errorString: nil)
         }
     }
@@ -180,7 +180,7 @@ extension UdacityClient {
     
     // Function: postStudentInformation
     // Parameters:
-    // - locationDictionary: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaURL": "<mediaURL>", "latitude": "<latitude>", "longitude": "<longitude>"] (StudentInformation.dictionaryFromStudentInformation(StudentInformation))
+    // - locationDictionary: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaURL": "<mediaURL>", "latitude": "<latitude>", "longitude": "<longitude>"] (studentInformation.dictionary())
     // - completionHandler
     //
     // POSTing a StudentInformation
@@ -200,14 +200,14 @@ extension UdacityClient {
     
     // Function: updateStudentInformation
     // Parameters:
-    // - locationDictionary: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaURL": "<mediaURL>", "latitude": "<latitude>", "longitude": "<longitude>"] (StudentInformation.dictionaryFromStudentInformation(StudentInformation))
+    // - locationDictionary: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaURL": "<mediaURL>", "latitude": "<latitude>", "longitude": "<longitude>"] (studentInformation.dictionary())
     // - completionHandler
     //
     // PUTting a StudentInformation
     // Required parameters (in HTTPBody): parameters
     //
     func updateStudentInformation(locationDicationary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
-        let method = UdacityClient.substituteKeyInMethod(Methods.UpdateStudentInformation, key: URLKeys.ObjectId, value: String(UdacityClient.sharedInstance().userID!))
+        let method = UdacityClient.substituteKeyInMethod(Methods.UpdateStudentInformation, key: URLKeys.ObjectId, value: UdacityClient.sharedInstance().userID!)
         startTaskForParsePUTMethod(method, jsonBody: locationDicationary) { (result, error) -> Void in
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")

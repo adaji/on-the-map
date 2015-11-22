@@ -15,7 +15,7 @@ class ListViewController: CommonViewController {
     
     // MARK: Properties
     
-    @IBOutlet weak var locationsTableView: UITableView!
+    @IBOutlet weak var tableView: UITableView!
     
     var allStudentInformation = [StudentInformation]()
     
@@ -26,7 +26,7 @@ class ListViewController: CommonViewController {
         
         self.allStudentInformation = allStudentInformation
         dispatch_async(dispatch_get_main_queue()) { () -> Void in
-            self.locationsTableView.reloadData()
+            self.tableView.reloadData()
         }
     }
     
@@ -45,34 +45,30 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let reuseId = "StudentInformationCell"
         
-        var cell: UITableViewCell
-        if let reusableCell = tableView.dequeueReusableCellWithIdentifier(reuseId) {
+        var cell: StudentInformationCell
+        if let reusableCell = tableView.dequeueReusableCellWithIdentifier(reuseId) as? StudentInformationCell {
             cell = reusableCell
         } else {
-            cell = UITableViewCell(style: .Subtitle, reuseIdentifier: reuseId)
+            cell = StudentInformationCell(style: .Subtitle, reuseIdentifier: reuseId)
         }
         
         if let studentInformation: StudentInformation = allStudentInformation[indexPath.row] {
-            cell.textLabel!.text =  studentInformation.fullName
-            cell.detailTextLabel!.text = studentInformation.mediaURL
-            cell.detailTextLabel!.textColor = UIColor.lightGrayColor()
+            cell.configureCell(studentInformation.initials(), name: studentInformation.fullName(), location: studentInformation.mapString, urlString: studentInformation.mediaURL)
         }
         
         return cell
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 80.0
+        return 100.0
     }
     
     // MARK: UITableViewDelegate
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        
         if let studentInformation: StudentInformation = allStudentInformation[indexPath.row] {
-            let app = UIApplication.sharedApplication()
-            app.openURL(NSURL(string: studentInformation.mediaURL)!)
+            openURL(studentInformation.mediaURL)
         }
     }
     

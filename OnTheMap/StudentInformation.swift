@@ -14,11 +14,10 @@ struct StudentInformation {
     
     // MARK: Properties
     
-    var objectId = ""
+    var objectId = "" // StudentLocation object id on Parse
     var uniqueKey = "" // Udacity account (user) id
     var firstName = ""
     var lastName = ""
-    var fullName = ""
     var mapString = ""
     var mediaURL = ""
     var latitude = 0.0
@@ -41,7 +40,6 @@ struct StudentInformation {
         if let lastName = dictionary[UdacityClient.StudentInformationKeys.LastName] as? String {
             self.lastName = lastName
         }
-        fullName = "\(firstName) \(lastName)"
         if let mapString = dictionary[UdacityClient.StudentInformationKeys.MapString] as? String {
             self.mapString = mapString
         }
@@ -77,17 +75,31 @@ struct StudentInformation {
         return locations
     }
     
-    // Convert StudentInformation object to dictionary (for posting/updating student information)
-    static func dictionaryFromStudentInformation(studentInformation: StudentInformation) -> [String: AnyObject] {
+    // MARK: Convenient Methods
+    
+    // Return the dictionary version of StudentInformation (for posting/updating student information, etc.)
+    func dictionary() -> [String: AnyObject] {
         return [
-            UdacityClient.StudentInformationKeys.UniqueKey: studentInformation.uniqueKey,
-            UdacityClient.StudentInformationKeys.FirstName: studentInformation.firstName,
-            UdacityClient.StudentInformationKeys.LastName: studentInformation.lastName,
-            UdacityClient.StudentInformationKeys.MapString: studentInformation.mapString,
-            UdacityClient.StudentInformationKeys.MediaURL: studentInformation.mediaURL,
-            UdacityClient.StudentInformationKeys.Latitude: studentInformation.latitude,
-            UdacityClient.StudentInformationKeys.Longitude: studentInformation.longitude
+            UdacityClient.StudentInformationKeys.UniqueKey: uniqueKey,
+            UdacityClient.StudentInformationKeys.FirstName: firstName,
+            UdacityClient.StudentInformationKeys.LastName: lastName,
+            UdacityClient.StudentInformationKeys.MapString: mapString,
+            UdacityClient.StudentInformationKeys.MediaURL: mediaURL,
+            UdacityClient.StudentInformationKeys.Latitude: latitude,
+            UdacityClient.StudentInformationKeys.Longitude: longitude
         ]
+    }
+    
+    // Return student's full name
+    func fullName() -> String {
+        return "\(firstName) \(lastName)"
+    }
+    
+    // Return student's initials
+    func initials() -> String {
+        let first = firstName.substringToIndex(firstName.startIndex.advancedBy(1))
+        let last = lastName.substringToIndex(lastName.startIndex.advancedBy(1))
+        return "\(first) \(last)"
     }
     
 }

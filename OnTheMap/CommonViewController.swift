@@ -99,7 +99,7 @@ class CommonViewController: UIViewController {
             } else {
                 // If user has posted location before, ask user whether to overwrite
                 if hasPosted {
-                    let message = "User \"\(studentInformation!.fullName)\" has already posted a Student Location. Would you like to overwrite the location?"
+                    let message = "User \"\(studentInformation!.fullName())\" has already posted a Student Location. Would you like to overwrite the location?"
                     let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
                     alertController.addAction(UIAlertAction(title: "Overwrite", style: .Default, handler: { (action) -> Void in
                         self.presentPostViewController()
@@ -199,6 +199,17 @@ class CommonViewController: UIViewController {
     }
     
     // MARK: Helper Functions
+    
+    func openURL(urlString: String) {
+        if let url = NSURL(string: urlString) {
+            let success = UIApplication.sharedApplication().openURL(url)
+            if !success {
+                showError("Invalid Link")
+            }
+        } else {
+            showError("Invalid Link")
+        }
+    }
     
     // Complete logout
     // - Clear saved data

@@ -31,15 +31,15 @@ class MapViewController: CommonViewController {
     func showAllStudentInformationOnMap(allStudentInformation: [StudentInformation]) {
         var annotations = [MKPointAnnotation]()
         
-        for location in allStudentInformation {
-            let lat = CLLocationDegrees(location.latitude)
-            let lon = CLLocationDegrees(location.longitude)
+        for studentInformation in allStudentInformation {
+            let lat = CLLocationDegrees(studentInformation.latitude)
+            let lon = CLLocationDegrees(studentInformation.longitude)
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
             
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
-            annotation.title = location.fullName
-            annotation.subtitle = location.mediaURL
+            annotation.title = studentInformation.fullName()
+            annotation.subtitle = studentInformation.mediaURL
             
             annotations.append(annotation)
         }
@@ -76,20 +76,14 @@ extension MapViewController: MKMapViewDelegate {
     // If the URL is invalid, alert user
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if control == view.rightCalloutAccessoryView {
-            let app = UIApplication.sharedApplication()
             if let urlString = view.annotation?.subtitle! {
-                if let url = NSURL(string: urlString) {
-                    let valid = app.openURL(url)
-                    if !valid {
-                        showError("Invalid Link")
-                    }
-                } else {
-                    showError("Invalid Link")
-                }
+                openURL(urlString)
+            } else {
+                showError("No valid URL.")
             }
         }
     }
-    
+        
 }
 
 

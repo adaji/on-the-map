@@ -224,7 +224,7 @@ class PostViewController: UIViewController {
     func submitStudentInformation() {
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
         
-        let locationDictionary = StudentInformation.dictionaryFromStudentInformation(myStudentInformation!)
+        let locationDictionary = myStudentInformation!.dictionary()
         UdacityClient.sharedInstance().submitStudentInformation(hasPosted, locationDictionary: locationDictionary) { (success, errorString) -> Void in
             if success {
                 self.delegate!.didSubmitStudentInformation()
