@@ -19,8 +19,8 @@ class UdacityClient: NSObject {
     var sessionID: String? = nil
     var userID: Int? = nil
     
-    var studentLocations: [StudentLocation]? = nil // Save/update student locations locally every time it's queried
-    var myStudentLocation: StudentLocation? = nil // Save/update user's student location locally every time it's queried, posted or updated
+    var allStudentInformation: [StudentInformation]? = nil // Save/update student information data locally every time it's queried
+    var myStudentInformation: StudentInformation? = nil // Save/update user's student information locally every time it's queried, posted or updated
     var udacityUser: UdacityUser? = nil
     
     // MARK: Initializers

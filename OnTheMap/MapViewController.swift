@@ -19,19 +19,19 @@ class MapViewController: CommonViewController {
     
     @IBOutlet weak var mapView: MKMapView!
     
-    // MARK: Show Student Locations (Override)
+    // MARK: Show All Student Information (Override)
     
-    override func showStudentLocations(studentLocations: [StudentLocation]) {
-        super.showStudentLocations(studentLocations)
+    override func showAllStudentInformation(allStudentInformation: [StudentInformation]) {
+        super.showAllStudentInformation(allStudentInformation)
         
-        showStudentLocationsOnMap(studentLocations)
+        showAllStudentInformationOnMap(allStudentInformation)
     }
     
-    // Show student locations on map
-    func showStudentLocationsOnMap(studentLocations: [StudentLocation]) {
+    // Show all student information on map
+    func showAllStudentInformationOnMap(allStudentInformation: [StudentInformation]) {
         var annotations = [MKPointAnnotation]()
         
-        for location in studentLocations {
+        for location in allStudentInformation {
             let lat = CLLocationDegrees(location.latitude)
             let lon = CLLocationDegrees(location.longitude)
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
@@ -78,8 +78,12 @@ extension MapViewController: MKMapViewDelegate {
         if control == view.rightCalloutAccessoryView {
             let app = UIApplication.sharedApplication()
             if let urlString = view.annotation?.subtitle! {
-                let valid = app.openURL(NSURL(string: urlString)!)
-                if !valid {
+                if let url = NSURL(string: urlString) {
+                    let valid = app.openURL(url)
+                    if !valid {
+                        showError("Invalid Link")
+                    }
+                } else {
                     showError("Invalid Link")
                 }
             }

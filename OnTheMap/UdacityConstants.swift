@@ -32,7 +32,7 @@ extension UdacityClient {
         static let UserData = "users/<userId>" // GETting Public User Data
         
         // Parse methods
-        static let UpdateStudentLocation = "<objectId>" // PUTing (Updating) a StudentLocation
+        static let UpdateStudentInformation = "<objectId>" // PUTing (Updating) a StudentInformation
     }
     
     struct URLKeys {
@@ -41,12 +41,12 @@ extension UdacityClient {
     }
     
     struct ParameterKeys {
-        // Get StudentLocations (Optional)
-        static let LimitKey = "limit" // (Number) specifies the maximum number of StudentLocation objects to return in the JSON response
+        // Get StudentInformationArray (Optional)
+        static let LimitKey = "limit" // (Number) specifies the maximum number of StudentInformation objects to return in the JSON response
         static let SkipKey = "skip" // (Number) use this parameter with limit to paginate through results
         static let OrderKey = "order" // (String) a comma-separate list of key names that specify the sorted order of the results
         
-        // Get StudentLocation (Required)
+        // Get StudentInformation (Required)
         static let WhereKey = "where"
         static let UniqueKey = "uniqueKey" // Udacity user id
     }
@@ -67,7 +67,7 @@ extension UdacityClient {
         static let AccessToken = "access_token"
     }
     
-    struct StudentLocationKeys {
+    struct StudentInformationKeys {
         static let ObjectId = "objectId"
         static let UniqueKey = "uniqueKey"
         static let FirstName = "firstName"
@@ -91,7 +91,7 @@ extension UdacityClient {
         static let Session = "session"
         static let SessionID = "id"
         
-        // MARK: Student Location(s)
+        // MARK: (All) Student Information
         
         static let Results = "results"
         

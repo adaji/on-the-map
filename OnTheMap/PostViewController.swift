@@ -14,7 +14,7 @@ import MBProgressHUD
 
 protocol PostViewControllerDelegate {
     
-    func didSubmitStudentLocation()
+    func didSubmitStudentInformation()
     
 }
 
@@ -40,7 +40,7 @@ class PostViewController: UIViewController {
     var delegate: PostViewControllerDelegate?
     
     var hasPosted: Bool = false // Whether user has posted location before
-    var myStudentLocation: StudentLocation? = nil
+    var myStudentInformation: StudentInformation? = nil
     
     let locationPlaceholderText = "Enter Your Location Here"
     let urlPlaceholderText = "Enter a Link to Share Here"
@@ -53,8 +53,8 @@ class PostViewController: UIViewController {
     //
     // Check if user has entered a valid location
     // If so,
-    // - save latitude and longitude of the location in myStudentLocation
-    // - configure UI for entering URL and submitting StudentLocation
+    // - save latitude and longitude of the location in myStudentInformation
+    // - configure UI for entering URL and submitting StudentInformation
     // If not, alert user
     @IBAction func findButtonTouchUp(sender: UIButton) {
         if locationTextView.text == locationPlaceholderText {
@@ -68,8 +68,8 @@ class PostViewController: UIViewController {
                         })
                         
                         let coordinates = placemark.location!.coordinate
-                        self.myStudentLocation!.latitude = coordinates.latitude
-                        self.myStudentLocation!.longitude = coordinates.longitude
+                        self.myStudentInformation!.latitude = coordinates.latitude
+                        self.myStudentInformation!.longitude = coordinates.longitude
                     }
                 } else {
                     let alertController = UIAlertController(title: nil, message: "Could not find the location.", preferredStyle: UIAlertControllerStyle.Alert)
@@ -88,17 +88,17 @@ class PostViewController: UIViewController {
     //
     // Check if user has entered some text
     // If so, 
-    // - save the text in myStudentLocation (as mediaURL)
-    // - submit myStudentLocation
+    // - save the text in myStudentInformation (as mediaURL)
+    // - submit myStudentInformation
     // If not, alert user
     // TODO: Check if the text is a valid URL string
     @IBAction func submitButtonTouchUp(sender: UIButton) {
         if urlTextView.text == urlPlaceholderText {
             showAlert("Please enter a link.")
         } else {
-            myStudentLocation!.mediaURL = urlTextView.text
+            myStudentInformation!.mediaURL = urlTextView.text
             
-            submitStudentLocation()
+            submitStudentInformation()
         }
     }
     
@@ -119,16 +119,16 @@ class PostViewController: UIViewController {
         tapRecognizer?.numberOfTapsRequired = 1
     }
     
-    // Initialize data (myStudentLocation, hasPosted)
-    // If user's student location has been saved locally, set myStudentLocation to this location
-    // If not, create a new StudentLocation with user's Udacity account (user) id
+    // Initialize data (myStudentInformation, hasPosted)
+    // If user's student information has been saved locally, set myStudentInformation to this location
+    // If not, create a new StudentInformation with user's Udacity account (user) id
     func initData() {
-        if UdacityClient.sharedInstance().myStudentLocation == nil {
+        if UdacityClient.sharedInstance().myStudentInformation == nil {
             hasPosted = false
-            myStudentLocation = StudentLocation(dictionary: [UdacityClient.StudentLocationKeys.UniqueKey: UdacityClient.sharedInstance().userID!])
+            myStudentInformation = StudentInformation(dictionary: [UdacityClient.StudentInformationKeys.UniqueKey: UdacityClient.sharedInstance().userID!])
         } else {
             hasPosted = true
-            myStudentLocation = UdacityClient.sharedInstance().myStudentLocation
+            myStudentInformation = UdacityClient.sharedInstance().myStudentInformation
         }
     }
     
@@ -175,7 +175,7 @@ class PostViewController: UIViewController {
         submitButton.hidden = true
     }
     
-    // Configure UI for entering link and submitting StudentLocation
+    // Configure UI for entering link and submitting StudentInformation
     // Show user entered location on map
     func configureUIForSubmit(annotation: MKAnnotation) {
         cancelButton.tintColor = UIColor.whiteColor()
@@ -214,27 +214,27 @@ class PostViewController: UIViewController {
         })
     }
     
-    // MARK: Submit StudentLocation
+    // MARK: Submit StudentInformation
     
-    // Submit myStudentLocation
+    // Submit myStudentInformation
     // If user has posted location before, update the location
-    // If not, post it (as a new StudentLocation object)
+    // If not, post it (as a new StudentInformation object)
     //
-    // If submission succeeds, update myStudentLocation stored in UdacityClient
-    func submitStudentLocation() {
+    // If submission succeeds, update myStudentInformation stored in UdacityClient
+    func submitStudentInformation() {
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
         
-        let locationDictionary = StudentLocation.dictionaryFromStudentLocation(myStudentLocation!)
-        UdacityClient.sharedInstance().submitStudentLocation(hasPosted, locationDictionary: locationDictionary) { (success, errorString) -> Void in
+        let locationDictionary = StudentInformation.dictionaryFromStudentInformation(myStudentInformation!)
+        UdacityClient.sharedInstance().submitStudentInformation(hasPosted, locationDictionary: locationDictionary) { (success, errorString) -> Void in
             if success {
-                self.delegate!.didSubmitStudentLocation()
+                self.delegate!.didSubmitStudentInformation()
                 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     hud.hide(true)
                     self.dismissViewControllerAnimated(true, completion: nil)
                 })
                 
-                UdacityClient.sharedInstance().myStudentLocation = self.myStudentLocation
+                UdacityClient.sharedInstance().myStudentInformation = self.myStudentInformation
                 print("Update Location Succeed.")
             }
             else {

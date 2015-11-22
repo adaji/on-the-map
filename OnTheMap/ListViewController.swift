@@ -17,14 +17,14 @@ class ListViewController: CommonViewController {
     
     @IBOutlet weak var locationsTableView: UITableView!
     
-    var studentLocations = [StudentLocation]()
+    var allStudentInformation = [StudentInformation]()
     
-    // MARK: Show StudentLocations (Override)
+    // MARK: Show AllStudentInformation (Override)
     
-    override func showStudentLocations(studentLocations: [StudentLocation]) {
-        super.showStudentLocations(studentLocations)
+    override func showAllStudentInformation(allStudentInformation: [StudentInformation]) {
+        super.showAllStudentInformation(allStudentInformation)
         
-        self.studentLocations = studentLocations
+        self.allStudentInformation = allStudentInformation
         dispatch_async(dispatch_get_main_queue()) { () -> Void in
             self.locationsTableView.reloadData()
         }
@@ -39,11 +39,11 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     // MARK: UITableViewDataSource
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return studentLocations.count
+        return allStudentInformation.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let reuseId = "StudentLocationCell"
+        let reuseId = "StudentInformationCell"
         
         var cell: UITableViewCell
         if let reusableCell = tableView.dequeueReusableCellWithIdentifier(reuseId) {
@@ -52,9 +52,9 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
             cell = UITableViewCell(style: .Subtitle, reuseIdentifier: reuseId)
         }
         
-        if let studentLocation: StudentLocation = studentLocations[indexPath.row] {
-            cell.textLabel!.text =  studentLocation.fullName
-            cell.detailTextLabel!.text = studentLocation.mediaURL
+        if let studentInformation: StudentInformation = allStudentInformation[indexPath.row] {
+            cell.textLabel!.text =  studentInformation.fullName
+            cell.detailTextLabel!.text = studentInformation.mediaURL
             cell.detailTextLabel!.textColor = UIColor.lightGrayColor()
         }
         
@@ -62,7 +62,7 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 60.0
+        return 80.0
     }
     
     // MARK: UITableViewDelegate
@@ -70,9 +70,9 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
-        if let studentLocation: StudentLocation = studentLocations[indexPath.row] {
+        if let studentInformation: StudentInformation = allStudentInformation[indexPath.row] {
             let app = UIApplication.sharedApplication()
-            app.openURL(NSURL(string: studentLocation.mediaURL)!)
+            app.openURL(NSURL(string: studentInformation.mediaURL)!)
         }
     }
     

@@ -26,7 +26,7 @@
 		60ECE9071BFC879A00D5B165 /* UdacityConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ECE9061BFC879A00D5B165 /* UdacityConstants.swift */; };
 		60ECE9091BFC87C900D5B165 /* UdacityClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ECE9081BFC87C900D5B165 /* UdacityClient.swift */; };
 		60ECE90B1BFC8A8300D5B165 /* UdacityConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ECE90A1BFC8A8300D5B165 /* UdacityConvenience.swift */; };
-		60ECE90D1BFC8E8E00D5B165 /* StudentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ECE90C1BFC8E8E00D5B165 /* StudentLocation.swift */; };
+		60ECE90D1BFC8E8E00D5B165 /* StudentInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ECE90C1BFC8E8E00D5B165 /* StudentInformation.swift */; };
 		60ECE9111BFCFEF500D5B165 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ECE9101BFCFEF500D5B165 /* MapViewController.swift */; };
 		60ECE9131BFD094200D5B165 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ECE9121BFD094200D5B165 /* ListViewController.swift */; };
 		60F1E7C31BFDB1A20070F8FE /* NetworkingDataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F1E7C21BFDB1A20070F8FE /* NetworkingDataHandler.swift */; };
@@ -75,7 +75,7 @@
 		60ECE9061BFC879A00D5B165 /* UdacityConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityConstants.swift; sourceTree = "<group>"; };
 		60ECE9081BFC87C900D5B165 /* UdacityClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityClient.swift; sourceTree = "<group>"; };
 		60ECE90A1BFC8A8300D5B165 /* UdacityConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityConvenience.swift; sourceTree = "<group>"; };
-		60ECE90C1BFC8E8E00D5B165 /* StudentLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentLocation.swift; sourceTree = "<group>"; };
+		60ECE90C1BFC8E8E00D5B165 /* StudentInformation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentInformation.swift; sourceTree = "<group>"; };
 		60ECE9101BFCFEF500D5B165 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		60ECE9121BFD094200D5B165 /* ListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		60F1E7C21BFDB1A20070F8FE /* NetworkingDataHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkingDataHandler.swift; sourceTree = "<group>"; };
@@ -200,8 +200,8 @@
 			isa = PBXGroup;
 			children = (
 				60533FAF1BFE327E00B33F92 /* PostViewController.swift */,
-				60ECE9101BFCFEF500D5B165 /* MapViewController.swift */,
 				6042093A1C01C18500BF1E4C /* CommonViewController.swift */,
+				60ECE9101BFCFEF500D5B165 /* MapViewController.swift */,
 				60ECE9121BFD094200D5B165 /* ListViewController.swift */,
 				60ECE8EE1BFC44A900D5B165 /* LoginViewController.swift */,
 				60ECE8FE1BFC7D3700D5B165 /* KeyboardHandlingViewController.swift */,
@@ -232,7 +232,7 @@
 				60ECE9081BFC87C900D5B165 /* UdacityClient.swift */,
 				60ECE90A1BFC8A8300D5B165 /* UdacityConvenience.swift */,
 				60ECE9061BFC879A00D5B165 /* UdacityConstants.swift */,
-				60ECE90C1BFC8E8E00D5B165 /* StudentLocation.swift */,
+				60ECE90C1BFC8E8E00D5B165 /* StudentInformation.swift */,
 				604715AC1BFEE624007D2E1D /* UdacityUser.swift */,
 			);
 			name = Udacity;
@@ -448,7 +448,7 @@
 				60533FB01BFE327E00B33F92 /* PostViewController.swift in Sources */,
 				60ECE8FB1BFC542300D5B165 /* BorderedButton.swift in Sources */,
 				60ECE8C11BFC32F600D5B165 /* AppDelegate.swift in Sources */,
-				60ECE90D1BFC8E8E00D5B165 /* StudentLocation.swift in Sources */,
+				60ECE90D1BFC8E8E00D5B165 /* StudentInformation.swift in Sources */,
 				60ECE9131BFD094200D5B165 /* ListViewController.swift in Sources */,
 				604715AD1BFEE624007D2E1D /* UdacityUser.swift in Sources */,
 				60ECE8FC1BFC542300D5B165 /* CustomTextField.swift in Sources */,

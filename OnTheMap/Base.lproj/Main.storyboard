@@ -337,7 +337,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StudentLocationCell" textLabel="g2e-RS-hIX" detailTextLabel="0r2-6I-8An" imageView="uEz-zd-30d" style="IBUITableViewCellStyleSubtitle" id="IZY-ut-AP2">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StudentInformationCell" textLabel="g2e-RS-hIX" detailTextLabel="0r2-6I-8An" imageView="uEz-zd-30d" style="IBUITableViewCellStyleSubtitle" id="IZY-ut-AP2">
                                 <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IZY-ut-AP2" id="hym-Up-8ZF">

@@ -31,18 +31,18 @@ class CommonViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        // Reload student locations data after user posts/updates location
+        // Reload all student information after user posts/updates information
         if shouldReloadData {
-            fetchStudentLocations()
+            fetchAllStudentInformation()
             shouldReloadData = false
             return
         }
         
-        // Fetch student locations data only if there is no such data saved locally (in UdacityClient)
-        if UdacityClient.sharedInstance().studentLocations == nil {
-            fetchStudentLocations()
+        // Fetch all student information data only if there is no such data saved locally (in UdacityClient)
+        if UdacityClient.sharedInstance().allStudentInformation == nil {
+            fetchAllStudentInformation()
         } else {
-            showStudentLocations(UdacityClient.sharedInstance().studentLocations!)
+            showAllStudentInformation(UdacityClient.sharedInstance().allStudentInformation!)
         }
     }
     
@@ -65,11 +65,11 @@ class CommonViewController: UIViewController {
         navigationItem.rightBarButtonItems = [refreshButtonItem, postButtonItem]
     }
     
-    // MARK: Show Student Locations
+    // MARK: Show All Student Information
     
-    // Show student locations (on map or in table view)
+    // Show all student information (on map or in table view)
     // To implement in subclasses
-    func showStudentLocations(studentLocations: [StudentLocation]) {
+    func showAllStudentInformation(allStudentInformation: [StudentInformation]) {
         
     }
     
@@ -93,13 +93,13 @@ class CommonViewController: UIViewController {
     // If so, ask user whether to overwrite
     // If not, present post view controller
     func post(sender: UIBarButtonItem) {
-        checkIfHasPosted { (hasPosted, studentLocation, errorString) -> Void in
+        checkIfHasPosted { (hasPosted, studentInformation, errorString) -> Void in
             if let errorString = errorString {
                 self.showError(errorString)
             } else {
                 // If user has posted location before, ask user whether to overwrite
                 if hasPosted {
-                    let message = "User \"\(studentLocation!.fullName)\" has already posted a Student Location. Would you like to overwrite the location?"
+                    let message = "User \"\(studentInformation!.fullName)\" has already posted a Student Location. Would you like to overwrite the location?"
                     let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
                     alertController.addAction(UIAlertAction(title: "Overwrite", style: .Default, handler: { (action) -> Void in
                         self.presentPostViewController()
@@ -124,29 +124,29 @@ class CommonViewController: UIViewController {
     }
     
     func refresh(sender: UIBarButtonItem) {
-        fetchStudentLocations()
+        fetchAllStudentInformation()
     }
     
     // MARK: Manipulate Data
     
-    // Fetch and show student locations data
-    func fetchStudentLocations() {
+    // Fetch and show all student information data
+    func fetchAllStudentInformation() {
         MBProgressHUD.hideAllHUDsForView(view, animated: true)
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
         
         let parameters = [UdacityClient.ParameterKeys.LimitKey: 100]
-        UdacityClient.sharedInstance().getStudentLocations(parameters) { (success, studentLocations, errorString) -> Void in
+        UdacityClient.sharedInstance().getAllStudentInformation(parameters) { (success, allStudentInformation, errorString) -> Void in
             
             if success {
-                if let studentLocations = studentLocations {
+                if let allStudentInformation = allStudentInformation {
                     // Update student data saved in UdacityClient
-                    UdacityClient.sharedInstance().studentLocations = studentLocations
+                    UdacityClient.sharedInstance().allStudentInformation = allStudentInformation
                     
                     dispatch_async(dispatch_get_main_queue(), {
                         hud.hide(true)
                     })
                     
-                    self.showStudentLocations(studentLocations)
+                    self.showAllStudentInformation(allStudentInformation)
                     
                 } else {
                     self.showError("No student data returned.")
@@ -158,28 +158,28 @@ class CommonViewController: UIViewController {
     }
     
     // Check if user has posted location before
-    // - If user's location has not been saved in UdacityClient (as myStudentLocation), query for user's location
-    func checkIfHasPosted(completionHandler: (hasPosted: Bool, studentLocation: StudentLocation?, errorString: String?) -> Void) {
-        if UdacityClient.sharedInstance().myStudentLocation != nil {
-            completionHandler(hasPosted: true, studentLocation: UdacityClient.sharedInstance().myStudentLocation!, errorString: nil)
+    // - If user's location has not been saved in UdacityClient (as myStudentInformation), query for user's location
+    func checkIfHasPosted(completionHandler: (hasPosted: Bool, studentInformation: StudentInformation?, errorString: String?) -> Void) {
+        if UdacityClient.sharedInstance().myStudentInformation != nil {
+            completionHandler(hasPosted: true, studentInformation: UdacityClient.sharedInstance().myStudentInformation!, errorString: nil)
         } else {
             MBProgressHUD.hideAllHUDsForView(view, animated: true)
             let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
             
             let parameters = [UdacityClient.ParameterKeys.WhereKey: "{\"\(UdacityClient.ParameterKeys.UniqueKey)\":\"\(UdacityClient.sharedInstance().userID!)\"}"]
-            UdacityClient.sharedInstance().queryForStudentLocation(parameters) { (success, studentLocation, errorString) -> Void in
+            UdacityClient.sharedInstance().queryForStudentInformation(parameters) { (success, studentInformation, errorString) -> Void in
                 dispatch_async(dispatch_get_main_queue(), {
                     hud.hide(true)
                 })
                 
                 if success {
-                    if let studentLocation = studentLocation {
-                        completionHandler(hasPosted: true, studentLocation: studentLocation, errorString: nil)
+                    if let studentInformation = studentInformation {
+                        completionHandler(hasPosted: true, studentInformation: studentInformation, errorString: nil)
                     } else {
-                        completionHandler(hasPosted: false, studentLocation: nil, errorString: "No student data returned.")
+                        completionHandler(hasPosted: false, studentInformation: nil, errorString: "No student data returned.")
                     }
                 } else {
-                    completionHandler(hasPosted: false, studentLocation: nil, errorString: errorString)
+                    completionHandler(hasPosted: false, studentInformation: nil, errorString: errorString)
                 }
             }
         }
@@ -189,8 +189,8 @@ class CommonViewController: UIViewController {
     func clearSavedData() {
         UdacityClient.sharedInstance().sessionID = nil
         UdacityClient.sharedInstance().userID = nil
-        UdacityClient.sharedInstance().studentLocations = nil
-        UdacityClient.sharedInstance().myStudentLocation = nil
+        UdacityClient.sharedInstance().allStudentInformation = nil
+        UdacityClient.sharedInstance().myStudentInformation = nil
         
         // Delete password when logout
         let userDefaults = NSUserDefaults.standardUserDefaults()
@@ -230,9 +230,9 @@ class CommonViewController: UIViewController {
 
 extension CommonViewController: PostViewControllerDelegate {
     
-    // If user has just successfully submitted StudentLocation in PostViewController,
-    // reload StudentLocations data when the view appears
-    func didSubmitStudentLocation() {
+    // If user has just successfully submitted StudentInformation in PostViewController,
+    // reload AllStudentInformation data when the view appears
+    func didSubmitStudentInformation() {
         shouldReloadData = true
     }
     

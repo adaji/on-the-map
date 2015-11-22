@@ -127,66 +127,66 @@ extension UdacityClient {
         }
     }
     
-    // MARK: Student Location(s)
+    // MARK: (All) Student Information
     
-    // Function: getStudentLocations
+    // Function: getAllStudentInformation
     // Parameters:
     // - optionalParameters: ["limit": 100, "skip": 400, "order": -updatedAt]
     // - completionHandler
     //
-    // GETting StudentLocations
+    // GETting an array of StudentInformation
     // Optional parameters: "limit", "skip", "order"
-    func getStudentLocations(optionalParameters: [String: AnyObject]?, completionHandler: (success: Bool, studentLocations: [StudentLocation]?, errorString: String?) -> Void) {
+    func getAllStudentInformation(optionalParameters: [String: AnyObject]?, completionHandler: (success: Bool, allStudentInformation: [StudentInformation]?, errorString: String?) -> Void) {
         startTaskForParseGETMethod(optionalParameters) { (result, error) -> Void in
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
-                completionHandler(success: false, studentLocations: nil, errorString: "There was an error retrieving student data.")
+                completionHandler(success: false, allStudentInformation: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             
             guard let result = result else {
                 print("No result returned.")
-                completionHandler(success: false, studentLocations: nil, errorString: "There was an error retrieving student data.")
+                completionHandler(success: false, allStudentInformation: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             
             guard let results = result[JSONResponseKeys.Results] as? [[String: AnyObject]] else {
                 print("Could not find key \(JSONResponseKeys.Results) in \(result)")
-                completionHandler(success: false, studentLocations: nil, errorString: "There was an error retrieving student data.")
+                completionHandler(success: false, allStudentInformation: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             
-            let studentLocations = StudentLocation.locationsFromResults(results)
-            self.studentLocations = studentLocations
-            completionHandler(success: true, studentLocations: studentLocations, errorString: nil)
+            let allStudentInformation = StudentInformation.allStudentInformationFromResults(results)
+            self.allStudentInformation = allStudentInformation
+            completionHandler(success: true, allStudentInformation: allStudentInformation, errorString: nil)
         }
     }
     
-    // Submit StudentLocation
+    // Submit StudentInformation
     // If user has posted location before, update the location
     // If not, post it
-    func submitStudentLocation(hasPosted: Bool, locationDictionary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
+    func submitStudentInformation(hasPosted: Bool, locationDictionary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
         if hasPosted {
             // TODO: Check if there is a bug
-            // Somehow updateStudentLocation doesn't update user's location returned in getStudentLocations
-            // Let's use postStudentLocation for now
-            // updateStudentLocation(locationDictionary, completionHandler: completionHandler)
-            postStudentLocation(locationDictionary, completionHandler: completionHandler)
+            // Somehow updateStudentInformation doesn't update user's location returned in getStudentInformationArray
+            // Let's use postStudentInformation for now
+            // updateStudentInformation(locationDictionary, completionHandler: completionHandler)
+            postStudentInformation(locationDictionary, completionHandler: completionHandler)
         }
         else {
-            postStudentLocation(locationDictionary, completionHandler: completionHandler)
+            postStudentInformation(locationDictionary, completionHandler: completionHandler)
         }
     }
     
-    // Function: postStudentLocation
+    // Function: postStudentInformation
     // Parameters:
-    // - locationDictionary: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaURL": "<mediaURL>", "latitude": "<latitude>", "longitude": "<longitude>"] (StudentLocation.dictionaryFromStudentLocation(studentLocation))
+    // - locationDictionary: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaURL": "<mediaURL>", "latitude": "<latitude>", "longitude": "<longitude>"] (StudentInformation.dictionaryFromStudentInformation(StudentInformation))
     // - completionHandler
     //
-    // POSTing a StudentLocation
+    // POSTing a StudentInformation
     // Required parameters (in HTTPBody): parameters
     //
-    func postStudentLocation(locationDictionary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
+    func postStudentInformation(locationDictionary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
         startTaskForParsePOSTMethod(locationDictionary) { (result, error) -> Void in
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
@@ -198,16 +198,16 @@ extension UdacityClient {
         }
     }
     
-    // Function: updateStudentLocation
+    // Function: updateStudentInformation
     // Parameters:
-    // - locationDictionary: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaURL": "<mediaURL>", "latitude": "<latitude>", "longitude": "<longitude>"] (StudentLocation.dictionaryFromStudentLocation(studentLocation))
+    // - locationDictionary: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaURL": "<mediaURL>", "latitude": "<latitude>", "longitude": "<longitude>"] (StudentInformation.dictionaryFromStudentInformation(StudentInformation))
     // - completionHandler
     //
-    // PUTting a StudentLocation
+    // PUTting a StudentInformation
     // Required parameters (in HTTPBody): parameters
     //
-    func updateStudentLocation(locationDicationary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
-        let method = UdacityClient.substituteKeyInMethod(Methods.UpdateStudentLocation, key: URLKeys.ObjectId, value: String(UdacityClient.sharedInstance().userID!))
+    func updateStudentInformation(locationDicationary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
+        let method = UdacityClient.substituteKeyInMethod(Methods.UpdateStudentInformation, key: URLKeys.ObjectId, value: String(UdacityClient.sharedInstance().userID!))
         startTaskForParsePUTMethod(method, jsonBody: locationDicationary) { (result, error) -> Void in
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
@@ -219,37 +219,37 @@ extension UdacityClient {
         }
     }
     
-    // Function: queryForStudentLocation
+    // Function: queryForStudentInformation
     // Parameters:
     // - parameters: [where: "\"uniqueKey\":\"<uniqueKey>\""]
     // - completionHandler
     //
-    // Querying for a StudentLocation
+    // Querying for a StudentInformation
     // Required parameters: "where"
     //
-    func queryForStudentLocation(parameters: [String: AnyObject], completionHandler: (success: Bool, studentLocation: StudentLocation?, errorString: String?) -> Void) {
+    func queryForStudentInformation(parameters: [String: AnyObject], completionHandler: (success: Bool, studentInformation: StudentInformation?, errorString: String?) -> Void) {
         startTaskForParseGETMethod(parameters) { (result, error) -> Void in
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
-                completionHandler(success: false, studentLocation: nil, errorString: "There was an error retrieving student data.")
+                completionHandler(success: false, studentInformation: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             
             guard let result = result else {
                 print("No result returned.")
-                completionHandler(success: false, studentLocation: nil, errorString: "There was an error retrieving student data.")
+                completionHandler(success: false, studentInformation: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             
             guard let results = result[JSONResponseKeys.Results] as? [[String: AnyObject]] else {
                 print("Could not find key \(JSONResponseKeys.Results) in \(result).")
-                completionHandler(success: false, studentLocation: nil, errorString: "There was an error retrieving student data.")
+                completionHandler(success: false, studentInformation: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             
-            let studentLocation = StudentLocation(dictionary: results[0])
-            self.myStudentLocation = studentLocation
-            completionHandler(success: true, studentLocation: studentLocation, errorString: nil)
+            let studentInformation = StudentInformation(dictionary: results[0])
+            self.myStudentInformation = studentInformation
+            completionHandler(success: true, studentInformation: studentInformation, errorString: nil)
         }
     }
     
