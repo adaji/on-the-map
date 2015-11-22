@@ -42,7 +42,7 @@
                                 <color key="tintColor" red="0.93333333330000001" green="0.24313725489999999" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="textColor" red="0.93333333330000001" green="0.24313725489999999" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="go" secureTextEntry="YES"/>
                                 <connections>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="GyY-wf-dYB"/>
                                 </connections>
@@ -198,7 +198,7 @@
                                 </constraints>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
                                 <connections>
                                     <outlet property="delegate" destination="CeH-Ry-pNb" id="kwC-qt-MeH"/>
                                 </connections>
@@ -549,7 +549,7 @@
         <image name="chat" width="25" height="25"/>
         <image name="link" width="26" height="26"/>
         <image name="list" width="25" height="25"/>
-        <image name="logo" width="700" height="701"/>
+        <image name="logo" width="80" height="80"/>
         <image name="map" width="25" height="25"/>
         <image name="marker" width="25" height="25"/>
     </resources>

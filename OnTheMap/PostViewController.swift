@@ -99,6 +99,7 @@ class PostViewController: UIViewController {
     }
     
     @IBAction func cancelButtonTouchUp(sender: UIButton) {
+        view.endEditing(true)
         dismissViewControllerAnimated(true, completion: nil)
     }
     
