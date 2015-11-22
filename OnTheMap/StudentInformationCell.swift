@@ -29,6 +29,8 @@ class StudentInformationCell: UITableViewCell {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var urlLabel: UILabel!
+    @IBOutlet weak var addButton: UIButton!
+    @IBOutlet weak var chatButton: UIButton!
     
     let colors = [green, orange, yellow, blue, gold, red, magenta, purple]
     

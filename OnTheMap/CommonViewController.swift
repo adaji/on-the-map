@@ -84,7 +84,7 @@ class CommonViewController: UIViewController {
             if success {
                 self.completeLogout()
             } else {
-                self.showError(errorString)
+                self.showAlert(errorString)
             }
         }
     }
@@ -95,7 +95,7 @@ class CommonViewController: UIViewController {
     func post(sender: UIBarButtonItem) {
         checkIfHasPosted { (hasPosted, studentInformation, errorString) -> Void in
             if let errorString = errorString {
-                self.showError(errorString)
+                self.showAlert(errorString)
             } else {
                 // If user has posted location before, ask user whether to overwrite
                 if hasPosted {
@@ -149,10 +149,10 @@ class CommonViewController: UIViewController {
                     self.showAllStudentInformation(allStudentInformation)
                     
                 } else {
-                    self.showError("No student data returned.")
+                    self.showAlert("No student data returned.")
                 }
             } else {
-                self.showError(errorString)
+                self.showAlert(errorString)
             }
         }
     }
@@ -208,10 +208,10 @@ class CommonViewController: UIViewController {
         if let url = NSURL(string: urlString) {
             let success = UIApplication.sharedApplication().openURL(url)
             if !success {
-                showError("Invalid Link")
+                showAlert("Invalid Link")
             }
         } else {
-            showError("Invalid Link")
+            showAlert("Invalid Link")
         }
     }
     
@@ -222,7 +222,7 @@ class CommonViewController: UIViewController {
 //            webVC.urlRequest = NSURLRequest(URL: url)
 //            navigationController!.pushViewController(webVC, animated: true)
 //        } else {
-//            showError("Invalid Link")
+//            showAlert("Invalid Link")
 //        }
 //    }
     
@@ -239,8 +239,8 @@ class CommonViewController: UIViewController {
     }
     
     // Show error
-    func showError(errorString: String?) {
-        let message = !errorString!.isEmpty ? errorString : "An unknown error has occurred."
+    func showAlert(message: String?) {
+        let message = !message!.isEmpty ? message : "An unknown error has occurred."
         let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
         
@@ -277,7 +277,7 @@ extension CommonViewController: FBSDKLoginButtonDelegate {
             if success {
                 self.completeLogout()
             } else {
-                self.showError(errorString)
+                self.showAlert(errorString)
             }
         }
     }

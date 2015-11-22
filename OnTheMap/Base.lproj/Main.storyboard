@@ -332,7 +332,7 @@
         <scene sceneID="faZ-3L-uJ6">
             <objects>
                 <tableViewController id="Es1-XK-Dhh" customClass="ListViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="80" sectionHeaderHeight="28" sectionFooterHeight="28" id="1tu-2H-DMv">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="80" sectionHeaderHeight="28" sectionFooterHeight="28" id="1tu-2H-DMv">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -341,7 +341,7 @@
                                 <rect key="frame" x="0.0" y="92" width="600" height="120"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IZY-ut-AP2" id="hym-Up-8ZF">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="119.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="120"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="WJ" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2JK-03-HeH">
@@ -413,6 +413,13 @@
                                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DCY-in-Wqj">
+                                            <rect key="frame" x="0.0" y="119.5" width="600" height="0.5"/>
+                                            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="1" id="LLH-U0-7Mq"/>
+                                            </constraints>
+                                        </view>
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="trailingMargin" secondItem="2bw-QJ-8IC" secondAttribute="trailing" id="0s8-2u-ma6"/>
@@ -421,9 +428,11 @@
                                         <constraint firstItem="QDj-xF-AG0" firstAttribute="leading" secondItem="CkL-J4-e5Q" secondAttribute="trailing" constant="7" id="AXp-Ug-bOV"/>
                                         <constraint firstItem="9k8-Au-aUh" firstAttribute="centerY" secondItem="9ps-Wc-pq8" secondAttribute="centerY" id="CTB-KJ-OcU"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="QDj-xF-AG0" secondAttribute="trailing" id="ETo-B5-uLM"/>
+                                        <constraint firstItem="DCY-in-Wqj" firstAttribute="leading" secondItem="hym-Up-8ZF" secondAttribute="leadingMargin" constant="-8" id="FmL-hO-BLc"/>
                                         <constraint firstItem="9k8-Au-aUh" firstAttribute="leading" secondItem="9ps-Wc-pq8" secondAttribute="trailing" constant="7" id="IAB-Sx-hWx"/>
                                         <constraint firstItem="5HE-27-ggv" firstAttribute="leading" secondItem="aNM-rv-EZG" secondAttribute="trailing" constant="4" id="IuC-OL-rfL"/>
                                         <constraint firstItem="CkL-J4-e5Q" firstAttribute="leading" secondItem="2JK-03-HeH" secondAttribute="trailing" constant="12" id="Lil-NF-jMn"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="DCY-in-Wqj" secondAttribute="trailing" constant="-8" id="LkA-51-mX4"/>
                                         <constraint firstItem="aNM-rv-EZG" firstAttribute="leading" secondItem="2JK-03-HeH" secondAttribute="trailing" constant="12" id="PPr-cG-Dq3"/>
                                         <constraint firstItem="2bw-QJ-8IC" firstAttribute="leading" secondItem="5HE-27-ggv" secondAttribute="trailing" constant="8" id="S6B-GN-Btc"/>
                                         <constraint firstItem="2JK-03-HeH" firstAttribute="centerY" secondItem="hym-Up-8ZF" secondAttribute="centerY" id="ZLg-Z2-Njo"/>
@@ -432,11 +441,14 @@
                                         <constraint firstAttribute="topMargin" secondItem="2bw-QJ-8IC" secondAttribute="top" id="hej-P3-7zg"/>
                                         <constraint firstAttribute="leadingMargin" secondItem="2JK-03-HeH" secondAttribute="leading" id="iJd-aQ-mTs"/>
                                         <constraint firstItem="9ps-Wc-pq8" firstAttribute="leading" secondItem="2JK-03-HeH" secondAttribute="trailing" constant="12" id="ja7-VW-3tu"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="DCY-in-Wqj" secondAttribute="bottom" constant="-8" id="lF6-sV-LLg"/>
                                         <constraint firstItem="aNM-rv-EZG" firstAttribute="top" secondItem="hym-Up-8ZF" secondAttribute="topMargin" constant="4" id="mtd-Uw-vr2"/>
                                         <constraint firstItem="9ps-Wc-pq8" firstAttribute="top" secondItem="aNM-rv-EZG" secondAttribute="bottom" constant="3" id="vr5-8B-DYw"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="addButton" destination="5HE-27-ggv" id="GwK-UQ-ML3"/>
+                                    <outlet property="chatButton" destination="2bw-QJ-8IC" id="jJ6-Ak-fPN"/>
                                     <outlet property="initialsLabel" destination="2JK-03-HeH" id="Wem-Pk-GPm"/>
                                     <outlet property="locationLabel" destination="9k8-Au-aUh" id="DEy-Yp-qyl"/>
                                     <outlet property="nameLabel" destination="aNM-rv-EZG" id="z3e-vY-X3b"/>

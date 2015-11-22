@@ -30,6 +30,24 @@ class ListViewController: CommonViewController {
         }
     }
     
+    // MARK: Actions
+    
+    // Add user as a friend/peer/...
+    // TODO: Implement when required API comes out :)
+    func addFriend(sender: UIButton) {
+        if let studentInformation: StudentInformation = allStudentInformation[sender.tag] {
+            showAlert("Add \(studentInformation.fullName()) as a friend")
+        }
+    }
+    
+    // Start a conversation with user
+    // TODO: Implement when required API comes out :)
+    func startConversation(sender: UIButton) {
+        if let studentInformation: StudentInformation = allStudentInformation[sender.tag] {
+            showAlert("Start a conversation with \(studentInformation.fullName())")
+        }
+    }
+    
 }
 
 // MARK: - ListViewController: UITableViewDataSource, UITableViewDelegate
@@ -54,6 +72,12 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
         
         if let studentInformation: StudentInformation = allStudentInformation[indexPath.row] {
             cell.configureCell(studentInformation.initials(), name: studentInformation.fullName(), location: studentInformation.mapString, urlString: studentInformation.mediaURL)
+            
+            cell.addButton.tag = indexPath.row // Add tag to identify which add button is pressed
+            cell.addButton.addTarget(self, action: "addFriend:", forControlEvents: .TouchUpInside)
+            
+            cell.chatButton.tag = indexPath.row
+            cell.chatButton.addTarget(self, action: "startConversation:", forControlEvents: .TouchUpInside)
         }
         
         return cell

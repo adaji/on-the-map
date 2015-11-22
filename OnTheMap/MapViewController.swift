@@ -79,7 +79,7 @@ extension MapViewController: MKMapViewDelegate {
             if let urlString = view.annotation?.subtitle! {
                 openURL(urlString)
             } else {
-                showError("No valid URL.")
+                showAlert("No valid URL.")
             }
         }
     }

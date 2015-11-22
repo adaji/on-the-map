@@ -63,8 +63,8 @@ class WebViewController: UIViewController {
     }
 
     // Show error
-    func showError(errorString: String?) {
-        let message = !errorString!.isEmpty ? errorString : "An unknown error has occurred."
+    func showAlert(message: String?) {
+        let message = !message!.isEmpty ? message : "An unknown error has occurred."
         let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
         
@@ -89,9 +89,9 @@ extension WebViewController: UIWebViewDelegate {
     
     func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
         if let error = error {
-            showError(error.description)
+            showAlert(error.description)
         } else {
-            showError("Loading failed.")
+            showAlert("Loading failed.")
         }
     }
     
