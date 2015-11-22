@@ -458,6 +458,42 @@
             </objects>
             <point key="canvasLocation" x="2629" y="1115"/>
         </scene>
+        <!--Web View Controller-->
+        <scene sceneID="RS9-Nn-4Qp">
+            <objects>
+                <viewController storyboardIdentifier="WebViewController" id="iS6-MO-vVz" customClass="WebViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="25R-4u-ios"/>
+                        <viewControllerLayoutGuide type="bottom" id="YS7-3h-dfD"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="LaK-fu-aTN">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RNe-tc-oLZ">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
+                                <connections>
+                                    <outlet property="delegate" destination="iS6-MO-vVz" id="uvs-Ie-8Lu"/>
+                                </connections>
+                            </webView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="RNe-tc-oLZ" secondAttribute="trailing" constant="-20" id="37L-kh-73P"/>
+                            <constraint firstItem="RNe-tc-oLZ" firstAttribute="top" secondItem="LaK-fu-aTN" secondAttribute="topMargin" id="W3t-8V-KC1"/>
+                            <constraint firstItem="YS7-3h-dfD" firstAttribute="top" secondItem="RNe-tc-oLZ" secondAttribute="bottom" id="Xww-7L-b4P"/>
+                            <constraint firstItem="RNe-tc-oLZ" firstAttribute="leading" secondItem="LaK-fu-aTN" secondAttribute="leadingMargin" constant="-20" id="tKQ-yb-PVO"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="webView" destination="RNe-tc-oLZ" id="Cr0-oo-1WM"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iiM-gH-zt4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3361" y="1115"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="9hO-m5-ZNu">
             <objects>

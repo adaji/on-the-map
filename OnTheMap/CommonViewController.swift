@@ -200,6 +200,10 @@ class CommonViewController: UIViewController {
     
     // MARK: Helper Functions
     
+    // Open URL with default browser
+    // Not using web view because there are many invalid media urls
+    // (random string, violate App Transport Security policy, etc.)
+    // Safari handles these conditions very well
     func openURL(urlString: String) {
         if let url = NSURL(string: urlString) {
             let success = UIApplication.sharedApplication().openURL(url)
@@ -210,6 +214,17 @@ class CommonViewController: UIViewController {
             showError("Invalid Link")
         }
     }
+    
+    // Open URL with web view
+//    func openURL(urlString: String) {
+//        if let url = NSURL(string: urlString) {
+//            let webVC = storyboard!.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
+//            webVC.urlRequest = NSURLRequest(URL: url)
+//            navigationController!.pushViewController(webVC, animated: true)
+//        } else {
+//            showError("Invalid Link")
+//        }
+//    }
     
     // Complete logout
     // - Clear saved data

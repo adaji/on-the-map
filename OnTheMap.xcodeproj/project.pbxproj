@@ -14,6 +14,7 @@
 		6042093F1C0222ED00BF1E4C /* StudentInformationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6042093E1C0222ED00BF1E4C /* StudentInformationCell.swift */; };
 		604715AD1BFEE624007D2E1D /* UdacityUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604715AC1BFEE624007D2E1D /* UdacityUser.swift */; };
 		60533FB01BFE327E00B33F92 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60533FAF1BFE327E00B33F92 /* PostViewController.swift */; };
+		606AFAD01C025109002010A0 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 606AFACF1C025109002010A0 /* WebViewController.swift */; };
 		60ECE8C11BFC32F600D5B165 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ECE8C01BFC32F600D5B165 /* AppDelegate.swift */; };
 		60ECE8C61BFC32F600D5B165 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60ECE8C41BFC32F600D5B165 /* Main.storyboard */; };
 		60ECE8C81BFC32F600D5B165 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60ECE8C71BFC32F600D5B165 /* Assets.xcassets */; };
@@ -57,6 +58,7 @@
 		6042093E1C0222ED00BF1E4C /* StudentInformationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StudentInformationCell.swift; path = OnTheMap/StudentInformationCell.swift; sourceTree = "<group>"; };
 		604715AC1BFEE624007D2E1D /* UdacityUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityUser.swift; sourceTree = "<group>"; };
 		60533FAF1BFE327E00B33F92 /* PostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
+		606AFACF1C025109002010A0 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		60B11E7F1BFE84CF0002196A /* OnTheMap-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OnTheMap-Bridging-Header.h"; sourceTree = "<group>"; };
 		60ECE8BD1BFC32F600D5B165 /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60ECE8C01BFC32F600D5B165 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -202,11 +204,12 @@
 		60ECE8FD1BFC785D00D5B165 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				60533FAF1BFE327E00B33F92 /* PostViewController.swift */,
+				60ECE8EE1BFC44A900D5B165 /* LoginViewController.swift */,
 				6042093A1C01C18500BF1E4C /* CommonViewController.swift */,
 				60ECE9101BFCFEF500D5B165 /* MapViewController.swift */,
 				60ECE9121BFD094200D5B165 /* ListViewController.swift */,
-				60ECE8EE1BFC44A900D5B165 /* LoginViewController.swift */,
+				606AFACF1C025109002010A0 /* WebViewController.swift */,
+				60533FAF1BFE327E00B33F92 /* PostViewController.swift */,
 				60ECE8FE1BFC7D3700D5B165 /* KeyboardHandlingViewController.swift */,
 			);
 			name = Controller;
@@ -452,6 +455,7 @@
 				60533FB01BFE327E00B33F92 /* PostViewController.swift in Sources */,
 				60ECE8FB1BFC542300D5B165 /* BorderedButton.swift in Sources */,
 				60ECE8C11BFC32F600D5B165 /* AppDelegate.swift in Sources */,
+				606AFAD01C025109002010A0 /* WebViewController.swift in Sources */,
 				60ECE90D1BFC8E8E00D5B165 /* StudentInformation.swift in Sources */,
 				60ECE9131BFD094200D5B165 /* ListViewController.swift in Sources */,
 				604715AD1BFEE624007D2E1D /* UdacityUser.swift in Sources */,
