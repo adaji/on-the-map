@@ -17,6 +17,7 @@ extension UdacityClient {
         // URLs
         static let UdacityBaseURL: String = "https://www.udacity.com/api/"
         static let ParseBaseURL: String = "https://api.parse.com/1/classes/StudentLocation"
+        static let UdacitySigninURL: String = "https://www.udacity.com/account/auth#!/signin"
     }
     
     struct HTTPMethods {

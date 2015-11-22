@@ -50,10 +50,13 @@ class CommonViewController: UIViewController {
     
     // Configure the common navigation bar
     func configureNavigationBar() {
+        navigationItem.title = "On the Map"
+        
         var logoutButtonItem: UIBarButtonItem
         if (UIApplication.sharedApplication().delegate as! AppDelegate).loggedInWithFB {
             let facebookButton = FBSDKLoginButton()
             facebookButton.delegate = self
+            facebookButton.frame = CGRect(origin: facebookButton.frame.origin, size: CGSize(width: facebookButton.frame.size.height, height: facebookButton.frame.size.height))
             logoutButtonItem = UIBarButtonItem(customView: facebookButton)
         } else {
             logoutButtonItem = UIBarButtonItem(image: UIImage(named: "logout"), style: .Plain, target: self, action: "logout:")

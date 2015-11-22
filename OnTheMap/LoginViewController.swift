@@ -41,15 +41,17 @@ class LoginViewController: KeyboardHandlingViewController {
     
     // MARK: Actions
     
-    @IBAction func loginButtonTouch(sender: UIButton) {
+    @IBAction func loginButtonTouchUp(sender: UIButton) {
+        view.endEditing(true)
         enableUserInteraction(false)
+        
         login()
     }
     
     // Clicking on the Sign Up link will open Safari to the Udacity sign-in page.
     @IBAction func signupButtonTouchUp(sender: UIButton) {
         let app = UIApplication.sharedApplication()
-        app.openURL(NSURL(string: "https://www.udacity.com/account/auth#!/signin")!)
+        app.openURL(NSURL(string: UdacityClient.Constants.UdacitySigninURL)!)
     }
     
     // MARK: Login
@@ -102,8 +104,13 @@ class LoginViewController: KeyboardHandlingViewController {
         facebookLoginButton.layer.cornerRadius = loginButton.layer.cornerRadius
     }
     
+    // TODO: Check why using "view.userInteraction = enabled"
+    // will trigger password text field to become first responder
+    // as login view re-appears from on logout
     func enableUserInteraction(enabled: Bool) {
-        view.userInteractionEnabled = enabled
+//        usernameTextField.enabled = true
+//        passwordTextField.enabled = true
+//        setLoginButtonEnabled(enabled)
     }
     
     func setLoginButtonEnabled(enabled: Bool) {
@@ -177,6 +184,7 @@ extension LoginViewController: UITextFieldDelegate {
         if textField == usernameTextField {
             passwordTextField.becomeFirstResponder()
         } else if textField == passwordTextField {
+            passwordTextField.resignFirstResponder()
             enableUserInteraction(false)
             login()
         }
