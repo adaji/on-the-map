@@ -8,7 +8,11 @@
 
 import UIKit
 
+// MARK: - CustomTextField: UITextField
+
 class CustomTextField: UITextField {
+    
+    // MARK: Initialization
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)!
@@ -23,7 +27,6 @@ class CustomTextField: UITextField {
     }
     
     func customedTextField() -> Void {
-        
         // Set left padding
         leftView = UIView(frame: CGRectMake(0.0, 0.0, 13.0, 0.0))
         leftViewMode = .Always

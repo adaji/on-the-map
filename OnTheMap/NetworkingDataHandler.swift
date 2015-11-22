@@ -8,9 +8,11 @@
 
 import Foundation
 
+// MARK: - NetworkingDataHandler: NSObject
+
 class NetworkingDataHandler: NSObject {
 
-    /* Helper: Given raw JSON, return a usable Foundation object */
+    // Given raw JSON, return a usable Foundation object
     class func parseJSONWithCompletionHandler(data: NSData, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
         
         var parsedResult: AnyObject!
@@ -24,7 +26,7 @@ class NetworkingDataHandler: NSObject {
         completionHandler(result: parsedResult, error: nil)
     }
     
-    /* Helper function: Given a dictionary of parameters, convert to a string for a url */
+    // Given a dictionary of parameters, convert to a string for a url
     class func escapedParameters(parameters: [String : AnyObject]) -> String {
         
         var urlVars = [String]()

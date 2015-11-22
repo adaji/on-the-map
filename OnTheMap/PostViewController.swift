@@ -10,13 +10,15 @@ import UIKit
 import MapKit
 import MBProgressHUD
 
-// MARK: Protocols
+// MARK: - PostViewControllerDelegate
 
 protocol PostViewControllerDelegate {
     
     func didSubmitStudentLocation()
     
 }
+
+// MARK: - PostViewController: UIViewController
 
 class PostViewController: UIViewController {
     
@@ -33,6 +35,8 @@ class PostViewController: UIViewController {
     @IBOutlet weak var urlTextView: UITextView!
     @IBOutlet weak var submitButton: BorderedButton!
     
+    var tapRecognizer: UITapGestureRecognizer? = nil
+    
     var delegate: PostViewControllerDelegate?
     
     var hasPosted: Bool = false // Whether user has posted location before
@@ -42,9 +46,8 @@ class PostViewController: UIViewController {
     let urlPlaceholderText = "Enter a Link to Share Here"
     let placeholderTextColor = UIColor(red: 217/255.0, green: 217/255.0, blue: 213/255.0, alpha: 1)
     
-    var tapRecognizer: UITapGestureRecognizer? = nil
     
-    // Actions
+    // MARK: Actions
     
     // Function: findButtonTouchUp
     //
@@ -54,13 +57,10 @@ class PostViewController: UIViewController {
     // - configure UI for entering URL and submitting StudentLocation
     // If not, alert user
     @IBAction func findButtonTouchUp(sender: UIButton) {
-        
         if locationTextView.text == locationPlaceholderText {
             showAlert("Please enter a location.")
-        }
-        else {
+        } else {
             findLocation({ (success, placemark, errorString) -> Void in
-                
                 if success {
                     if let placemark = placemark {
                         dispatch_async(dispatch_get_main_queue(), {
@@ -71,8 +71,7 @@ class PostViewController: UIViewController {
                         self.myStudentLocation!.latitude = coordinates.latitude
                         self.myStudentLocation!.longitude = coordinates.longitude
                     }
-                }
-                else {
+                } else {
                     let alertController = UIAlertController(title: nil, message: "Could not find the location.", preferredStyle: UIAlertControllerStyle.Alert)
                     alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
 
@@ -94,11 +93,9 @@ class PostViewController: UIViewController {
     // If not, alert user
     // TODO: Check if the text is a valid URL string
     @IBAction func submitButtonTouchUp(sender: UIButton) {
-        
         if urlTextView.text == urlPlaceholderText {
             showAlert("Please enter a link.")
-        }
-        else {
+        } else {
             myStudentLocation!.mediaURL = urlTextView.text
             
             submitStudentLocation()
@@ -129,8 +126,7 @@ class PostViewController: UIViewController {
         if UdacityClient.sharedInstance().myStudentLocation == nil {
             hasPosted = false
             myStudentLocation = StudentLocation(dictionary: [UdacityClient.StudentLocationKeys.UniqueKey: UdacityClient.sharedInstance().userID!])
-        }
-        else {
+        } else {
             hasPosted = true
             myStudentLocation = UdacityClient.sharedInstance().myStudentLocation
         }
@@ -153,7 +149,6 @@ class PostViewController: UIViewController {
     // MARK: Configure UI
     
     func configureUI() {
-        
         let attributedText = NSMutableAttributedString()
         attributedText.appendAttributedString(NSAttributedString(string: "Where are you\n", attributes: [NSFontAttributeName: UIFont(name: "AppleSDGothicNeo-Thin", size: 28)!]))
         attributedText.appendAttributedString(NSAttributedString(string: "studying\n", attributes: [NSFontAttributeName: UIFont(name: "AppleSDGothicNeo-Regular", size: 28)!]))
@@ -172,7 +167,6 @@ class PostViewController: UIViewController {
     
     // Configure UI for entering location
     func configureUIForEnteringLocation() {
-        
         cancelButton.tintColor = UIColor.orangeColor()
         
         mapView.hidden = true
@@ -184,7 +178,6 @@ class PostViewController: UIViewController {
     // Configure UI for entering link and submitting StudentLocation
     // Show user entered location on map
     func configureUIForSubmit(annotation: MKAnnotation) {
-        
         cancelButton.tintColor = UIColor.whiteColor()
 
         textLabel.hidden = true
@@ -206,7 +199,6 @@ class PostViewController: UIViewController {
     func findLocation(completionHandler: (success: Bool, placemark: MKPlacemark?, errorString: String?) -> Void) {
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(locationTextView.text, completionHandler: { (placemarks, error) -> Void in
-            
             if let error = error {
                 completionHandler(success: false, placemark: nil, errorString: error.description)
                 return
@@ -233,17 +225,14 @@ class PostViewController: UIViewController {
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
         
         let locationDictionary = StudentLocation.dictionaryFromStudentLocation(myStudentLocation!)
-        
         UdacityClient.sharedInstance().submitStudentLocation(hasPosted, locationDictionary: locationDictionary) { (success, errorString) -> Void in
-            
             if success {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    hud.hide(true)
-                })
-                
                 self.delegate!.didSubmitStudentLocation()
                 
-                self.dismissViewControllerAnimated(true, completion: nil)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    hud.hide(true)
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                })
                 
                 UdacityClient.sharedInstance().myStudentLocation = self.myStudentLocation
                 print("Update Location Succeed.")
@@ -289,7 +278,6 @@ class PostViewController: UIViewController {
 extension PostViewController: UITextViewDelegate {
     
     func textViewDidBeginEditing(textView: UITextView) {
-        
         if textView.text == locationPlaceholderText || textView.text == urlPlaceholderText {
             textView.text = ""
             textView.textColor = UIColor.whiteColor()
@@ -297,12 +285,10 @@ extension PostViewController: UITextViewDelegate {
     }
     
     func textViewDidEndEditing(textView: UITextView) {
-        
         if textView.text!.isEmpty {
             if textView == locationTextView {
                 textView.text = locationPlaceholderText
-            }
-            else if textView == urlTextView {
+            } else if textView == urlTextView {
                 textView.text = urlPlaceholderText
             }
             textView.textColor = placeholderTextColor
@@ -315,7 +301,6 @@ extension PostViewController: UITextViewDelegate {
             textView.resignFirstResponder()
             return false
         }
-        
         return true
     }
     

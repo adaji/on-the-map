@@ -8,6 +8,8 @@
 
 import Foundation
 
+// MARK: - StudentLocation
+
 struct StudentLocation {
     
     // MARK: Properties
@@ -27,7 +29,6 @@ struct StudentLocation {
     // MARK: Initializers
     
     init(dictionary: [String: AnyObject]) {
-        
         if let objectId = dictionary[UdacityClient.StudentLocationKeys.ObjectId] as? String {
             self.objectId = objectId
         }
@@ -65,6 +66,18 @@ struct StudentLocation {
         }
     }
     
+    // Given an array of dictionaries, convert them to an array of StudentLocation objects
+    static func locationsFromResults(results: [[String: AnyObject]]) -> [StudentLocation] {
+        var locations = [StudentLocation]()
+        
+        for result in results {
+            locations.append(StudentLocation(dictionary: result))
+        }
+        
+        return locations
+    }
+    
+    // Convert StudentLocation object to dictionary (for posting/updating student location)
     static func dictionaryFromStudentLocation(studentLocation: StudentLocation) -> [String: AnyObject] {
         return [
             UdacityClient.StudentLocationKeys.UniqueKey: studentLocation.uniqueKey,
@@ -75,17 +88,6 @@ struct StudentLocation {
             UdacityClient.StudentLocationKeys.Latitude: studentLocation.latitude,
             UdacityClient.StudentLocationKeys.Longitude: studentLocation.longitude
         ]
-    }
-    
-    // Given an array of dictionaries, convert them to an array of StudentLocation objects
-    static func locationsFromResults(results: [[String: AnyObject]]) -> [StudentLocation] {
-        var locations = [StudentLocation]()
-        
-        for result in results {
-            locations.append(StudentLocation(dictionary: result))
-        }
-        
-        return locations
     }
     
 }

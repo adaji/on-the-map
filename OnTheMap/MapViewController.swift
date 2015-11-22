@@ -11,6 +11,8 @@ import MapKit
 import MBProgressHUD
 import FBSDKLoginKit
 
+// MARK: - MapViewController: CommonViewController
+
 class MapViewController: CommonViewController {
     
     // MARK: Properties
@@ -32,7 +34,6 @@ class MapViewController: CommonViewController {
         for location in studentLocations {
             let lat = CLLocationDegrees(location.latitude)
             let lon = CLLocationDegrees(location.longitude)
-            
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
             
             let annotation = MKPointAnnotation()
@@ -56,18 +57,15 @@ class MapViewController: CommonViewController {
 extension MapViewController: MKMapViewDelegate {
     
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
-        
         let reuseId = "pin"
         
         var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
-        
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView!.canShowCallout = true
             pinView!.pinTintColor = UIColor.redColor()
             pinView!.rightCalloutAccessoryView = UIButton(type: .DetailDisclosure)
-        }
-        else {
+        } else {
             pinView!.annotation = annotation
         }
         
@@ -77,7 +75,6 @@ extension MapViewController: MKMapViewDelegate {
     // Open the system browser to the URL specified in the annotationViews subtitle property
     // If the URL is invalid, alert user
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        
         if control == view.rightCalloutAccessoryView {
             let app = UIApplication.sharedApplication()
             if let urlString = view.annotation?.subtitle! {

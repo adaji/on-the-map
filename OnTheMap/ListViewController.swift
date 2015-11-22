@@ -9,6 +9,8 @@
 import UIKit
 import MBProgressHUD
 
+// MARK: - ListViewController: CommonViewController
+
 class ListViewController: CommonViewController {
     
     // MARK: Properties
@@ -41,13 +43,12 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
         let reuseId = "StudentLocationCell"
+        
         var cell: UITableViewCell
         if let reusableCell = tableView.dequeueReusableCellWithIdentifier(reuseId) {
             cell = reusableCell
-        }
-        else {
+        } else {
             cell = UITableViewCell(style: .Subtitle, reuseIdentifier: reuseId)
         }
         

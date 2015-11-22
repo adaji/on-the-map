@@ -32,9 +32,7 @@ class UdacityClient: NSObject {
     
     // MARK: Tasks for Udacity HTTP Methods
     
-    // POST
     func startTaskForUdacityPOSTMethod(method: String, jsonBody: [String: AnyObject], completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
-        
         let urlString = Constants.UdacityBaseURL + method
         let request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
         request.HTTPMethod = HTTPMethods.POST
@@ -47,9 +45,7 @@ class UdacityClient: NSObject {
         startTaskForUdacityHTTPMethod(request, completionHandler: completionHandler)
     }
     
-    // DELETE
     func startTaskForUdacityDELETEMethod(method: String, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
-        
         let urlString = Constants.UdacityBaseURL + method
         let request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
         request.HTTPMethod = HTTPMethods.DELETE
@@ -66,9 +62,7 @@ class UdacityClient: NSObject {
         startTaskForUdacityHTTPMethod(request, completionHandler: completionHandler)
     }
     
-    // GET
     func startTaskForUdacityGETMethod(method: String, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
-        
         let urlString = Constants.UdacityBaseURL + method
         let request = NSURLRequest(URL: NSURL(string: urlString)!)
         
@@ -77,7 +71,6 @@ class UdacityClient: NSObject {
     
     func startTaskForUdacityHTTPMethod(request: NSURLRequest, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
         let task = session.dataTaskWithRequest(request) { (data, response, error) -> Void in
-            
             guard error == nil else {
                 completionHandler(result: nil, error: error)
                 print("There was an error with your request: \(error)")
@@ -98,9 +91,7 @@ class UdacityClient: NSObject {
     
     // MARK: Tasks for Parse HTTP Methods
     
-    // GET
     func startTaskForParseGETMethod(optionalParameters: [String: AnyObject]?, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
-
         var urlString = Constants.ParseBaseURL
         if let parameters = optionalParameters {
             urlString += NetworkingDataHandler.escapedParameters(parameters)
@@ -112,9 +103,7 @@ class UdacityClient: NSObject {
         startTaskForParseHTTPMethod(request, completionHandler: completionHandler)
     }
     
-    // POST
     func startTaskForParsePOSTMethod(jsonBody: [String: AnyObject], completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
-        
         let urlString = Constants.ParseBaseURL
         let request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
         request.HTTPMethod = HTTPMethods.POST
@@ -127,9 +116,7 @@ class UdacityClient: NSObject {
         startTaskForParseHTTPMethod(request, completionHandler: completionHandler)
     }
     
-    // PUT
     func startTaskForParsePUTMethod(method: String, jsonBody: [String: AnyObject], completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
-        
         let urlString = Constants.ParseBaseURL + method
         let request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
         request.HTTPMethod = HTTPMethods.PUT
@@ -144,7 +131,6 @@ class UdacityClient: NSObject {
     
     func startTaskForParseHTTPMethod(request: NSURLRequest, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
         let task = session.dataTaskWithRequest(request) { data, response, error in
-            
             guard error == nil else {
                 completionHandler(result: nil, error: error)
                 print("There was an error with your request: \(error)")
@@ -165,12 +151,11 @@ class UdacityClient: NSObject {
     
     // MARK: Helper Functions
     
-    /* Helper: Substitute the key for the value that is contained within the method name */
+    // Substitute the key for the value that is contained within the method name
     class func substituteKeyInMethod(method: String, key: String, value: String) -> String {
         if method.rangeOfString("<\(key)>") != nil {
             return method.stringByReplacingOccurrencesOfString("<\(key)>", withString: value)
-        }
-        else {
+        } else {
             return method
         }
     }
@@ -183,13 +168,13 @@ class UdacityClient: NSObject {
     // MARK: Shared Instance
     
     class func sharedInstance() -> UdacityClient {
-        
         struct Singleton {
             static var sharedInstance = UdacityClient()
         }
         
         return Singleton.sharedInstance
     }
+    
 }
 
 

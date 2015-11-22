@@ -64,8 +64,8 @@
                                     <constraint firstAttribute="width" constant="80" id="wVg-Nh-hql"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yyR-08-CW8">
-                                <rect key="frame" x="170" y="365" width="261" height="44"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yyR-08-CW8">
+                                <rect key="frame" x="176" y="365" width="249" height="44"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                 <state key="normal" title="Don't have an account? Sign Up">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -82,8 +82,8 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="9iU-Cs-9u0"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Login to Udacity" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OpS-j8-z8R">
-                                <rect key="frame" x="223" y="160" width="155" height="41"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Login to Udacity" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OpS-j8-z8R">
+                                <rect key="frame" x="227" y="160" width="147.5" height="41"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="41" id="SV5-yC-9Zp"/>
                                 </constraints>
@@ -129,39 +129,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="280" y="337"/>
-        </scene>
-        <!--Udacity Auth View Controller-->
-        <scene sceneID="TD8-T8-emb">
-            <objects>
-                <viewController id="Q48-cv-sxq" customClass="UdacityAuthViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="wd1-Bn-Fgt"/>
-                        <viewControllerLayoutGuide type="bottom" id="ece-GM-9Vs"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="jVI-m7-bOW">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Euw-kd-hLP">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
-                            </webView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="Euw-kd-hLP" firstAttribute="leading" secondItem="jVI-m7-bOW" secondAttribute="leadingMargin" constant="-20" id="HgD-Zj-RaU"/>
-                            <constraint firstItem="Euw-kd-hLP" firstAttribute="top" secondItem="jVI-m7-bOW" secondAttribute="topMargin" id="TUV-wl-7Uo"/>
-                            <constraint firstItem="ece-GM-9Vs" firstAttribute="top" secondItem="Euw-kd-hLP" secondAttribute="bottom" id="XrR-t5-msS"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="Euw-kd-hLP" secondAttribute="trailing" constant="-20" id="cgr-Cb-Au8"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="webView" destination="Euw-kd-hLP" id="6ns-B2-5s7"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="2U7-Pr-8wd" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1005" y="-370"/>
         </scene>
         <!--Map View Controller-->
         <scene sceneID="A3J-5F-IH4">

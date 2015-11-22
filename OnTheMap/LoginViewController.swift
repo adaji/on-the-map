@@ -10,7 +10,11 @@ import UIKit
 import MBProgressHUD
 import FBSDKLoginKit
 
+// MARK: - LoginViewController: KeyboardHandlingViewController
+
 class LoginViewController: KeyboardHandlingViewController {
+    
+    // MARK: Properties
     
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -32,7 +36,6 @@ class LoginViewController: KeyboardHandlingViewController {
         setControlsEnabled(true)
         setLoginButtonEnabled(false)
         
-        // Try auto login
         tryAutoLogin()
     }
     
@@ -51,6 +54,7 @@ class LoginViewController: KeyboardHandlingViewController {
     
     // MARK: Login
     
+    // Try auto login
     // Login automatically if user has logged in from this device before
     func tryAutoLogin() {
         let userDefaults = NSUserDefaults.standardUserDefaults()
@@ -147,10 +151,11 @@ class LoginViewController: KeyboardHandlingViewController {
     
 }
 
+// MARK: - LoginViewController: UITextFieldDelegate
+
 extension LoginViewController: UITextFieldDelegate {
     
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
-        
         // Clear password before editing begins
         if textField == passwordTextField {
             textField.text = ""
@@ -161,7 +166,6 @@ extension LoginViewController: UITextFieldDelegate {
     }
 
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        
         // Disable login button if email or password is empty
         if !usernameTextField.text!.isEmpty && !passwordTextField.text!.isEmpty && !(range.location == 0 && string == "") {
             setLoginButtonEnabled(true)
@@ -173,7 +177,6 @@ extension LoginViewController: UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        
         if textField == usernameTextField {
             passwordTextField.becomeFirstResponder()
         } else if textField == passwordTextField {
@@ -186,14 +189,14 @@ extension LoginViewController: UITextFieldDelegate {
     
 }
 
+// MARK: - LoginViewController: FBSDKLoginButtonDelegate
+
 extension LoginViewController: FBSDKLoginButtonDelegate {
     
     func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
-        
         if let error = error {
             showLoginError(error.description)
-        }
-        else {
+        } else {
             dismissViewControllerAnimated(true, completion: nil)
             
             if let token = result.token {
@@ -214,12 +217,10 @@ extension LoginViewController: FBSDKLoginButtonDelegate {
         UdacityClient.sharedInstance().deleteSession { (success, errorString) -> Void in
             if success {
                 print("Logout Succeed.")
-            }
-            else {
+            } else {
                 print(errorString)
             }
         }
-        
     }
     
 }

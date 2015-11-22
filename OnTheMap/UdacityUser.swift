@@ -8,14 +8,19 @@
 
 import Foundation
 
+// MARK: - UdacityUser
+
 struct UdacityUser {
+    
+    // MARK: Properties
     
     var fullName = ""
     var loctaion: String?
     var websiteUrl: String?
     
+    // MARK: Initializers
+    
     init(dictionary: [String: AnyObject]) {
-        
         let firstName = dictionary[UdacityClient.JSONResponseKeys.UserFirstName] as! String
         let lastName = dictionary[UdacityClient.JSONResponseKeys.UserLastName] as! String
         fullName = "\(firstName) \(lastName)"

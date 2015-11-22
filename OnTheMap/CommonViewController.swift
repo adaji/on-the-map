@@ -52,7 +52,9 @@ class CommonViewController: UIViewController {
     func configureNavigationBar() {
         var logoutButtonItem: UIBarButtonItem
         if (UIApplication.sharedApplication().delegate as! AppDelegate).loggedInWithFB {
-            logoutButtonItem = UIBarButtonItem(customView: FBSDKLoginButton())
+            let facebookButton = FBSDKLoginButton()
+            facebookButton.delegate = self
+            logoutButtonItem = UIBarButtonItem(customView: facebookButton)
         } else {
             logoutButtonItem = UIBarButtonItem(image: UIImage(named: "logout"), style: .Plain, target: self, action: "logout:")
         }
@@ -81,8 +83,7 @@ class CommonViewController: UIViewController {
         UdacityClient.sharedInstance().deleteSession { (success, errorString) -> Void in
             if success {
                 self.completeLogout()
-            }
-            else {
+            } else {
                 self.showError(errorString)
             }
         }
@@ -92,12 +93,13 @@ class CommonViewController: UIViewController {
     // If so, ask user whether to overwrite
     // If not, present post view controller
     func post(sender: UIBarButtonItem) {
-        checkIfHasPosted { (hasPosted, studentLocation) -> Void in
-            
-            // If user has posted location before, ask user whether to overwrite
-            if hasPosted {
-                if let studentLocation = studentLocation {
-                    let message = "User \"\(studentLocation.fullName)\" has already posted a Student Location. Would you like to overwrite the location?"
+        checkIfHasPosted { (hasPosted, studentLocation, errorString) -> Void in
+            if let errorString = errorString {
+                self.showError(errorString)
+            } else {
+                // If user has posted location before, ask user whether to overwrite
+                if hasPosted {
+                    let message = "User \"\(studentLocation!.fullName)\" has already posted a Student Location. Would you like to overwrite the location?"
                     let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
                     alertController.addAction(UIAlertAction(title: "Overwrite", style: .Default, handler: { (action) -> Void in
                         self.presentPostViewController()
@@ -107,10 +109,9 @@ class CommonViewController: UIViewController {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         self.presentViewController(alertController, animated: true, completion: nil)
                     })
+                } else {
+                    self.presentPostViewController()
                 }
-            }
-            else {
-                self.presentPostViewController()
             }
         }
     }
@@ -140,55 +141,45 @@ class CommonViewController: UIViewController {
                 if let studentLocations = studentLocations {
                     // Update student data saved in UdacityClient
                     UdacityClient.sharedInstance().studentLocations = studentLocations
-
+                    
                     dispatch_async(dispatch_get_main_queue(), {
                         hud.hide(true)
                     })
                     
                     self.showStudentLocations(studentLocations)
-                }
-                else {
+                    
+                } else {
                     self.showError("No student data returned.")
                 }
-            }
-            else {
+            } else {
                 self.showError(errorString)
             }
         }
     }
     
     // Check if user has posted location before
-    func checkIfHasPosted(completionHandler: (hasPosted: Bool, studentLocation: StudentLocation?) -> Void) {
-        
-        // Check if user's StudentLocation has been saved locally (as myStudentLocation)
-        let myLocation = UdacityClient.sharedInstance().myStudentLocation
-        if myLocation != nil {
-            completionHandler(hasPosted: true, studentLocation: myLocation)
-        }
-        else {
-            // Query for user's StudentLocation
-            
+    // - If user's location has not been saved in UdacityClient (as myStudentLocation), query for user's location
+    func checkIfHasPosted(completionHandler: (hasPosted: Bool, studentLocation: StudentLocation?, errorString: String?) -> Void) {
+        if UdacityClient.sharedInstance().myStudentLocation != nil {
+            completionHandler(hasPosted: true, studentLocation: UdacityClient.sharedInstance().myStudentLocation!, errorString: nil)
+        } else {
             MBProgressHUD.hideAllHUDsForView(view, animated: true)
             let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
             
             let parameters = [UdacityClient.ParameterKeys.WhereKey: "{\"\(UdacityClient.ParameterKeys.UniqueKey)\":\"\(UdacityClient.sharedInstance().userID!)\"}"]
             UdacityClient.sharedInstance().queryForStudentLocation(parameters) { (success, studentLocation, errorString) -> Void in
+                dispatch_async(dispatch_get_main_queue(), {
+                    hud.hide(true)
+                })
                 
                 if success {
-                    dispatch_async(dispatch_get_main_queue(), {
-                        hud.hide(true)
-                    })
-                    
                     if let studentLocation = studentLocation {
-                        completionHandler(hasPosted: true, studentLocation: studentLocation)
+                        completionHandler(hasPosted: true, studentLocation: studentLocation, errorString: nil)
+                    } else {
+                        completionHandler(hasPosted: false, studentLocation: nil, errorString: "No student data returned.")
                     }
-                    else {
-                        completionHandler(hasPosted: false, studentLocation: nil)
-                    }
-                }
-                else {
-                    completionHandler(hasPosted: false, studentLocation: nil)
-                    print(errorString)
+                } else {
+                    completionHandler(hasPosted: false, studentLocation: nil, errorString: errorString)
                 }
             }
         }
@@ -213,12 +204,12 @@ class CommonViewController: UIViewController {
     // - Clear saved data
     // - Show login view
     func completeLogout() {
-        clearSavedData()
-        
         dispatch_async(dispatch_get_main_queue(), {
             MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
             self.dismissViewControllerAnimated(true, completion: nil)
         })
+
+        clearSavedData()
     }
     
     // Show error
@@ -232,7 +223,7 @@ class CommonViewController: UIViewController {
             self.presentViewController(alertController, animated: true, completion: nil)
         }
     }
-
+    
 }
 
 // MARK: - CommonViewController: PostViewControllerDelegate
@@ -247,6 +238,25 @@ extension CommonViewController: PostViewControllerDelegate {
     
 }
 
+// MARK: - CommonViewController: FBSDKLoginButtonDelegate
+
+extension CommonViewController: FBSDKLoginButtonDelegate {
+    
+    func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
+        
+    }
+    
+    func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
+        UdacityClient.sharedInstance().deleteSession { (success, errorString) -> Void in
+            if success {
+                self.completeLogout()
+            } else {
+                self.showError(errorString)
+            }
+        }
+    }
+    
+}
 
 
 

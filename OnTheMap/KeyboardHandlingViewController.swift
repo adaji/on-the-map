@@ -8,6 +8,8 @@
 
 import UIKit
 
+// MARK: - KeyboardHandlingViewController: UIViewController
+
 class KeyboardHandlingViewController: UIViewController {
     
     // MARK: Properties
@@ -39,6 +41,7 @@ class KeyboardHandlingViewController: UIViewController {
         removeKeyboardDismissRecognizer()
         unsubscribeToKeyboardNotifications()
     }
+    
     // MARK: Show/Hide Keyboard
     
     func addKeyboardDismissRecognizer() {

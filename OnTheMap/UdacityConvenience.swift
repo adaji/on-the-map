@@ -26,7 +26,6 @@ extension UdacityClient {
     // Required parameters (in HTTPBody): ["udacity": ["username": username, "password": password]]
     //
     func authenticate(username: String, password: String, completionHandler: (success: Bool, errorString: String?) -> Void) {
-        
         let jsonBody = [UdacityClient.JSONBodyKeys.Udacity: [UdacityClient.JSONBodyKeys.Username: username, UdacityClient.JSONBodyKeys.Password: password]]
         postSession(jsonBody, completionHandler: completionHandler)
     }
@@ -41,16 +40,13 @@ extension UdacityClient {
     // Required parameters (in HTTPBody): ["facebook_mobile": ["access_token": accessToken]]
     //
     func loginWithFacebook(accessToken: String, completionHandler: (success: Bool, errorString: String?) -> Void) {
-
         let jsonBody = [UdacityClient.JSONBodyKeys.FacebookMobile: [UdacityClient.JSONBodyKeys.AccessToken: accessToken]]
         postSession(jsonBody, completionHandler: completionHandler)
     }
     
     // POSTing (Creating) a Session
     func postSession(jsonBody: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
-        
         startTaskForUdacityPOSTMethod(Methods.Session, jsonBody: jsonBody) { result, error in
-            
             guard error == nil else {
                 print("Login Failed. Error: \(error)")
                 completionHandler(success: false, errorString: error!.description)
@@ -63,13 +59,11 @@ extension UdacityClient {
                 return
             }
             
-            guard let session = result[JSONResponseKeys.Session] as? [String: String] else {
+            guard let session = result[JSONResponseKeys.Session] as? [String: AnyObject] else {
                 print("Could not find key \"\(JSONResponseKeys.Session)\" in \(result)")
                 completionHandler(success: false, errorString: "Login Failed (Session ID).")
                 return
             }
-            
-            let sessionID = session[JSONResponseKeys.SessionID]
             
             guard let account = result[JSONResponseKeys.Account] as? [String: AnyObject] else {
                 print("Could not find key \"\(JSONResponseKeys.Account)\" in \(result)")
@@ -77,14 +71,8 @@ extension UdacityClient {
                 return
             }
             
-            guard let userID = account[JSONResponseKeys.AccountKey] as? String else {
-                print("Could not find key \"\(JSONResponseKeys.AccountKey)\" in \(account)")
-                completionHandler(success: false, errorString: "Login Failed (User ID).")
-                return
-            }
-            
-            self.sessionID = sessionID
-            self.userID = Int(userID)
+            self.sessionID = session[JSONResponseKeys.SessionID] as? String
+            self.userID = Int(account[JSONResponseKeys.AccountKey] as! String)
             
             completionHandler(success: true, errorString: nil)
         }
@@ -97,7 +85,6 @@ extension UdacityClient {
     //
     func deleteSession(completionHandler: (success: Bool, errorString: String?) -> Void) {
         startTaskForUdacityDELETEMethod(Methods.Session) { (result, error) -> Void in
-            
             guard error == nil else {
                 print("Logout Failed. Error: \(error)")
                 completionHandler(success: false, errorString: "Logout Failed (Delete Session).")
@@ -115,9 +102,7 @@ extension UdacityClient {
     //
     func getUdacityUser(completionHandler: (success: Bool, udacityUser: UdacityUser?, errorString: String?) -> Void) {
         let method = UdacityClient.substituteKeyInMethod(Methods.UserData, key: URLKeys.UserId, value: String(UdacityClient.sharedInstance().userID!))
-        
         startTaskForUdacityGETMethod(method) { (result, error) -> Void in
-            
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
                 completionHandler(success: false, udacityUser: nil, errorString: "There was an error retrieving student data.")
@@ -152,9 +137,7 @@ extension UdacityClient {
     // GETting StudentLocations
     // Optional parameters: "limit", "skip", "order"
     func getStudentLocations(optionalParameters: [String: AnyObject]?, completionHandler: (success: Bool, studentLocations: [StudentLocation]?, errorString: String?) -> Void) {
-        
         startTaskForParseGETMethod(optionalParameters) { (result, error) -> Void in
-            
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
                 completionHandler(success: false, studentLocations: nil, errorString: "There was an error retrieving student data.")
@@ -204,9 +187,7 @@ extension UdacityClient {
     // Required parameters (in HTTPBody): parameters
     //
     func postStudentLocation(locationDictionary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
-        
         startTaskForParsePOSTMethod(locationDictionary) { (result, error) -> Void in
-            
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
                 completionHandler(success: false, errorString: "There was an error posting student data.")
@@ -227,9 +208,7 @@ extension UdacityClient {
     //
     func updateStudentLocation(locationDicationary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
         let method = UdacityClient.substituteKeyInMethod(Methods.UpdateStudentLocation, key: URLKeys.ObjectId, value: String(UdacityClient.sharedInstance().userID!))
-        
         startTaskForParsePUTMethod(method, jsonBody: locationDicationary) { (result, error) -> Void in
-            
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
                 completionHandler(success: false, errorString: "There was an error updating student data.")
@@ -249,9 +228,7 @@ extension UdacityClient {
     // Required parameters: "where"
     //
     func queryForStudentLocation(parameters: [String: AnyObject], completionHandler: (success: Bool, studentLocation: StudentLocation?, errorString: String?) -> Void) {
-        
         startTaskForParseGETMethod(parameters) { (result, error) -> Void in
-            
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
                 completionHandler(success: false, studentLocation: nil, errorString: "There was an error retrieving student data.")
