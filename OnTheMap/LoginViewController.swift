@@ -124,12 +124,12 @@ class LoginViewController: KeyboardHandlingViewController {
     // Complete login
     func completeLogin(loggedInWithFB: Bool) {
         (UIApplication.sharedApplication().delegate as! AppDelegate).loggedInWithFB = loggedInWithFB
-        
-        let mainTBC = self.storyboard!.instantiateViewControllerWithIdentifier("MainTabBarController") as! UITabBarController
-        mainTBC.tabBar.tintColor = UIColor.orangeColor() // Change tab bar tint color to orange
 
         dispatch_async(dispatch_get_main_queue(), {
             MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+            
+            let mainTBC = self.storyboard!.instantiateViewControllerWithIdentifier("MainTabBarController") as! UITabBarController // Instantiate view controller after in main queue to properly configure its UI
+            mainTBC.tabBar.tintColor = UIColor.orangeColor() // Change tab bar tint color to orange
             self.presentViewController(mainTBC, animated: true, completion: nil)
         })
     }
