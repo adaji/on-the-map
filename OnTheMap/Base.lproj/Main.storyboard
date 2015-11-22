@@ -3,7 +3,6 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
-        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="SF-UI-Text-Regular.otf">
@@ -192,20 +191,7 @@
                         </constraints>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" id="kGg-nx-af7">
-                        <rightBarButtonItems>
-                            <barButtonItem image="refresh" id="0wa-oy-Rw2">
-                                <connections>
-                                    <action selector="refreshButtonTouchUp:" destination="Rm2-V3-l8x" id="oWl-ay-nXl"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem image="marker" id="LW5-C4-XEH">
-                                <connections>
-                                    <action selector="postButtonTouchUp:" destination="Rm2-V3-l8x" id="ga3-Gd-FFr"/>
-                                </connections>
-                            </barButtonItem>
-                        </rightBarButtonItems>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="kGg-nx-af7"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="mapView" destination="Efm-fJ-BqI" id="8iu-M5-iha"/>
@@ -418,25 +404,7 @@
                             <outlet property="delegate" destination="Es1-XK-Dhh" id="qRF-P3-thv"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="xtR-fC-C96">
-                        <barButtonItem key="leftBarButtonItem" image="logout" id="bLl-08-sDH">
-                            <connections>
-                                <action selector="logoutButtonTouchUp:" destination="Es1-XK-Dhh" id="Dti-yy-Cru"/>
-                            </connections>
-                        </barButtonItem>
-                        <rightBarButtonItems>
-                            <barButtonItem image="refresh" id="BjU-n1-JkG">
-                                <connections>
-                                    <action selector="refreshButtonTouchUp:" destination="Es1-XK-Dhh" id="9og-bV-VhI"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem image="marker" id="Iim-ib-6Qv">
-                                <connections>
-                                    <action selector="postButtonTouchUp:" destination="Es1-XK-Dhh" id="adr-zT-PlF"/>
-                                </connections>
-                            </barButtonItem>
-                        </rightBarButtonItems>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="xtR-fC-C96"/>
                     <connections>
                         <outlet property="locationsTableView" destination="1tu-2H-DMv" id="8w5-sw-q4H"/>
                     </connections>
@@ -486,10 +454,8 @@
     <resources>
         <image name="list" width="25" height="25"/>
         <image name="logo" width="700" height="701"/>
-        <image name="logout" width="25" height="25"/>
         <image name="map" width="25" height="25"/>
         <image name="marker" width="25" height="25"/>
-        <image name="refresh" width="25" height="25"/>
     </resources>
     <color key="tintColor" red="1" green="0.50196081399917603" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
 </document>
