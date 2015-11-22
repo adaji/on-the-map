@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 import MBProgressHUD
+import FBSDKLoginKit
 
 class MapViewController: UIViewController {
     
@@ -22,6 +23,18 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        configureLogoutButton()
+    }
+    
+    func configureLogoutButton() {
+        var logoutButtonItem: UIBarButtonItem
+        if (UIApplication.sharedApplication().delegate as! AppDelegate).loggedInWithFB {
+            logoutButtonItem = UIBarButtonItem(customView: FBSDKLoginButton())
+        } else {
+            logoutButtonItem = UIBarButtonItem(image: UIImage(named: "logout"), style: .Plain, target: self, action: "logout:")
+        }
+        navigationItem.leftBarButtonItem = logoutButtonItem
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -46,29 +59,26 @@ class MapViewController: UIViewController {
     
     // MARK: Actions
     
-    @IBAction func LogoutButtonTouchUp(sender: UIBarButtonItem) {
+    @IBAction func logout(sender: UIBarButtonItem) {
         
         MBProgressHUD.hideAllHUDsForView(view, animated: true)
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
         hud.labelText = "Logging out..."
 
-        UdacityClient.sharedInstance().deleteUdacitySession { (success, errorString) -> Void in
+        UdacityClient.sharedInstance().deleteSession { (success, errorString) -> Void in
             if success {
                 dispatch_async(dispatch_get_main_queue(), {
                     hud.hide(true)
                 })
-
-                // Delete password when logout
-                let userDefaults = NSUserDefaults.standardUserDefaults()
-                userDefaults.setValue("", forKey: "password")
-                userDefaults.synchronize()
+                
+                self.clearDataOnLogout()
 
                 self.dismissViewControllerAnimated(true, completion: nil)
             }
             else {
                 dispatch_async(dispatch_get_main_queue(), {
                     hud.hide(true)
-                    self.showAlert("There was a problem logging out.")
+                    self.showAlert("An error has occurred during logging out.")
                 })
 
                 print(errorString)
@@ -185,6 +195,19 @@ class MapViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    // Clear saved data (student data, password, etc.) on logout
+    func clearDataOnLogout() {
+        UdacityClient.sharedInstance().sessionID = nil
+        UdacityClient.sharedInstance().userID = nil
+        UdacityClient.sharedInstance().studentLocations = nil
+        UdacityClient.sharedInstance().myStudentLocation = nil
+        
+        // Delete password when logout
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setValue("", forKey: "password")
+        userDefaults.synchronize()
     }
     
     // MARK: Show StudentLocations on Map

@@ -8,14 +8,15 @@
 
 import UIKit
 import MBProgressHUD
+import FBSDKLoginKit
 
 class LoginViewController: KeyboardHandlingViewController {
     
-    @IBOutlet weak var emailTextField: UITextField!
+    @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: BorderedButton!
     @IBOutlet weak var signupButton: UIButton!
-    @IBOutlet weak var facebookLoginButton: BorderedButton!
+    @IBOutlet weak var facebookLoginButton: FBSDKLoginButton!
         
     // MARK: Life Cycle
     
@@ -54,7 +55,7 @@ class LoginViewController: KeyboardHandlingViewController {
     func tryAutoLogin() {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         if let email = userDefaults.valueForKey("email") as? String {
-            emailTextField.text = email
+            usernameTextField.text = email
             if let password = userDefaults.valueForKey("password") as? String {
                 passwordTextField.text = password
                 
@@ -69,37 +70,18 @@ class LoginViewController: KeyboardHandlingViewController {
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
         hud.labelText = "Logging in..."
         
-        UdacityClient.sharedInstance().autheticateUdacityWithViewController(self) {
+        UdacityClient.sharedInstance().authenticate(usernameTextField.text!, password: passwordTextField.text!) {
             success, errorString in
             if success {
                 // Save/update email and password
                 let userDefaults = NSUserDefaults.standardUserDefaults()
-                userDefaults.setValue(self.emailTextField.text!, forKey: "email")
+                userDefaults.setValue(self.usernameTextField.text!, forKey: "username")
                 userDefaults.setValue(self.passwordTextField.text!, forKey: "password")
                 userDefaults.synchronize()
-
-                let mainTBC = self.storyboard!.instantiateViewControllerWithIdentifier("MainTabBarController") as! UITabBarController
                 
-                dispatch_async(dispatch_get_main_queue(), {
-                    hud.hide(true)
-                    
-                    mainTBC.tabBar.tintColor = UIColor.orangeColor() // Change tab bar tint color to orange
-                    self.presentViewController(mainTBC, animated: true, completion: nil)
-                })
+                self.completeLogin(false)
             } else {
-                // Display error
-                let alertController = UIAlertController(title: nil, message: errorString, preferredStyle: UIAlertControllerStyle.Alert)
-                alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
-                    self.setControlsEnabled(true)
-                    self.setLoginButtonEnabled(false)
-                }))
-
-                dispatch_async(dispatch_get_main_queue(), {
-                    hud.hide(true)
-                    
-                    self.presentViewController(alertController, animated: true, completion: nil)
-                })
-                
+                self.showLoginError(errorString)
                 print(errorString)
             }
         }
@@ -108,12 +90,12 @@ class LoginViewController: KeyboardHandlingViewController {
     // MARK: Configure UI
     
     func configureUI() {
-        facebookLoginButton.backgroundColor = UIColor(red: 59/255.0, green: 89/255.0, blue: 152/255.0, alpha: 1.0)
-        facebookLoginButton.backingColor = UIColor(red: 59/255.0, green: 89/255.0, blue: 152/255.0, alpha: 1.0)
-        
         loginButton.backgroundColor = UIColor(red: 238/255.0, green: 62/255.0, blue: 10/255.0, alpha: 1.0)
         loginButton.backingColor = UIColor(red: 238/255.0, green: 62/255.0, blue: 10/255.0, alpha: 1.0)
         loginButton.highlightedBackingColor = UIColor.redColor()
+
+        facebookLoginButton.layer.masksToBounds = true
+        facebookLoginButton.layer.cornerRadius = loginButton.layer.cornerRadius
     }
     
     func setLoginButtonEnabled(enabled: Bool) {
@@ -127,10 +109,40 @@ class LoginViewController: KeyboardHandlingViewController {
     }
     
     func setControlsEnabled(enabled: Bool) {
-        emailTextField.enabled = enabled
+        usernameTextField.enabled = enabled
         passwordTextField.enabled = enabled
         setLoginButtonEnabled(enabled)
         facebookLoginButton.enabled = enabled
+    }
+    
+    // MARK: Helper Functions
+    
+    // Complete login
+    func completeLogin(loggedInWithFB: Bool) {
+        (UIApplication.sharedApplication().delegate as! AppDelegate).loggedInWithFB = loggedInWithFB
+        
+        let mainTBC = self.storyboard!.instantiateViewControllerWithIdentifier("MainTabBarController") as! UITabBarController
+        mainTBC.tabBar.tintColor = UIColor.orangeColor() // Change tab bar tint color to orange
+
+        dispatch_async(dispatch_get_main_queue(), {
+            MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+            self.presentViewController(mainTBC, animated: true, completion: nil)
+        })
+    }
+    
+    // Show login error
+    func showLoginError(errorString: String?) {
+        let errorString = !errorString!.isEmpty ? errorString! : "An unknow error has occurred during login."
+        let alertController = UIAlertController(title: nil, message: errorString, preferredStyle: UIAlertControllerStyle.Alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
+            self.setControlsEnabled(true)
+            self.setLoginButtonEnabled(false)
+        }))
+        
+        dispatch_async(dispatch_get_main_queue(), {
+            MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+            self.presentViewController(alertController, animated: true, completion: nil)
+        })
     }
     
 }
@@ -151,7 +163,7 @@ extension LoginViewController: UITextFieldDelegate {
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
         // Disable login button if email or password is empty
-        if !emailTextField.text!.isEmpty && !passwordTextField.text!.isEmpty && !(range.location == 0 && string == "") {
+        if !usernameTextField.text!.isEmpty && !passwordTextField.text!.isEmpty && !(range.location == 0 && string == "") {
             setLoginButtonEnabled(true)
         } else {
             setLoginButtonEnabled(false)
@@ -162,7 +174,7 @@ extension LoginViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         
-        if textField == emailTextField {
+        if textField == usernameTextField {
             passwordTextField.becomeFirstResponder()
         } else if textField == passwordTextField {
             setControlsEnabled(false)
@@ -174,6 +186,43 @@ extension LoginViewController: UITextFieldDelegate {
     
 }
 
+extension LoginViewController: FBSDKLoginButtonDelegate {
+    
+    func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
+        
+        if let error = error {
+            showLoginError(error.description)
+        }
+        else {
+            dismissViewControllerAnimated(true, completion: nil)
+            
+            if let token = result.token {
+                UdacityClient.sharedInstance().loginWithFacebook(token.tokenString) { (success, errorString) -> Void in
+                    if success {
+                        self.completeLogin(true)
+                    } else {
+                        self.showLoginError(errorString)
+                    }
+                }
+            } else {
+                showLoginError("Login failed.")
+            }
+        }
+    }
+    
+    func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
+        UdacityClient.sharedInstance().deleteSession { (success, errorString) -> Void in
+            if success {
+                print("Logout Succeed.")
+            }
+            else {
+                print(errorString)
+            }
+        }
+        
+    }
+    
+}
 
 
 

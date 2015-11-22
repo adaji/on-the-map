@@ -16,6 +16,7 @@ extension UdacityClient {
         static let ParseAppID: String = "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr" // Parse Application ID
         static let ParseAPIKey: String = "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY" // Parse REST API Key
         static let FacebookAppID = "365362206864879" // Facebook App ID
+        static let FacebookURLSchemeSuffix = "onthemap" // Udacity Facebook URL Scheme Suffix
         
         static let UdacityBaseURL: String = "https://www.udacity.com/api/"
         static let ParseBaseURL: String = "https://api.parse.com/1/classes/StudentLocation"

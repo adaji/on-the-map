@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		480B4FDDBDE596D1306F65E2 /* Pods_OnTheMap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E1577941877556B0355C4A2 /* Pods_OnTheMap.framework */; };
+		604209361C01845100BF1E4C /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 604209351C01845100BF1E4C /* FBSDKCoreKit.framework */; };
+		604209391C01898C00BF1E4C /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 604209381C01898C00BF1E4C /* FBSDKLoginKit.framework */; };
 		604715AD1BFEE624007D2E1D /* UdacityUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604715AC1BFEE624007D2E1D /* UdacityUser.swift */; };
 		60533FB01BFE327E00B33F92 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60533FAF1BFE327E00B33F92 /* PostViewController.swift */; };
 		60ECE8C11BFC32F600D5B165 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ECE8C01BFC32F600D5B165 /* AppDelegate.swift */; };
@@ -49,6 +51,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		604209351C01845100BF1E4C /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../resources/FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		604209381C01898C00BF1E4C /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../resources/FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		604715AC1BFEE624007D2E1D /* UdacityUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityUser.swift; sourceTree = "<group>"; };
 		60533FAF1BFE327E00B33F92 /* PostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		60B11E7F1BFE84CF0002196A /* OnTheMap-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OnTheMap-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -88,6 +92,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				480B4FDDBDE596D1306F65E2 /* Pods_OnTheMap.framework in Frameworks */,
+				604209361C01845100BF1E4C /* FBSDKCoreKit.framework in Frameworks */,
+				604209391C01898C00BF1E4C /* FBSDKLoginKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,6 +114,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		604209371C01845500BF1E4C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				604209381C01898C00BF1E4C /* FBSDKLoginKit.framework */,
+				604209351C01845100BF1E4C /* FBSDKCoreKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		60ECE8B41BFC32F600D5B165 = {
 			isa = PBXGroup;
 			children = (
@@ -139,6 +154,7 @@
 				60ECE8C41BFC32F600D5B165 /* Main.storyboard */,
 				60ECE8C71BFC32F600D5B165 /* Assets.xcassets */,
 				60ECE8F01BFC491A00D5B165 /* Supporting Files */,
+				604209371C01845500BF1E4C /* Frameworks */,
 			);
 			path = OnTheMap;
 			sourceTree = "<group>";
@@ -582,7 +598,10 @@
 			baseConfigurationReference = D059F18D26FC2AE145624B75 /* Pods-OnTheMap.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/**";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)/**",
+					"/Users/Caroline/Developer/ios-dev/resources/FacebookSDK",
+				);
 				INFOPLIST_FILE = OnTheMap/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -597,7 +616,10 @@
 			baseConfigurationReference = F338D491F451D6B0607CB237 /* Pods-OnTheMap.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/**";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)/**",
+					"/Users/Caroline/Developer/ios-dev/resources/FacebookSDK",
+				);
 				INFOPLIST_FILE = OnTheMap/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

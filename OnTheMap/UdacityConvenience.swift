@@ -15,91 +15,87 @@ extension UdacityClient {
     
     // MARK: Udacity Authetication Methods
     
-    func autheticateUdacityWithViewController(hostViewController: UIViewController, completionHandler: (success: Bool, errorString: String?) -> Void) {
-        
-        if let loginVC = hostViewController as? LoginViewController {
-            getUdacitySessionID([UdacityClient.JSONBodyKeys.Username: loginVC.emailTextField.text!, UdacityClient.JSONBodyKeys.Password: loginVC.passwordTextField.text!]) { success, sessionID, userID, errorString in
-                
-                if success {
-                    if let sessionID = sessionID {
-                        self.sessionID = sessionID
-                    }
-                    if let userID = userID {
-                        self.userID = Int(userID)
-                    }
-                }
-                
-                completionHandler(success: success, errorString: errorString)
-            }
-        }
-        
-    }
-    
-    // Function: getUdacitySessionID
-    // Parameters: 
-    // - parameters: ["username": "<username>", "password": "<password>"]
+    // Function: authenticate
+    // Parameters:
+    // - username
+    // - password
     // - completionHandler
     //
     // POSTing (Creating) a Session
     // Method: session
-    // Required parameters (in HTTPBody): ["udacity": parameters]
+    // Required parameters (in HTTPBody): ["udacity": ["username": username, "password": password]]
     //
-    func getUdacitySessionID(parameters: [String: String], completionHandler: (success: Bool, sessionID: String?, userID: String?, errorString: String?) -> Void) {
+    func authenticate(username: String, password: String, completionHandler: (success: Bool, errorString: String?) -> Void) {
         
-        let jsonBody = [UdacityClient.JSONBodyKeys.Udacity: parameters]
+        let jsonBody = [UdacityClient.JSONBodyKeys.Udacity: [UdacityClient.JSONBodyKeys.Username: username, UdacityClient.JSONBodyKeys.Password: password]]
+        postSession(jsonBody, completionHandler: completionHandler)
+    }
+    
+    // Function: loginWithFacebook
+    // Parameters:
+    // - accessToken
+    // - completionHandler
+    //
+    // POSTing (Creating) a Session with Facebook Authentication
+    // Method: session
+    // Required parameters (in HTTPBody): ["facebook_mobile": ["access_token": accessToken]]
+    //
+    func loginWithFacebook(accessToken: String, completionHandler: (success: Bool, errorString: String?) -> Void) {
+
+        let jsonBody = [UdacityClient.JSONBodyKeys.FacebookMobile: [UdacityClient.JSONBodyKeys.AccessToken: accessToken]]
+        postSession(jsonBody, completionHandler: completionHandler)
+    }
+    
+    // POSTing (Creating) a Session
+    func postSession(jsonBody: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
         
         startTaskForUdacityPOSTMethod(Methods.Session, jsonBody: jsonBody) { result, error in
             
             guard error == nil else {
                 print("Login Failed. Error: \(error)")
-                var errorMessage = ""
-                switch error!.code {
-                case -1009:
-                    errorMessage = "The Internet connection appears to be offline."
-                    break
-                default:
-                    errorMessage = "Invalid username or password."
-                    break
-                }
-                completionHandler(success: false, sessionID: nil, userID: nil, errorString: errorMessage)
+                completionHandler(success: false, errorString: error!.description)
                 return
             }
             
             guard let result = result else {
                 print("No result returned.")
-                completionHandler(success: false, sessionID: nil, userID: nil, errorString: "Login Failed (Session ID).")
+                completionHandler(success: false, errorString: "Login Failed (Session ID).")
                 return
             }
             
             guard let session = result[JSONResponseKeys.Session] as? [String: String] else {
-                completionHandler(success: false, sessionID: nil, userID: nil, errorString: "Login Failed (Session ID).")
+                print("Could not find key \"\(JSONResponseKeys.Session)\" in \(result)")
+                completionHandler(success: false, errorString: "Login Failed (Session ID).")
                 return
             }
             
             let sessionID = session[JSONResponseKeys.SessionID]
             
             guard let account = result[JSONResponseKeys.Account] as? [String: AnyObject] else {
-                print("Could not find key \(JSONResponseKeys.Account)")
-                completionHandler(success: false, sessionID: nil, userID: nil, errorString: "Login Failed (User ID).")
+                print("Could not find key \"\(JSONResponseKeys.Account)\" in \(result)")
+                completionHandler(success: false, errorString: "Login Failed (User ID).")
                 return
             }
             
             guard let userID = account[JSONResponseKeys.AccountKey] as? String else {
-                print("Could not get user id")
-                completionHandler(success: false, sessionID: nil, userID: nil, errorString: "Login Failed (User ID).")
+                print("Could not find key \"\(JSONResponseKeys.AccountKey)\" in \(account)")
+                completionHandler(success: false, errorString: "Login Failed (User ID).")
                 return
             }
             
-            completionHandler(success: true, sessionID: sessionID, userID: userID, errorString: nil)
+            self.sessionID = sessionID
+            self.userID = Int(userID)
+            
+            completionHandler(success: true, errorString: nil)
         }
     }
     
-    // Function: deleteUdacitySession
+    // Function: deleteSession
     //
     // DELETEing (Logging Out Of) a Session
     // Method: session
     //
-    func deleteUdacitySession(completionHandler: (success: Bool, errorString: String?) -> Void) {
+    func deleteSession(completionHandler: (success: Bool, errorString: String?) -> Void) {
         startTaskForUdacityDELETEMethod(Methods.Session) { (result, error) -> Void in
             
             guard error == nil else {

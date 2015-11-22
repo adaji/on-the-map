@@ -51,26 +51,12 @@ class ListViewController: UIViewController {
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
         hud.labelText = "Logging out..."
 
-        UdacityClient.sharedInstance().deleteUdacitySession { (success, errorString) -> Void in
+        UdacityClient.sharedInstance().deleteSession { (success, errorString) -> Void in
             if success {
-                dispatch_async(dispatch_get_main_queue(), {
-                    hud.hide(true)
-                })
-
-                // Delete password when logout
-                let userDefaults = NSUserDefaults.standardUserDefaults()
-                userDefaults.setValue("", forKey: "password")
-                userDefaults.synchronize()
-                
-                self.dismissViewControllerAnimated(true, completion: nil)
+                self.completeLogout()
             }
             else {
-                dispatch_async(dispatch_get_main_queue(), {
-                    hud.hide(true)
-                    self.showAlert("There was a problem logging out.")
-                })
-                
-                print(errorString)
+                self.showError(errorString)
             }
         }
     }
@@ -126,27 +112,20 @@ class ListViewController: UIViewController {
             
             if success {
                 if let studentLocations = studentLocations {
+                    self.studentLocations = studentLocations
                     
                     dispatch_async(dispatch_get_main_queue(), {
                         hud.hide(true)
                         
-                        self.studentLocations = studentLocations // Put this in the block because it must be done before table view reloads data
                         self.locationsTableView.reloadData()
                     })
                 }
                 else {
-                    dispatch_async(dispatch_get_main_queue(), {
-                        hud.hide(true)
-                        self.showAlert(errorString)
-                    })
+                    self.showError(errorString)
                 }
             }
             else {
-                dispatch_async(dispatch_get_main_queue(), {
-                    hud.hide(true)
-                    self.showAlert(errorString)
-                })
-                print(errorString)
+                self.showError(errorString)
             }
         }
     }
@@ -190,11 +169,31 @@ class ListViewController: UIViewController {
     
     // MARK: Helper Functions
     
-    func showAlert(message: String?) {
-        let message = !message!.isEmpty ? message : "An unknown error has occurred."
+    // Complete logout
+    // - Delete password (saved in userDefaults)
+    // - Show login view
+    func completeLogout() {
+        // Delete password on logout
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setValue("", forKey: "password")
+        userDefaults.synchronize()
+        
+        dispatch_async(dispatch_get_main_queue(), {
+            MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+            self.dismissViewControllerAnimated(true, completion: nil)
+        })
+    }
+    
+    // Show error
+    func showError(errorString: String?) {
+        let message = !errorString!.isEmpty ? errorString : "An unknown error has occurred."
         let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-        self.presentViewController(alertController, animated: true, completion: nil)
+        
+        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+            self.presentViewController(alertController, animated: true, completion: nil)
+        }
     }
     
 }
