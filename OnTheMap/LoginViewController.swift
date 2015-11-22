@@ -33,7 +33,7 @@ class LoginViewController: KeyboardHandlingViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        setControlsEnabled(true)
+        enableUserInteraction(true)
         setLoginButtonEnabled(false)
         
         tryAutoLogin()
@@ -42,7 +42,7 @@ class LoginViewController: KeyboardHandlingViewController {
     // MARK: Actions
     
     @IBAction func loginButtonTouch(sender: UIButton) {
-        setControlsEnabled(false)
+        enableUserInteraction(false)
         login()
     }
     
@@ -102,6 +102,10 @@ class LoginViewController: KeyboardHandlingViewController {
         facebookLoginButton.layer.cornerRadius = loginButton.layer.cornerRadius
     }
     
+    func enableUserInteraction(enabled: Bool) {
+        view.userInteractionEnabled = enabled
+    }
+    
     func setLoginButtonEnabled(enabled: Bool) {
         loginButton.enabled = enabled
         
@@ -110,13 +114,6 @@ class LoginViewController: KeyboardHandlingViewController {
         } else {
             loginButton.alpha = 0.5
         }
-    }
-    
-    func setControlsEnabled(enabled: Bool) {
-        usernameTextField.enabled = enabled
-        passwordTextField.enabled = enabled
-        setLoginButtonEnabled(enabled)
-        facebookLoginButton.enabled = enabled
     }
     
     // MARK: Helper Functions
@@ -139,7 +136,7 @@ class LoginViewController: KeyboardHandlingViewController {
         let errorString = !errorString!.isEmpty ? errorString! : "An unknow error has occurred during login."
         let alertController = UIAlertController(title: nil, message: errorString, preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
-            self.setControlsEnabled(true)
+            self.enableUserInteraction(true)
             self.setLoginButtonEnabled(false)
         }))
         
@@ -180,7 +177,7 @@ extension LoginViewController: UITextFieldDelegate {
         if textField == usernameTextField {
             passwordTextField.becomeFirstResponder()
         } else if textField == passwordTextField {
-            setControlsEnabled(false)
+            enableUserInteraction(false)
             login()
         }
         

@@ -35,6 +35,8 @@ class PostViewController: UIViewController {
     @IBOutlet weak var urlTextView: UITextView!
     @IBOutlet weak var submitButton: BorderedButton!
     
+    var activityIndicator: UIActivityIndicatorView? = nil
+    
     var tapRecognizer: UITapGestureRecognizer? = nil
     
     var delegate: PostViewControllerDelegate?
@@ -45,7 +47,6 @@ class PostViewController: UIViewController {
     let locationPlaceholderText = "Enter Your Location Here"
     let urlPlaceholderText = "Enter a Link to Share Here"
     let placeholderTextColor = UIColor(red: 217/255.0, green: 217/255.0, blue: 213/255.0, alpha: 1)
-    
     
     // MARK: Actions
     
@@ -72,12 +73,7 @@ class PostViewController: UIViewController {
                         self.myStudentInformation!.longitude = coordinates.longitude
                     }
                 } else {
-                    let alertController = UIAlertController(title: nil, message: "Could not find the location.", preferredStyle: UIAlertControllerStyle.Alert)
-                    alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        self.presentViewController(alertController, animated: true, completion: nil)
-                    })
+                    self.showAlert("Could not find the location.")
                     print("Could not find \"\(self.locationTextView.text)\" on map. Error: \(errorString)")
                 }
             })
@@ -114,9 +110,12 @@ class PostViewController: UIViewController {
         configureUI()
 
         initData()
-
+        
         tapRecognizer = UITapGestureRecognizer(target: self, action: "handleSingleTap:")
         tapRecognizer?.numberOfTapsRequired = 1
+        
+        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .White)
+        activityIndicator!.center = view.center
     }
     
     // Initialize data (myStudentInformation, hasPosted)
@@ -197,8 +196,15 @@ class PostViewController: UIViewController {
 
     // Find the location that user has entered
     func findLocation(completionHandler: (success: Bool, placemark: MKPlacemark?, errorString: String?) -> Void) {
+        // Indicate activity during geocoding
+        startIndicatingActivity()
+        
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(locationTextView.text, completionHandler: { (placemarks, error) -> Void in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.stopIndicatingActivity()
+            })
+            
             if let error = error {
                 completionHandler(success: false, placemark: nil, errorString: error.description)
                 return
@@ -248,13 +254,37 @@ class PostViewController: UIViewController {
         }
     }
     
-    // MARK: Helper Functions
+    // MARK: Indicate Activity
+    
+    func startIndicatingActivity() {
+        // TODO: Add animation to alpha change
+        view.alpha = 0.5
+        
+        if activityIndicator != nil {
+            activityIndicator!.startAnimating()
+            view.addSubview(activityIndicator!)
+        }
+    }
+    
+    func stopIndicatingActivity() {
+        if activityIndicator != nil {
+            activityIndicator!.stopAnimating()
+            activityIndicator!.removeFromSuperview()
+        }
+        
+        view.alpha = 1.0
+    }
+    
+    // MARK: Show Alert
     
     func showAlert(message: String?) {
         let message = !message!.isEmpty ? message : "An unknown error has occurred."
         let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-        self.presentViewController(alertController, animated: true, completion: nil)
+        
+        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            self.presentViewController(alertController, animated: true, completion: nil)
+        }
     }
 
     // MARK: Show/Hide Keyboard

@@ -17,7 +17,7 @@ import FBSDKLoginKit
 class CommonViewController: UIViewController {
     
     // MARK: Properties
-    
+        
     var shouldReloadData: Bool = false
 
     // MARK: Life Cycle
@@ -130,11 +130,12 @@ class CommonViewController: UIViewController {
     // MARK: Manipulate Data
     
     // Fetch and show all student information data
+    // TODO: Implement "load more" (skip > 0)
     func fetchAllStudentInformation() {
         MBProgressHUD.hideAllHUDsForView(view, animated: true)
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
         
-        let parameters = [UdacityClient.ParameterKeys.LimitKey: 100]
+        let parameters = [UdacityClient.ParameterKeys.LimitKey: 100, UdacityClient.ParameterKeys.SkipKey: 0, UdacityClient.ParameterKeys.OrderKey: "-updatedAt"]
         UdacityClient.sharedInstance().getAllStudentInformation(parameters) { (success, allStudentInformation, errorString) -> Void in
             
             if success {
@@ -238,7 +239,7 @@ class CommonViewController: UIViewController {
         clearSavedData()
     }
     
-    // Show error
+    // Show alert
     func showAlert(message: String?) {
         let message = !message!.isEmpty ? message : "An unknown error has occurred."
         let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
