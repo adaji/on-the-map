@@ -95,35 +95,35 @@ extension UdacityClient {
         }
     }
     
-    // Function: getUdacityUser
+    // Function: getUserDictionary
     //
     // GETting Public User Data
     // Method: users/<userId>
     //
-    func getUdacityUser(userId: String, completionHandler: (success: Bool, udacityUser: UdacityUser?, errorString: String?) -> Void) {
+    // TODO: Find its usage
+    func getUserDictionary(userId: String, completionHandler: (success: Bool, userDictionary: [String: AnyObject]?, errorString: String?) -> Void) {
         let method = UdacityClient.substituteKeyInMethod(Methods.UserData, key: UdacityClient.URLKeys.UserId, value: userId)
         startTaskForUdacityGETMethod(method) { (result, error) -> Void in
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
-                completionHandler(success: false, udacityUser: nil, errorString: "There was an error retrieving student data.")
+                completionHandler(success: false, userDictionary: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             
             guard let result = result else {
                 print("No result returned.")
-                completionHandler(success: false, udacityUser: nil, errorString: "There was an error retrieving student data.")
+                completionHandler(success: false, userDictionary: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             
             guard let user = result[JSONResponseKeys.User] as? [String: AnyObject] else {
                 print("Could not find key \(JSONResponseKeys.User) in \(result).")
-                completionHandler(success: false, udacityUser: nil, errorString: "There was an error retrieving student data.")
+                completionHandler(success: false, userDictionary: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             
             print("user dictionary: \(user)")
-            let udacityUser = UdacityUser(dictionary: user)
-            completionHandler(success: true, udacityUser: udacityUser, errorString: nil)
+            completionHandler(success: true, userDictionary: user, errorString: nil)
         }
     }
     
