@@ -208,7 +208,7 @@ class PostViewController: UIViewController {
             })
             
             if let error = error {
-                completionHandler(success: false, placemark: nil, errorString: error.description)
+                completionHandler(success: false, placemark: nil, errorString: error.localizedDescription)
                 return
             }
 

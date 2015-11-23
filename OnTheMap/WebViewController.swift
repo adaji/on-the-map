@@ -89,7 +89,7 @@ extension WebViewController: UIWebViewDelegate {
     
     func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
         if let error = error {
-            showAlert(error.description)
+            showAlert(error.localizedDescription)
         } else {
             showAlert("Loading failed.")
         }

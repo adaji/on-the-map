@@ -49,7 +49,7 @@ extension UdacityClient {
         startTaskForUdacityPOSTMethod(Methods.Session, jsonBody: jsonBody) { result, error in
             guard error == nil else {
                 print("Login Failed. Error: \(error)")
-                completionHandler(success: false, errorString: error!.description)
+                completionHandler(success: false, errorString: error!.localizedDescription)
                 return
             }
             

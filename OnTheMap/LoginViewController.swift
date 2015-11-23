@@ -200,7 +200,7 @@ extension LoginViewController: FBSDKLoginButtonDelegate {
     
     func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
         if let error = error {
-            showLoginError(error.description)
+            showLoginError(error.localizedDescription)
         } else {
             dismissViewControllerAnimated(true, completion: nil)
             
