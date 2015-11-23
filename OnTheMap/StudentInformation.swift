@@ -66,13 +66,13 @@ struct StudentInformation {
     
     // Given an array of dictionaries, convert them to an array of StudentInformation objects
     static func allStudentInformationFromResults(results: [[String: AnyObject]]) -> [StudentInformation] {
-        var locations = [StudentInformation]()
+        var allStudentInformation = [StudentInformation]()
         
         for result in results {
-            locations.append(StudentInformation(dictionary: result))
+            allStudentInformation.append(StudentInformation(dictionary: result))
         }
         
-        return locations
+        return allStudentInformation
     }
     
     // MARK: Convenient Methods

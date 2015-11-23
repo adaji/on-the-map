@@ -41,7 +41,7 @@ class PostViewController: UIViewController {
     
     var delegate: PostViewControllerDelegate?
     
-    var hasPosted: Bool = false // Whether user has posted location before
+    var hasPosted: Bool = false // Whether user has posted information before
     var myStudentInformation: StudentInformation? = nil
     
     let locationPlaceholderText = "Enter Your Location Here"
@@ -120,7 +120,7 @@ class PostViewController: UIViewController {
     }
     
     // Initialize data (myStudentInformation, hasPosted)
-    // If user's student information has been saved locally, set myStudentInformation to this location
+    // If user's student information has been saved locally, set myStudentInformation to this information
     // If not, create a new StudentInformation with user's Udacity account (user) id
     func initData() {
         if UdacityClient.sharedInstance().myStudentInformation == nil {
@@ -231,8 +231,8 @@ class PostViewController: UIViewController {
     func submitStudentInformation() {
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
         
-        let locationDictionary = myStudentInformation!.dictionary()
-        UdacityClient.sharedInstance().submitStudentInformation(hasPosted, locationDictionary: locationDictionary) { (success, errorString) -> Void in
+        let informationDictionary = myStudentInformation!.dictionary()
+        UdacityClient.sharedInstance().submitStudentInformation(hasPosted, informationDictionary: informationDictionary) { (success, errorString) -> Void in
             if success {
                 self.delegate!.didSubmitStudentInformation()
                 

@@ -16,7 +16,7 @@ extension UdacityClient {
         
         // URLs
         static let UdacityBaseURL: String = "https://www.udacity.com/api/"
-        static let ParseBaseURL: String = "https://api.parse.com/1/classes/StudentLocation"
+        static let ParseBaseURL: String = "https://api.parse.com/1/classes/StudentLocation/" // Add "/" at the end of base URL for appending methods
         static let UdacitySigninURL: String = "https://www.udacity.com/account/auth#!/signin"
     }
     
@@ -99,11 +99,6 @@ extension UdacityClient {
         // MARK: Udacity User
         
         static let User = "user"
-
-        static let UserFirstName = "first_name"
-        static let UserLastName = "last_name"
-        static let UserLocation = "location"
-        static let UserWebsiteUrl = "website_url"
     }
     
 }

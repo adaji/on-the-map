@@ -92,7 +92,7 @@ class CommonViewController: UIViewController {
         }
     }
     
-    // Check if user has posted location before
+    // Check if user has posted information before
     // If so, ask user whether to overwrite
     // If not, present post view controller
     func post(sender: UIBarButtonItem) {
@@ -100,7 +100,7 @@ class CommonViewController: UIViewController {
             if let errorString = errorString {
                 self.showAlert(errorString)
             } else {
-                // If user has posted location before, ask user whether to overwrite
+                // If user has posted information before, ask user whether to overwrite
                 if hasPosted {
                     let message = "User \"\(studentInformation!.fullName())\" has already posted a Student Location. Would you like to overwrite the location?"
                     let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
@@ -161,8 +161,8 @@ class CommonViewController: UIViewController {
         }
     }
     
-    // Check if user has posted location before
-    // - If user's location has not been saved in UdacityClient (as myStudentInformation), query for user's location
+    // Check if user has posted information before
+    // - If user's information has not been saved in UdacityClient (as myStudentInformation), query for user's information
     func checkIfHasPosted(completionHandler: (hasPosted: Bool, studentInformation: StudentInformation?, errorString: String?) -> Void) {
         if UdacityClient.sharedInstance().myStudentInformation != nil {
             completionHandler(hasPosted: true, studentInformation: UdacityClient.sharedInstance().myStudentInformation!, errorString: nil)

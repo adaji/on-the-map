@@ -163,31 +163,27 @@ extension UdacityClient {
     }
     
     // Submit StudentInformation
-    // If user has posted location before, update the location
+    // If user has posted information before, update the information
     // If not, post it
-    func submitStudentInformation(hasPosted: Bool, locationDictionary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
+    func submitStudentInformation(hasPosted: Bool, informationDictionary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
         if hasPosted {
-            // TODO: Check if there is a bug
-            // Somehow updateStudentInformation doesn't update user's location returned in getStudentInformationArray
-            // Let's use postStudentInformation for now
-            // updateStudentInformation(locationDictionary, completionHandler: completionHandler)
-            postStudentInformation(locationDictionary, completionHandler: completionHandler)
+            updateStudentInformation(informationDictionary, completionHandler: completionHandler)
         }
         else {
-            postStudentInformation(locationDictionary, completionHandler: completionHandler)
+            postStudentInformation(informationDictionary, completionHandler: completionHandler)
         }
     }
     
     // Function: postStudentInformation
     // Parameters:
-    // - locationDictionary: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaURL": "<mediaURL>", "latitude": "<latitude>", "longitude": "<longitude>"] (studentInformation.dictionary())
+    // - informationDictionary: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaURL": "<mediaURL>", "latitude": "<latitude>", "longitude": "<longitude>"] (studentInformation.dictionary())
     // - completionHandler
     //
     // POSTing a StudentInformation
     // Required parameters (in HTTPBody): parameters
     //
-    func postStudentInformation(locationDictionary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
-        startTaskForParsePOSTMethod(locationDictionary) { (result, error) -> Void in
+    func postStudentInformation(informationDictionary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
+        startTaskForParsePOSTMethod(informationDictionary) { (result, error) -> Void in
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
                 completionHandler(success: false, errorString: "There was an error posting student data.")
@@ -200,21 +196,28 @@ extension UdacityClient {
     
     // Function: updateStudentInformation
     // Parameters:
-    // - locationDictionary: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaURL": "<mediaURL>", "latitude": "<latitude>", "longitude": "<longitude>"] (studentInformation.dictionary())
+    // - informationDictionary: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaURL": "<mediaURL>", "latitude": "<latitude>", "longitude": "<longitude>"] (studentInformation.dictionary())
     // - completionHandler
     //
     // PUTting a StudentInformation
     // Required parameters (in HTTPBody): parameters
     //
-    func updateStudentInformation(locationDicationary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
-        let method = UdacityClient.substituteKeyInMethod(Methods.UpdateStudentInformation, key: URLKeys.ObjectId, value: UdacityClient.sharedInstance().userID!)
-        startTaskForParsePUTMethod(method, jsonBody: locationDicationary) { (result, error) -> Void in
+    func updateStudentInformation(informationDicationary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
+        let method = UdacityClient.substituteKeyInMethod(Methods.UpdateStudentInformation, key: URLKeys.ObjectId, value: UdacityClient.sharedInstance().myStudentInformation!.objectId)
+        startTaskForParsePUTMethod(method, jsonBody: informationDicationary) { (result, error) -> Void in
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
                 completionHandler(success: false, errorString: "There was an error updating student data.")
                 return
             }
             
+            guard let result = result else {
+                print("No result returned.")
+                completionHandler(success: false, errorString: "There was an error updating student data.")
+                return
+            }
+            
+            print("Update student information succeed. Result: \(result))")
             completionHandler(success: true, errorString: nil)
         }
     }
