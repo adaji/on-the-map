@@ -39,10 +39,10 @@ class CommonViewController: UIViewController {
         }
         
         // Fetch all student information data only if there is no such data saved locally (in UdacityClient)
-        if UdacityClient.sharedInstance().allStudentInformation == nil {
+        if StudentInformation.allStudentInformation == nil {
             fetchAllStudentInformation()
         } else {
-            showAllStudentInformation(UdacityClient.sharedInstance().allStudentInformation!)
+            showAllStudentInformation(StudentInformation.allStudentInformation!)
         }
     }
     
@@ -144,7 +144,7 @@ class CommonViewController: UIViewController {
             if success {
                 if let allStudentInformation = allStudentInformation {
                     // Update student data saved in UdacityClient
-                    UdacityClient.sharedInstance().allStudentInformation = allStudentInformation
+                    StudentInformation.allStudentInformation = allStudentInformation
                     
                     dispatch_async(dispatch_get_main_queue(), {
                         hud.hide(true)
@@ -164,8 +164,8 @@ class CommonViewController: UIViewController {
     // Check if user has posted information before
     // - If user's information has not been saved in UdacityClient (as myStudentInformation), query for user's information
     func checkIfHasPosted(completionHandler: (hasPosted: Bool, studentInformation: StudentInformation?, errorString: String?) -> Void) {
-        if UdacityClient.sharedInstance().myStudentInformation != nil {
-            completionHandler(hasPosted: true, studentInformation: UdacityClient.sharedInstance().myStudentInformation!, errorString: nil)
+        if StudentInformation.myStudentInformation != nil {
+            completionHandler(hasPosted: true, studentInformation: StudentInformation.myStudentInformation!, errorString: nil)
         } else {
             MBProgressHUD.hideAllHUDsForView(view, animated: true)
             let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
@@ -193,8 +193,8 @@ class CommonViewController: UIViewController {
     func clearSavedData() {
         UdacityClient.sharedInstance().sessionID = nil
         UdacityClient.sharedInstance().userID = nil
-        UdacityClient.sharedInstance().allStudentInformation = nil
-        UdacityClient.sharedInstance().myStudentInformation = nil
+        StudentInformation.allStudentInformation = nil
+        StudentInformation.myStudentInformation = nil
         
         // Delete password when logout
         let userDefaults = NSUserDefaults.standardUserDefaults()

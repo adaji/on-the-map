@@ -157,7 +157,7 @@ extension UdacityClient {
             }
             
             let allStudentInformation = StudentInformation.allStudentInformationFromResults(results)
-            self.allStudentInformation = allStudentInformation
+            StudentInformation.allStudentInformation = allStudentInformation
             completionHandler(success: true, allStudentInformation: allStudentInformation, errorString: nil)
         }
     }
@@ -203,7 +203,7 @@ extension UdacityClient {
     // Required parameters (in HTTPBody): parameters
     //
     func updateStudentInformation(informationDicationary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
-        let method = UdacityClient.substituteKeyInMethod(Methods.UpdateStudentInformation, key: URLKeys.ObjectId, value: UdacityClient.sharedInstance().myStudentInformation!.objectId)
+        let method = UdacityClient.substituteKeyInMethod(Methods.UpdateStudentInformation, key: URLKeys.ObjectId, value: StudentInformation.myStudentInformation!.objectId)
         startTaskForParsePUTMethod(method, jsonBody: informationDicationary) { (result, error) -> Void in
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
@@ -251,7 +251,7 @@ extension UdacityClient {
             }
             
             let studentInformation = StudentInformation(dictionary: results[0])
-            self.myStudentInformation = studentInformation
+            StudentInformation.myStudentInformation = studentInformation
             completionHandler(success: true, studentInformation: studentInformation, errorString: nil)
         }
     }

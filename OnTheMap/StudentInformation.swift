@@ -25,6 +25,9 @@ struct StudentInformation {
     var createdAt = NSDate()
     var updatedAt = NSDate()
     
+    static var allStudentInformation: [StudentInformation]? = nil // Save/update student information data locally every time it's queried
+    static var myStudentInformation: StudentInformation? = nil // Save/update user's student information locally every time it's queried, posted or updated
+
     // MARK: Initializers
     
     init(dictionary: [String: AnyObject]) {

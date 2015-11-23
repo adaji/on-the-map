@@ -17,14 +17,12 @@ class ListViewController: CommonViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    var allStudentInformation = [StudentInformation]()
-    
     // MARK: Show AllStudentInformation (Override)
     
     override func showAllStudentInformation(allStudentInformation: [StudentInformation]) {
         super.showAllStudentInformation(allStudentInformation)
         
-        self.allStudentInformation = allStudentInformation
+        StudentInformation.allStudentInformation = allStudentInformation
         dispatch_async(dispatch_get_main_queue()) { () -> Void in
             self.tableView.reloadData()
         }
@@ -35,7 +33,7 @@ class ListViewController: CommonViewController {
     // Add user as a friend/peer/...
     // TODO: Implement when required API comes out :)
     func addFriend(sender: UIButton) {
-        if let studentInformation: StudentInformation = allStudentInformation[sender.tag] {
+        if let studentInformation: StudentInformation = StudentInformation.allStudentInformation![sender.tag] {
             showAlert("Add \(studentInformation.fullName()) as a friend")
         }
     }
@@ -43,7 +41,7 @@ class ListViewController: CommonViewController {
     // Start a conversation with user
     // TODO: Implement when required API comes out :)
     func startConversation(sender: UIButton) {
-        if let studentInformation: StudentInformation = allStudentInformation[sender.tag] {
+        if let studentInformation: StudentInformation = StudentInformation.allStudentInformation![sender.tag] {
             showAlert("Start a conversation with \(studentInformation.fullName())")
         }
     }
@@ -57,7 +55,7 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     // MARK: UITableViewDataSource
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return allStudentInformation.count
+        return StudentInformation.allStudentInformation!.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -70,7 +68,7 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
             cell = StudentInformationCell(style: .Subtitle, reuseIdentifier: reuseId)
         }
         
-        if let studentInformation: StudentInformation = allStudentInformation[indexPath.row] {
+        if let studentInformation: StudentInformation = StudentInformation.allStudentInformation![indexPath.row] {
             cell.configureCell(studentInformation.initials(), name: studentInformation.fullName(), location: studentInformation.mapString, urlString: studentInformation.mediaURL)
             
             cell.addButton.tag = indexPath.row // Add tag to identify which add button is pressed
@@ -91,7 +89,7 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        if let studentInformation: StudentInformation = allStudentInformation[indexPath.row] {
+        if let studentInformation: StudentInformation = StudentInformation.allStudentInformation![indexPath.row] {
             openURL(studentInformation.mediaURL)
         }
     }

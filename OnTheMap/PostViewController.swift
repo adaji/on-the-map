@@ -71,6 +71,7 @@ class PostViewController: UIViewController {
                         let coordinates = placemark.location!.coordinate
                         self.myStudentInformation!.latitude = coordinates.latitude
                         self.myStudentInformation!.longitude = coordinates.longitude
+                        self.myStudentInformation!.mapString = self.locationTextView.text
                     }
                 } else {
                     self.showAlert("Could not find the location.")
@@ -123,12 +124,12 @@ class PostViewController: UIViewController {
     // If user's student information has been saved locally, set myStudentInformation to this information
     // If not, create a new StudentInformation with user's Udacity account (user) id
     func initData() {
-        if UdacityClient.sharedInstance().myStudentInformation == nil {
+        if StudentInformation.myStudentInformation == nil {
             hasPosted = false
             myStudentInformation = StudentInformation(dictionary: [UdacityClient.StudentInformationKeys.UniqueKey: UdacityClient.sharedInstance().userID!])
         } else {
             hasPosted = true
-            myStudentInformation = UdacityClient.sharedInstance().myStudentInformation
+            myStudentInformation = StudentInformation.myStudentInformation
         }
     }
     
@@ -241,7 +242,7 @@ class PostViewController: UIViewController {
                     self.dismissViewControllerAnimated(true, completion: nil)
                 })
                 
-                UdacityClient.sharedInstance().myStudentInformation = self.myStudentInformation
+                StudentInformation.myStudentInformation = self.myStudentInformation
                 print("Update Location Succeed.")
             }
             else {
