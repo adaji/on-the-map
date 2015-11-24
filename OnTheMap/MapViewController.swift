@@ -18,17 +18,11 @@ class MapViewController: CommonViewController {
     // MARK: Properties
     
     @IBOutlet weak var mapView: MKMapView!
-        
+    
     // MARK: Show All Student Information (Override)
     
-    override func showAllStudentInformation() {
-        super.showAllStudentInformation()
-        
-        showAllStudentInformationOnMap()
-    }
-    
     // Show all student information on map
-    func showAllStudentInformationOnMap() {
+    override func showAllStudentInformation() {
         var annotations = [MKPointAnnotation]()
         
         for studentInformation in model.allStudentInformation! {

@@ -34,20 +34,7 @@ class CommonViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        // Reload all student information after user successfully posts/updates information
-        if didSubmitStudentInformation {
-            fetchAndShowAllStudentInformation()
-            didSubmitStudentInformation = false
-            return
-        }
-        
-        // Fetch all student information data only if there is
-        // no such data stored in tab bar controller
-        if model.allStudentInformation == nil {
-            fetchAndShowAllStudentInformation()
-        } else {
-            showAllStudentInformation()
-        }
+        fetchAndShowAllStudentInformation()
     }
     
     // MARK: Configure Navigation Bar
@@ -73,17 +60,13 @@ class CommonViewController: UIViewController {
     }
     
     // MARK: Show All Student Information
-    // Implement in subclasses
     
-    // Show all student information (on map or in table view)
-    // Implement this method in subclasses because this is the only part
-    // that is different for map and list view controller when view appears,
-    // namely, displaying data on either a map view or table view,
-    // The rest is common for the two view controllers
-    // and are extracted to this common view controller.
-    // Also, I don't (re)load view every time it appears,
-    // only when data is fetched (at launch or refresh button is pressed),
-    // or when user successfully submit student information.
+    // Show all student information (in either a map view or a table view)
+    //
+    // Implement in subclasses
+    // Note that this method is used in both the refresh and the viewWillAppear methods.
+    // And it is the only part in these two methods that is different for the two view controllers.
+    // It makes sense to implement only the different part in subclasses.
     func showAllStudentInformation() {
         
     }
@@ -145,9 +128,19 @@ class CommonViewController: UIViewController {
     
     // MARK: Manipulate Data
     
-    // Fetch and show all student information data
-    // TODO: Implement "load more" (skip > 0)
     func fetchAndShowAllStudentInformation() {
+        fetchAllStudentInformation { (success, errorString) -> Void in
+            if success {
+                self.showAllStudentInformation()
+            } else {
+                self.showAlert(errorString)
+            }
+        }
+    }
+    
+    // Fetch all student information data
+    // TODO: Implement "load more" (skip > 0)
+    func fetchAllStudentInformation(completionHandler: (success: Bool, errorString: String?) -> Void) {
         MBProgressHUD.hideAllHUDsForView(view, animated: true)
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
         
@@ -162,13 +155,12 @@ class CommonViewController: UIViewController {
                         hud.hide(true)
                     })
                     
-                    self.showAllStudentInformation()
-                    
+                    completionHandler(success: true, errorString: nil)
                 } else {
-                    self.showAlert("No student data returned.")
+                    completionHandler(success: false, errorString: "No student data returned.")
                 }
             } else {
-                self.showAlert(errorString)
+                completionHandler(success: false, errorString: errorString)
             }
         }
     }

@@ -16,12 +16,10 @@ class ListViewController: CommonViewController {
     // MARK: Properties
     
     @IBOutlet weak var tableView: UITableView!
-        
-    // MARK: Show AllStudentInformation (Override)
+    
+    // MARK: Show All Student Information (Override)
     
     override func showAllStudentInformation() {
-        super.showAllStudentInformation()
-        
         dispatch_async(dispatch_get_main_queue()) { () -> Void in
             self.tableView.reloadData()
         }
