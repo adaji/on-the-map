@@ -157,7 +157,6 @@ extension UdacityClient {
             }
             
             let allStudentInformation = StudentInformation.allStudentInformationFromResults(results)
-            StudentInformation.allStudentInformation = allStudentInformation
             completionHandler(success: true, allStudentInformation: allStudentInformation, errorString: nil)
         }
     }
@@ -165,12 +164,12 @@ extension UdacityClient {
     // Submit StudentInformation
     // If user has posted information before, update the information
     // If not, post it
-    func submitStudentInformation(hasPosted: Bool, informationDictionary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
-        if hasPosted {
-            updateStudentInformation(informationDictionary, completionHandler: completionHandler)
+    func submitStudentInformation(objectId: String, informationDictionary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
+        if objectId.isEmpty {
+            postStudentInformation(informationDictionary, completionHandler: completionHandler)
         }
         else {
-            postStudentInformation(informationDictionary, completionHandler: completionHandler)
+            updateStudentInformation(objectId, informationDicationary: informationDictionary, completionHandler: completionHandler)
         }
     }
     
@@ -202,8 +201,8 @@ extension UdacityClient {
     // PUTting a StudentInformation
     // Required parameters (in HTTPBody): parameters
     //
-    func updateStudentInformation(informationDicationary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
-        let method = UdacityClient.substituteKeyInMethod(Methods.UpdateStudentInformation, key: URLKeys.ObjectId, value: StudentInformation.myStudentInformation!.objectId)
+    func updateStudentInformation(objectId: String, informationDicationary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
+        let method = UdacityClient.substituteKeyInMethod(Methods.UpdateStudentInformation, key: URLKeys.ObjectId, value: objectId)
         startTaskForParsePUTMethod(method, jsonBody: informationDicationary) { (result, error) -> Void in
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
@@ -251,7 +250,6 @@ extension UdacityClient {
             }
             
             let studentInformation = StudentInformation(dictionary: results[0])
-            StudentInformation.myStudentInformation = studentInformation
             completionHandler(success: true, studentInformation: studentInformation, errorString: nil)
         }
     }

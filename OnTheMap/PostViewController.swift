@@ -14,7 +14,7 @@ import MBProgressHUD
 
 protocol PostViewControllerDelegate {
     
-    func didSubmitStudentInformation()
+    func didSubmitStudentInformation(studentInformation: StudentInformation)
     
 }
 
@@ -42,7 +42,7 @@ class PostViewController: UIViewController {
     var delegate: PostViewControllerDelegate?
     
     var hasPosted: Bool = false // Whether user has posted information before
-    var myStudentInformation: StudentInformation? = nil
+    var studentInformation: StudentInformation? = nil
     
     let locationPlaceholderText = "Enter Your Location Here"
     let urlPlaceholderText = "Enter a Link to Share Here"
@@ -69,9 +69,9 @@ class PostViewController: UIViewController {
                         })
                         
                         let coordinates = placemark.location!.coordinate
-                        self.myStudentInformation!.latitude = coordinates.latitude
-                        self.myStudentInformation!.longitude = coordinates.longitude
-                        self.myStudentInformation!.mapString = self.locationTextView.text
+                        self.studentInformation!.latitude = coordinates.latitude
+                        self.studentInformation!.longitude = coordinates.longitude
+                        self.studentInformation!.mapString = self.locationTextView.text
                     }
                 } else {
                     self.showAlert("Could not find the location.")
@@ -93,7 +93,7 @@ class PostViewController: UIViewController {
         if urlTextView.text == urlPlaceholderText {
             showAlert("Please enter a link.")
         } else {
-            myStudentInformation!.mediaURL = urlTextView.text
+            studentInformation!.mediaURL = urlTextView.text
             
             submitStudentInformation()
         }
@@ -124,12 +124,11 @@ class PostViewController: UIViewController {
     // If user's student information has been saved locally, set myStudentInformation to this information
     // If not, create a new StudentInformation with user's Udacity account (user) id
     func initData() {
-        if StudentInformation.myStudentInformation == nil {
+        if studentInformation == nil {
             hasPosted = false
-            myStudentInformation = StudentInformation(dictionary: [UdacityClient.StudentInformationKeys.UniqueKey: UdacityClient.sharedInstance().userID!])
+            studentInformation = StudentInformation(dictionary: [UdacityClient.StudentInformationKeys.UniqueKey: UdacityClient.sharedInstance().userID!])
         } else {
             hasPosted = true
-            myStudentInformation = StudentInformation.myStudentInformation
         }
     }
     
@@ -232,17 +231,16 @@ class PostViewController: UIViewController {
     func submitStudentInformation() {
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
         
-        let informationDictionary = myStudentInformation!.dictionary()
-        UdacityClient.sharedInstance().submitStudentInformation(hasPosted, informationDictionary: informationDictionary) { (success, errorString) -> Void in
+        let informationDictionary = studentInformation!.dictionary()
+        UdacityClient.sharedInstance().submitStudentInformation(studentInformation!.objectId, informationDictionary: informationDictionary) { (success, errorString) -> Void in
             if success {
-                self.delegate!.didSubmitStudentInformation()
+                self.delegate!.didSubmitStudentInformation(self.studentInformation!)
                 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     hud.hide(true)
                     self.dismissViewControllerAnimated(true, completion: nil)
                 })
                 
-                StudentInformation.myStudentInformation = self.myStudentInformation
                 print("Update Location Succeed.")
             }
             else {

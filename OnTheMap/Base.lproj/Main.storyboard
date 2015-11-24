@@ -415,7 +415,7 @@
                                         </label>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DCY-in-Wqj">
                                             <rect key="frame" x="0.0" y="119.5" width="600" height="0.5"/>
-                                            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                            <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="LLH-U0-7Mq"/>
                                             </constraints>
@@ -506,10 +506,10 @@
             </objects>
             <point key="canvasLocation" x="3361" y="1115"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--On The Map Tab Bar Controller-->
         <scene sceneID="9hO-m5-ZNu">
             <objects>
-                <tabBarController storyboardIdentifier="MainTabBarController" automaticallyAdjustsScrollViewInsets="NO" id="L0H-oM-3qL" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="MainTabBarController" automaticallyAdjustsScrollViewInsets="NO" id="L0H-oM-3qL" customClass="OnTheMapTabBarController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="m87-vi-MgZ">
                         <autoresizingMask key="autoresizingMask"/>

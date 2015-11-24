@@ -12,6 +12,8 @@
 		6042093F1C0222ED00BF1E4C /* StudentInformationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6042093E1C0222ED00BF1E4C /* StudentInformationCell.swift */; };
 		60533FB01BFE327E00B33F92 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60533FAF1BFE327E00B33F92 /* PostViewController.swift */; };
 		606AFAD01C025109002010A0 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 606AFACF1C025109002010A0 /* WebViewController.swift */; };
+		60B1FCBE1C042BEE00CB7F0A /* OnTheMapTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B1FCBD1C042BEE00CB7F0A /* OnTheMapTabBarController.swift */; };
+		60B1FCC01C042C9200CB7F0A /* OnTheMapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B1FCBF1C042C9200CB7F0A /* OnTheMapModel.swift */; };
 		60BDA8221C02E377006D4320 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60BDA8201C02E377006D4320 /* FBSDKCoreKit.framework */; };
 		60BDA8231C02E377006D4320 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60BDA8211C02E377006D4320 /* FBSDKLoginKit.framework */; };
 		60ECE8C11BFC32F600D5B165 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ECE8C01BFC32F600D5B165 /* AppDelegate.swift */; };
@@ -56,6 +58,8 @@
 		60533FAF1BFE327E00B33F92 /* PostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		606AFACF1C025109002010A0 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		60B11E7F1BFE84CF0002196A /* OnTheMap-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OnTheMap-Bridging-Header.h"; sourceTree = "<group>"; };
+		60B1FCBD1C042BEE00CB7F0A /* OnTheMapTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnTheMapTabBarController.swift; sourceTree = "<group>"; };
+		60B1FCBF1C042C9200CB7F0A /* OnTheMapModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnTheMapModel.swift; sourceTree = "<group>"; };
 		60BDA8201C02E377006D4320 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		60BDA8211C02E377006D4320 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		60ECE8BD1BFC32F600D5B165 /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -202,12 +206,13 @@
 		60ECE8FD1BFC785D00D5B165 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				60B1FCBD1C042BEE00CB7F0A /* OnTheMapTabBarController.swift */,
 				60ECE8EE1BFC44A900D5B165 /* LoginViewController.swift */,
 				6042093A1C01C18500BF1E4C /* CommonViewController.swift */,
 				60ECE9101BFCFEF500D5B165 /* MapViewController.swift */,
 				60ECE9121BFD094200D5B165 /* ListViewController.swift */,
-				606AFACF1C025109002010A0 /* WebViewController.swift */,
 				60533FAF1BFE327E00B33F92 /* PostViewController.swift */,
+				606AFACF1C025109002010A0 /* WebViewController.swift */,
 				60ECE8FE1BFC7D3700D5B165 /* KeyboardHandlingViewController.swift */,
 			);
 			name = Controller;
@@ -216,6 +221,7 @@
 		60ECE9021BFC874500D5B165 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				60B1FCBF1C042C9200CB7F0A /* OnTheMapModel.swift */,
 				60F1E7C21BFDB1A20070F8FE /* NetworkingDataHandler.swift */,
 				60ECE9031BFC875C00D5B165 /* Clients */,
 			);
@@ -441,6 +447,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				60ECE9091BFC87C900D5B165 /* UdacityClient.swift in Sources */,
+				60B1FCBE1C042BEE00CB7F0A /* OnTheMapTabBarController.swift in Sources */,
+				60B1FCC01C042C9200CB7F0A /* OnTheMapModel.swift in Sources */,
 				60ECE8EF1BFC44A900D5B165 /* LoginViewController.swift in Sources */,
 				60ECE90B1BFC8A8300D5B165 /* UdacityConvenience.swift in Sources */,
 				60ECE9071BFC879A00D5B165 /* UdacityConstants.swift in Sources */,

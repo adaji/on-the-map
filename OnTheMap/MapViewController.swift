@@ -18,20 +18,20 @@ class MapViewController: CommonViewController {
     // MARK: Properties
     
     @IBOutlet weak var mapView: MKMapView!
-    
+        
     // MARK: Show All Student Information (Override)
     
-    override func showAllStudentInformation(allStudentInformation: [StudentInformation]) {
-        super.showAllStudentInformation(allStudentInformation)
+    override func showAllStudentInformation() {
+        super.showAllStudentInformation()
         
-        showAllStudentInformationOnMap(allStudentInformation)
+        showAllStudentInformationOnMap()
     }
     
     // Show all student information on map
-    func showAllStudentInformationOnMap(allStudentInformation: [StudentInformation]) {
+    func showAllStudentInformationOnMap() {
         var annotations = [MKPointAnnotation]()
         
-        for studentInformation in allStudentInformation {
+        for studentInformation in model.allStudentInformation! {
             let lat = CLLocationDegrees(studentInformation.latitude)
             let lon = CLLocationDegrees(studentInformation.longitude)
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)

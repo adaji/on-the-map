@@ -18,12 +18,15 @@ class CommonViewController: UIViewController {
     
     // MARK: Properties
         
-    var shouldReloadData: Bool = false
+    var model: OnTheMapModel!
+    var didSubmitStudentInformation: Bool = false
 
     // MARK: Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        model = (tabBarController as! OnTheMapTabBarController).model
         
         configureNavigationBar()
     }
@@ -31,18 +34,19 @@ class CommonViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        // Reload all student information after user posts/updates information
-        if shouldReloadData {
-            fetchAllStudentInformation()
-            shouldReloadData = false
+        // Reload all student information after user successfully posts/updates information
+        if didSubmitStudentInformation {
+            fetchAndShowAllStudentInformation()
+            didSubmitStudentInformation = false
             return
         }
         
-        // Fetch all student information data only if there is no such data saved locally (in UdacityClient)
-        if StudentInformation.allStudentInformation == nil {
-            fetchAllStudentInformation()
+        // Fetch all student information data only if there is
+        // no such data stored in tab bar controller
+        if model.allStudentInformation == nil {
+            fetchAndShowAllStudentInformation()
         } else {
-            showAllStudentInformation(StudentInformation.allStudentInformation!)
+            showAllStudentInformation()
         }
     }
     
@@ -69,10 +73,18 @@ class CommonViewController: UIViewController {
     }
     
     // MARK: Show All Student Information
+    // Implement in subclasses
     
     // Show all student information (on map or in table view)
-    // To implement in subclasses
-    func showAllStudentInformation(allStudentInformation: [StudentInformation]) {
+    // Implement this method in subclasses because this is the only part
+    // that is different for map and list view controller when view appears,
+    // namely, displaying data on either a map view or table view,
+    // The rest is common for the two view controllers
+    // and are extracted to this common view controller.
+    // Also, I don't (re)load view every time it appears,
+    // only when data is fetched (at launch or refresh button is pressed),
+    // or when user successfully submit student information.
+    func showAllStudentInformation() {
         
     }
     
@@ -101,7 +113,7 @@ class CommonViewController: UIViewController {
                 self.showAlert(errorString)
             } else {
                 // If user has posted information before, ask user whether to overwrite
-                if hasPosted {
+                if hasPosted {                    
                     let message = "User \"\(studentInformation!.fullName())\" has already posted a Student Location. Would you like to overwrite the location?"
                     let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
                     alertController.addAction(UIAlertAction(title: "Overwrite", style: .Default, handler: { (action) -> Void in
@@ -123,34 +135,34 @@ class CommonViewController: UIViewController {
     func presentPostViewController() {
         let postVC = self.storyboard!.instantiateViewControllerWithIdentifier("PostViewController") as! PostViewController
         postVC.delegate = self
+        postVC.studentInformation = model.myStudentInformation
         presentViewController(postVC, animated: true, completion: nil)
     }
     
     func refresh(sender: UIBarButtonItem) {
-        fetchAllStudentInformation()
+        fetchAndShowAllStudentInformation()
     }
     
     // MARK: Manipulate Data
     
     // Fetch and show all student information data
     // TODO: Implement "load more" (skip > 0)
-    func fetchAllStudentInformation() {
+    func fetchAndShowAllStudentInformation() {
         MBProgressHUD.hideAllHUDsForView(view, animated: true)
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
         
         let parameters = [UdacityClient.ParameterKeys.LimitKey: 100, UdacityClient.ParameterKeys.SkipKey: 0, UdacityClient.ParameterKeys.OrderKey: "-updatedAt"]
         UdacityClient.sharedInstance().getAllStudentInformation(parameters) { (success, allStudentInformation, errorString) -> Void in
-            
             if success {
                 if let allStudentInformation = allStudentInformation {
-                    // Update student data saved in UdacityClient
-                    StudentInformation.allStudentInformation = allStudentInformation
+                    // Update student data saved in tab bar controller
+                    self.model.allStudentInformation = allStudentInformation
                     
                     dispatch_async(dispatch_get_main_queue(), {
                         hud.hide(true)
                     })
                     
-                    self.showAllStudentInformation(allStudentInformation)
+                    self.showAllStudentInformation()
                     
                 } else {
                     self.showAlert("No student data returned.")
@@ -162,10 +174,11 @@ class CommonViewController: UIViewController {
     }
     
     // Check if user has posted information before
-    // - If user's information has not been saved in UdacityClient (as myStudentInformation), query for user's information
+    // - If user's information has not been saved in StudentInformation
+    // (as myStudentInformation), query for user's information
     func checkIfHasPosted(completionHandler: (hasPosted: Bool, studentInformation: StudentInformation?, errorString: String?) -> Void) {
-        if StudentInformation.myStudentInformation != nil {
-            completionHandler(hasPosted: true, studentInformation: StudentInformation.myStudentInformation!, errorString: nil)
+        if model.myStudentInformation != nil {
+            completionHandler(hasPosted: true, studentInformation: model.myStudentInformation!, errorString: nil)
         } else {
             MBProgressHUD.hideAllHUDsForView(view, animated: true)
             let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
@@ -178,6 +191,8 @@ class CommonViewController: UIViewController {
                 
                 if success {
                     if let studentInformation = studentInformation {
+                        self.model.myStudentInformation = studentInformation
+                        
                         completionHandler(hasPosted: true, studentInformation: studentInformation, errorString: nil)
                     } else {
                         completionHandler(hasPosted: false, studentInformation: nil, errorString: "No student data returned.")
@@ -193,8 +208,8 @@ class CommonViewController: UIViewController {
     func clearSavedData() {
         UdacityClient.sharedInstance().sessionID = nil
         UdacityClient.sharedInstance().userID = nil
-        StudentInformation.allStudentInformation = nil
-        StudentInformation.myStudentInformation = nil
+        model.allStudentInformation = nil
+        model.myStudentInformation = nil
         
         // Delete password when logout
         let userDefaults = NSUserDefaults.standardUserDefaults()
@@ -262,8 +277,9 @@ extension CommonViewController: PostViewControllerDelegate {
     
     // If user has just successfully submitted StudentInformation in PostViewController,
     // reload AllStudentInformation data when the view appears
-    func didSubmitStudentInformation() {
-        shouldReloadData = true
+    func didSubmitStudentInformation(studentInformation: StudentInformation) {
+        model.myStudentInformation = studentInformation
+        didSubmitStudentInformation = true
     }
     
 }
