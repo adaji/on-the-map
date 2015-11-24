@@ -60,12 +60,12 @@ class LoginViewController: KeyboardHandlingViewController {
     // Login automatically if user has logged in from this device before
     func tryAutoLogin() {
         let userDefaults = NSUserDefaults.standardUserDefaults()
-        if let email = userDefaults.valueForKey("email") as? String {
-            usernameTextField.text = email
-            if let password = userDefaults.valueForKey("password") as? String {
+        if let username = userDefaults.valueForKey(Constants.UserDefaultsKey.Username) as? String {
+            usernameTextField.text = username
+            if let password = userDefaults.valueForKey(Constants.UserDefaultsKey.Password) as? String {
                 passwordTextField.text = password
                 
-                if !email.isEmpty && !password.isEmpty {
+                if !username.isEmpty && !password.isEmpty {
                     login()
                 }
             }
@@ -81,8 +81,8 @@ class LoginViewController: KeyboardHandlingViewController {
             if success {
                 // Save/update email and password
                 let userDefaults = NSUserDefaults.standardUserDefaults()
-                userDefaults.setValue(self.usernameTextField.text!, forKey: "username")
-                userDefaults.setValue(self.passwordTextField.text!, forKey: "password")
+                userDefaults.setValue(self.usernameTextField.text!, forKey: Constants.UserDefaultsKey.Username)
+                userDefaults.setValue(self.passwordTextField.text!, forKey: Constants.UserDefaultsKey.Password)
                 userDefaults.synchronize()
                 
                 self.completeLogin(false)
