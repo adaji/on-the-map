@@ -10,80 +10,30 @@
 
 extension UdacityClient {
     
-    enum Client {
-        case Udacity
-        case Parse
-    }
-    
-    struct Constants {
-        static let ParseAppID: String = "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr" // Parse Application ID
-        static let ParseAPIKey: String = "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY" // Parse REST API Key
-        
+    struct Constants {        
         // URLs
-        static let UdacityBaseURL: String = "https://www.udacity.com/api/"
-        static let ParseBaseURL: String = "https://api.parse.com/1/classes/StudentLocation/" // Add "/" at the end of base URL for appending methods
-        static let UdacitySigninURL: String = "https://www.udacity.com/account/auth#!/signin"
-    }
-    
-    struct HTTPMethods {
-        static let POST = "POST"
-        static let GET = "GET"
-        static let DELETE = "DELETE"
-        static let PUT = "PUT"
+        static let BaseURL: String = "https://www.udacity.com/api/"
+        static let SigninURL: String = "https://www.udacity.com/account/auth#!/signin"
     }
     
     struct Methods {
-        // Udacity methods
         static let Session = "session"
         static let UserData = "users/<userId>" // GETting Public User Data
-        
-        // Parse methods
-        static let UpdateStudentInformation = "<objectId>" // PUTing (Updating) a StudentInformation
     }
     
     struct URLKeys {
         static let UserId = "userId"
-        static let ObjectId = "objectId"
     }
-    
-    struct ParameterKeys {
-        // Get StudentInformationArray (Optional)
-        static let LimitKey = "limit" // (Number) specifies the maximum number of StudentInformation objects to return in the JSON response
-        static let SkipKey = "skip" // (Number) use this parameter with limit to paginate through results
-        static let OrderKey = "order" // (String) a comma-separate list of key names that specify the sorted order of the results
-        
-        // Get StudentInformation (Required)
-        static let WhereKey = "where"
-        static let UniqueKey = "uniqueKey" // Udacity user id
-    }
-    
-    struct HTTPHeaderKeys {
-        static let ParseAppIdKey = "X-Parse-Application-Id"
-        static let ParseAPIKey = "X-Parse-REST-API-Key"
-    }
-    
+
     struct JSONBodyKeys {
-        // Udacity Auth
+        // MARK: Udacity Auth
         static let Udacity = "udacity"
         static let Username = "username"
         static let Password = "password"
-        
-        // Facebook Auth
+
+        // MARK: Facebook Auth
         static let FacebookMobile = "facebook_mobile"
         static let AccessToken = "access_token"
-    }
-    
-    struct StudentInformationKeys {
-        static let ObjectId = "objectId"
-        static let UniqueKey = "uniqueKey"
-        static let FirstName = "firstName"
-        static let LastName = "lastName"
-        static let MapString = "mapString"
-        static let MediaURL = "mediaURL"
-        static let Latitude = "latitude"
-        static let Longitude = "longitude"
-        static let CreatedAt = "createdAt"
-        static let UpdatedAt = "updatedAt"
     }
     
     struct JSONResponseKeys {
@@ -96,10 +46,6 @@ extension UdacityClient {
         // Session id
         static let Session = "session"
         static let SessionID = "id"
-        
-        // MARK: (All) Student Information
-        
-        static let Results = "results"
         
         // MARK: Udacity User
         

@@ -127,7 +127,7 @@ class PostViewController: UIViewController {
     func initData() {
         if studentInformation == nil {
             hasPosted = false
-            studentInformation = StudentInformation(dictionary: [UdacityClient.StudentInformationKeys.UniqueKey: UdacityClient.sharedInstance().userID!])
+            studentInformation = StudentInformation(dictionary: [ParseClient.StudentInformationKeys.UniqueKey: UdacityClient.sharedInstance().userID!])
         } else {
             hasPosted = true
         }
@@ -164,6 +164,8 @@ class PostViewController: UIViewController {
             button.backingColor = UIColor.whiteColor()
             button.highlightedBackingColor = UIColor.whiteColor()
         }
+        
+        mapView.userInteractionEnabled = false
     }
     
     // Configure UI for entering location
@@ -190,7 +192,7 @@ class PostViewController: UIViewController {
         topCoverView.hidden = false
         urlTextView.hidden = false
         submitButton.hidden = false
-        submitButtonContainer.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
+        submitButtonContainer.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.4)
 
         mapView.addAnnotation(annotation)
         mapView.showAnnotations([annotation], animated: true)
@@ -235,7 +237,7 @@ class PostViewController: UIViewController {
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
         
         let informationDictionary = studentInformation!.dictionary()
-        UdacityClient.sharedInstance().submitStudentInformation(studentInformation!.objectId, informationDictionary: informationDictionary) { (success, errorString) -> Void in
+        ParseClient.sharedInstance().submitStudentInformation(studentInformation!.objectId, informationDictionary: informationDictionary) { (success, errorString) -> Void in
             if success {
                 self.delegate!.didSubmitStudentInformation(self.studentInformation!)
                 

@@ -144,8 +144,8 @@ class CommonViewController: UIViewController {
         MBProgressHUD.hideAllHUDsForView(view, animated: true)
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
         
-        let parameters = [UdacityClient.ParameterKeys.LimitKey: 100, UdacityClient.ParameterKeys.SkipKey: 0, UdacityClient.ParameterKeys.OrderKey: "-updatedAt"]
-        UdacityClient.sharedInstance().getAllStudentInformation(parameters) { (success, allStudentInformation, errorString) -> Void in
+        let parameters = [ParseClient.ParameterKeys.LimitKey: 100, ParseClient.ParameterKeys.SkipKey: 0, ParseClient.ParameterKeys.OrderKey: "-updatedAt"]
+        ParseClient.sharedInstance().getAllStudentInformation(parameters) { (success, allStudentInformation, errorString) -> Void in
             if success {
                 if let allStudentInformation = allStudentInformation {
                     // Update student data saved in tab bar controller
@@ -175,8 +175,8 @@ class CommonViewController: UIViewController {
             MBProgressHUD.hideAllHUDsForView(view, animated: true)
             let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
             
-            let parameters = [UdacityClient.ParameterKeys.WhereKey: "{\"\(UdacityClient.ParameterKeys.UniqueKey)\":\"\(UdacityClient.sharedInstance().userID!)\"}"]
-            UdacityClient.sharedInstance().queryForStudentInformation(parameters) { (success, studentInformation, errorString) -> Void in
+            let parameters = [ParseClient.ParameterKeys.WhereKey: "{\"\(ParseClient.ParameterKeys.UniqueKey)\":\"\(UdacityClient.sharedInstance().userID!)\"}"]
+            ParseClient.sharedInstance().queryForStudentInformation(parameters) { (success, studentInformation, errorString) -> Void in
                 dispatch_async(dispatch_get_main_queue(), {
                     hud.hide(true)
                 })

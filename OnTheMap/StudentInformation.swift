@@ -28,38 +28,38 @@ struct StudentInformation {
     // MARK: Initializers
     
     init(dictionary: [String: AnyObject]) {
-        if let objectId = dictionary[UdacityClient.StudentInformationKeys.ObjectId] as? String {
+        if let objectId = dictionary[ParseClient.StudentInformationKeys.ObjectId] as? String {
             self.objectId = objectId
         }
-        if let uniqueKey = dictionary[UdacityClient.StudentInformationKeys.UniqueKey] as? String {
+        if let uniqueKey = dictionary[ParseClient.StudentInformationKeys.UniqueKey] as? String {
             self.uniqueKey = uniqueKey
         }
-        if let firstName = dictionary[UdacityClient.StudentInformationKeys.FirstName] as? String {
+        if let firstName = dictionary[ParseClient.StudentInformationKeys.FirstName] as? String {
             self.firstName = firstName
         }
-        if let lastName = dictionary[UdacityClient.StudentInformationKeys.LastName] as? String {
+        if let lastName = dictionary[ParseClient.StudentInformationKeys.LastName] as? String {
             self.lastName = lastName
         }
-        if let mapString = dictionary[UdacityClient.StudentInformationKeys.MapString] as? String {
+        if let mapString = dictionary[ParseClient.StudentInformationKeys.MapString] as? String {
             self.mapString = mapString
         }
-        if let mediaURL = dictionary[UdacityClient.StudentInformationKeys.MediaURL] as? String {
+        if let mediaURL = dictionary[ParseClient.StudentInformationKeys.MediaURL] as? String {
             self.mediaURL = mediaURL
         }
-        if let latitude = dictionary[UdacityClient.StudentInformationKeys.Latitude] as? Double {
+        if let latitude = dictionary[ParseClient.StudentInformationKeys.Latitude] as? Double {
             self.latitude = latitude
         }
-        if let longitude = dictionary[UdacityClient.StudentInformationKeys.Longitude] as? Double {
+        if let longitude = dictionary[ParseClient.StudentInformationKeys.Longitude] as? Double {
             self.longitude = longitude
         }
         
         // Parse date
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        if let createdAtString = dictionary[UdacityClient.StudentInformationKeys.CreatedAt] as? String {
+        if let createdAtString = dictionary[ParseClient.StudentInformationKeys.CreatedAt] as? String {
             createdAt = dateFormatter.dateFromString(createdAtString)!
         }
-        if let updatedAtString = dictionary[UdacityClient.StudentInformationKeys.UpdatedAt] as? String {
+        if let updatedAtString = dictionary[ParseClient.StudentInformationKeys.UpdatedAt] as? String {
             updatedAt = dateFormatter.dateFromString(updatedAtString)!
         }
     }
@@ -80,13 +80,13 @@ struct StudentInformation {
     // Return the dictionary version of StudentInformation (for posting/updating student information, etc.)
     func dictionary() -> [String: AnyObject] {
         return [
-            UdacityClient.StudentInformationKeys.UniqueKey: uniqueKey,
-            UdacityClient.StudentInformationKeys.FirstName: firstName,
-            UdacityClient.StudentInformationKeys.LastName: lastName,
-            UdacityClient.StudentInformationKeys.MapString: mapString,
-            UdacityClient.StudentInformationKeys.MediaURL: mediaURL,
-            UdacityClient.StudentInformationKeys.Latitude: latitude,
-            UdacityClient.StudentInformationKeys.Longitude: longitude
+            ParseClient.StudentInformationKeys.UniqueKey: uniqueKey,
+            ParseClient.StudentInformationKeys.FirstName: firstName,
+            ParseClient.StudentInformationKeys.LastName: lastName,
+            ParseClient.StudentInformationKeys.MapString: mapString,
+            ParseClient.StudentInformationKeys.MediaURL: mediaURL,
+            ParseClient.StudentInformationKeys.Latitude: latitude,
+            ParseClient.StudentInformationKeys.Longitude: longitude
         ]
     }
     

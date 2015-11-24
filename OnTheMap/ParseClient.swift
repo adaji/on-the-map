@@ -1,28 +1,20 @@
 //
-//  UdacityClient.swift
+//  ParseClient.swift
 //  OnTheMap
 //
-//  Created by Ada Ji on 11/18/15.
+//  Created by Ada Ji on 11/24/15.
 //  Copyright © 2015 Ada Ji. All rights reserved.
 //
 
 import Foundation
 
-// MARK: - UdacityClient: NSObject
+// MARK: - ParseClient: NSObject
 
-// Note: The structures of Udacity and Parse's HTTP methods are very different.
-// It makes sense to have different methods for the two clients.
-// I did move all the Parse-related properties and methods to a separate class
-// to make the code cleaner here.
-
-class UdacityClient: NSObject {
+class ParseClient: NSObject {
     
     // MARK: Properties
     
     var session: NSURLSession
-    
-    var sessionID: String? = nil
-    var userID: String? = nil
     
     // MARK: Initializers
     
@@ -34,16 +26,18 @@ class UdacityClient: NSObject {
     // MARK: Tasks for HTTP Methods
     
     func startTaskForGETMethod(method: String?, parameters: [String: AnyObject]?, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
-        let request = NSURLRequest(URL: NSURL(string: getUrlString(method, parameters: parameters))!)
+        let request = NSMutableURLRequest(URL: NSURL(string: getUrlString(method, parameters: parameters))!)
+        request.addValue(ParseClient.Constants.AppID, forHTTPHeaderField: ParseClient.HTTPHeaderKeys.ParseAppIdKey)
+        request.addValue(ParseClient.Constants.APIKey, forHTTPHeaderField: ParseClient.HTTPHeaderKeys.ParseAPIKey)
         
         startTaskForHTTPMethod(request, completionHandler: completionHandler)
     }
     
-    func startTaskForPOSTMethod(method: String?, jsonBody: [String: AnyObject], completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
-        let request = NSMutableURLRequest(URL: NSURL(string: getUrlString(method, parameters: nil))!)
+    func startTaskForPOSTMethod(jsonBody: [String: AnyObject], completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
+        let request = NSMutableURLRequest(URL: NSURL(string: getUrlString(nil, parameters: nil))!)
         request.HTTPMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue(ParseClient.Constants.AppID, forHTTPHeaderField: ParseClient.HTTPHeaderKeys.ParseAppIdKey)
+        request.addValue(ParseClient.Constants.APIKey, forHTTPHeaderField: ParseClient.HTTPHeaderKeys.ParseAPIKey)
         do {
             request.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(jsonBody, options: .PrettyPrinted)
         }
@@ -51,17 +45,13 @@ class UdacityClient: NSObject {
         startTaskForHTTPMethod(request, completionHandler: completionHandler)
     }
     
-    func startTaskForDELETEMethod(method: String, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
+    func startTaskForPUTMethod(method: String, jsonBody: [String: AnyObject], completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
         let request = NSMutableURLRequest(URL: NSURL(string: getUrlString(method, parameters: nil))!)
-        request.HTTPMethod = "DELETE"
-        
-        var xsrfCookie: NSHTTPCookie? = nil
-        let sharedCookieStorage = NSHTTPCookieStorage.sharedHTTPCookieStorage()
-        for cookie in sharedCookieStorage.cookies! as [NSHTTPCookie] {
-            if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
-        }
-        if let xsrfCookie = xsrfCookie {
-            request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
+        request.HTTPMethod = "PUT"
+        request.addValue(ParseClient.Constants.AppID, forHTTPHeaderField: ParseClient.HTTPHeaderKeys.ParseAppIdKey)
+        request.addValue(ParseClient.Constants.APIKey, forHTTPHeaderField: ParseClient.HTTPHeaderKeys.ParseAPIKey)
+        do {
+            request.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(jsonBody, options: .PrettyPrinted)
         }
         
         startTaskForHTTPMethod(request, completionHandler: completionHandler)
@@ -81,8 +71,7 @@ class UdacityClient: NSObject {
                 return
             }
             
-            // Subset data if it's Udacity method
-            NetworkingDataHandler.parseJSONWithCompletionHandler(UdacityClient.subsetData(data), completionHandler: completionHandler)
+            NetworkingDataHandler.parseJSONWithCompletionHandler(data, completionHandler: completionHandler)
         }
         
         task.resume()
@@ -92,7 +81,7 @@ class UdacityClient: NSObject {
     
     // Get url string
     func getUrlString(method: String?, parameters: [String: AnyObject]?) -> String {
-        var urlString = UdacityClient.Constants.BaseURL
+        var urlString = ParseClient.Constants.BaseURL
         if let method = method {
             urlString += method
         }
@@ -103,22 +92,14 @@ class UdacityClient: NSObject {
         return urlString
     }
 
-    // Subset response data from Udacity
-    class func subsetData(data: NSData) -> NSData {
-        return data.subdataWithRange(NSMakeRange(5, data.length - 5))
-    }
-    
     // MARK: Shared Instance
     
-    class func sharedInstance() -> UdacityClient {
+    class func sharedInstance() -> ParseClient {
         struct Singleton {
-            static var sharedInstance = UdacityClient()
+            static var sharedInstance = ParseClient()
         }
         
         return Singleton.sharedInstance
     }
     
 }
-
-
-

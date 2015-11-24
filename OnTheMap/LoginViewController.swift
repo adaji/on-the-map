@@ -51,7 +51,7 @@ class LoginViewController: KeyboardHandlingViewController {
     // Clicking on the Sign Up link will open Safari to the Udacity sign-in page.
     @IBAction func signupButtonTouchUp(sender: UIButton) {
         let app = UIApplication.sharedApplication()
-        app.openURL(NSURL(string: UdacityClient.Constants.UdacitySigninURL)!)
+        app.openURL(NSURL(string: UdacityClient.Constants.SigninURL)!)
     }
     
     // MARK: Login
@@ -60,9 +60,9 @@ class LoginViewController: KeyboardHandlingViewController {
     // Login automatically if user has logged in from this device before
     func tryAutoLogin() {
         let userDefaults = NSUserDefaults.standardUserDefaults()
-        if let username = userDefaults.valueForKey(Constants.UserDefaultsKey.Username) as? String {
+        if let username = userDefaults.valueForKey(OnTheMapConstants.UserDefaultsKey.Username) as? String {
             usernameTextField.text = username
-            if let password = userDefaults.valueForKey(Constants.UserDefaultsKey.Password) as? String {
+            if let password = userDefaults.valueForKey(OnTheMapConstants.UserDefaultsKey.Password) as? String {
                 passwordTextField.text = password
                 
                 if !username.isEmpty && !password.isEmpty {
@@ -81,8 +81,8 @@ class LoginViewController: KeyboardHandlingViewController {
             if success {
                 // Save/update email and password
                 let userDefaults = NSUserDefaults.standardUserDefaults()
-                userDefaults.setValue(self.usernameTextField.text!, forKey: Constants.UserDefaultsKey.Username)
-                userDefaults.setValue(self.passwordTextField.text!, forKey: Constants.UserDefaultsKey.Password)
+                userDefaults.setValue(self.usernameTextField.text!, forKey: OnTheMapConstants.UserDefaultsKey.Username)
+                userDefaults.setValue(self.passwordTextField.text!, forKey: OnTheMapConstants.UserDefaultsKey.Password)
                 userDefaults.synchronize()
                 
                 self.completeLogin(false)
