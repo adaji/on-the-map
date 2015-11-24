@@ -10,6 +10,11 @@
 
 extension UdacityClient {
     
+    enum Client {
+        case Udacity
+        case Parse
+    }
+    
     struct Constants {
         static let ParseAppID: String = "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr" // Parse Application ID
         static let ParseAPIKey: String = "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY" // Parse REST API Key

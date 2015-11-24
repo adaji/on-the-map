@@ -46,7 +46,7 @@ extension UdacityClient {
     
     // POSTing (Creating) a Session
     func postSession(jsonBody: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
-        startTaskForUdacityPOSTMethod(Methods.Session, jsonBody: jsonBody) { result, error in
+        startTaskForPOSTMethod(.Udacity, method: Methods.Session, jsonBody: jsonBody) { result, error in
             guard error == nil else {
                 print("Login Failed. Error: \(error)")
                 completionHandler(success: false, errorString: error!.localizedDescription)
@@ -84,7 +84,7 @@ extension UdacityClient {
     // Method: session
     //
     func deleteSession(completionHandler: (success: Bool, errorString: String?) -> Void) {
-        startTaskForUdacityDELETEMethod(Methods.Session) { (result, error) -> Void in
+        startTaskForDELETEMethod(.Udacity, method: Methods.Session) { (result, error) -> Void in
             guard error == nil else {
                 print("Logout Failed. Error: \(error)")
                 completionHandler(success: false, errorString: "Logout Failed (Delete Session).")
@@ -103,7 +103,7 @@ extension UdacityClient {
     // TODO: Find its usage
     func getUserDictionary(userId: String, completionHandler: (success: Bool, userDictionary: [String: AnyObject]?, errorString: String?) -> Void) {
         let method = UdacityClient.substituteKeyInMethod(Methods.UserData, key: UdacityClient.URLKeys.UserId, value: userId)
-        startTaskForUdacityGETMethod(method) { (result, error) -> Void in
+        startTaskForGETMethod(.Udacity, method: method, parameters: nil) { (result, error) -> Void in
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
                 completionHandler(success: false, userDictionary: nil, errorString: "There was an error retrieving student data.")
@@ -137,7 +137,7 @@ extension UdacityClient {
     // GETting an array of StudentInformation
     // Optional parameters: "limit", "skip", "order"
     func getAllStudentInformation(optionalParameters: [String: AnyObject]?, completionHandler: (success: Bool, allStudentInformation: [StudentInformation]?, errorString: String?) -> Void) {
-        startTaskForParseGETMethod(optionalParameters) { (result, error) -> Void in
+        startTaskForGETMethod(.Parse, method: nil, parameters: optionalParameters) { (result, error) -> Void in
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
                 completionHandler(success: false, allStudentInformation: nil, errorString: "There was an error retrieving student data.")
@@ -182,7 +182,7 @@ extension UdacityClient {
     // Required parameters (in HTTPBody): parameters
     //
     func postStudentInformation(informationDictionary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
-        startTaskForParsePOSTMethod(informationDictionary) { (result, error) -> Void in
+        startTaskForPOSTMethod(.Parse, method: nil, jsonBody: informationDictionary) { (result, error) -> Void in
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
                 completionHandler(success: false, errorString: "There was an error posting student data.")
@@ -203,7 +203,7 @@ extension UdacityClient {
     //
     func updateStudentInformation(objectId: String, informationDicationary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
         let method = UdacityClient.substituteKeyInMethod(Methods.UpdateStudentInformation, key: URLKeys.ObjectId, value: objectId)
-        startTaskForParsePUTMethod(method, jsonBody: informationDicationary) { (result, error) -> Void in
+        startTaskForPUTMethod(.Parse, method: method, jsonBody: informationDicationary) { (result, error) -> Void in
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
                 completionHandler(success: false, errorString: "There was an error updating student data.")
@@ -230,7 +230,7 @@ extension UdacityClient {
     // Required parameters: "where"
     //
     func queryForStudentInformation(parameters: [String: AnyObject], completionHandler: (success: Bool, studentInformation: StudentInformation?, errorString: String?) -> Void) {
-        startTaskForParseGETMethod(parameters) { (result, error) -> Void in
+        startTaskForGETMethod(.Parse, method: nil, parameters: parameters) { (result, error) -> Void in
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
                 completionHandler(success: false, studentInformation: nil, errorString: "There was an error retrieving student data.")
