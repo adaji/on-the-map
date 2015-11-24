@@ -19,6 +19,8 @@ class ListViewController: CommonViewController {
     
     // MARK: Show All Student Information (Override)
     
+    // Note: implement this method here to avoid re-implementing the refresh method
+    // which is extracted in the CommonViewController and uses this method which cannot be extracted
     override func showAllStudentInformation() {
         dispatch_async(dispatch_get_main_queue()) { () -> Void in
             self.tableView.reloadData()

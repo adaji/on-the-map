@@ -64,7 +64,7 @@ class CommonViewController: UIViewController {
     // Show all student information (in either a map view or a table view)
     //
     // Implement in subclasses
-    // Note that this method is used in both the refresh and the viewWillAppear methods.
+    // Note: This method is used in both the refresh and the viewWillAppear methods.
     // And it is the only part in these two methods that is different for the two view controllers.
     // It makes sense to implement only the different part in subclasses.
     func showAllStudentInformation() {

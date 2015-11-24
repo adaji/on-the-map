@@ -22,6 +22,9 @@ class MapViewController: CommonViewController {
     // MARK: Show All Student Information (Override)
     
     // Show all student information on map
+    //
+    // Note: implement this method here to avoid re-implementing the refresh method
+    // which is extracted in the CommonViewController and uses this method which cannot be extracted
     override func showAllStudentInformation() {
         var annotations = [MKPointAnnotation]()
         

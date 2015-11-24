@@ -34,6 +34,7 @@ class PostViewController: UIViewController {
     @IBOutlet weak var topCoverView: UIView!
     @IBOutlet weak var urlTextView: UITextView!
     @IBOutlet weak var submitButton: BorderedButton!
+    @IBOutlet weak var submitButtonContainer: UIView!
     
     var activityIndicator: UIActivityIndicatorView? = nil
     
@@ -46,7 +47,7 @@ class PostViewController: UIViewController {
     
     let locationPlaceholderText = "Enter Your Location Here"
     let urlPlaceholderText = "Enter a Link to Share Here"
-    let placeholderTextColor = UIColor(red: 217/255.0, green: 217/255.0, blue: 213/255.0, alpha: 1)
+    let lightGrayColor = UIColor(red: 217/255.0, green: 217/255.0, blue: 213/255.0, alpha: 1)
     
     // MARK: Actions
     
@@ -173,6 +174,7 @@ class PostViewController: UIViewController {
         topCoverView.hidden = true
         urlTextView.hidden = true
         submitButton.hidden = true
+        submitButtonContainer.backgroundColor = lightGrayColor
     }
     
     // Configure UI for entering link and submitting StudentInformation
@@ -188,6 +190,7 @@ class PostViewController: UIViewController {
         topCoverView.hidden = false
         urlTextView.hidden = false
         submitButton.hidden = false
+        submitButtonContainer.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
 
         mapView.addAnnotation(annotation)
         mapView.showAnnotations([annotation], animated: true)
@@ -321,7 +324,7 @@ extension PostViewController: UITextViewDelegate {
             } else if textView == urlTextView {
                 textView.text = urlPlaceholderText
             }
-            textView.textColor = placeholderTextColor
+            textView.textColor = lightGrayColor
         }
     }
     

@@ -300,6 +300,7 @@
                         <outlet property="locationTextView" destination="3Hd-ij-BzG" id="N7v-BK-9A8"/>
                         <outlet property="mapView" destination="jX8-a4-4uK" id="XLv-Lk-bUZ"/>
                         <outlet property="submitButton" destination="TZf-kt-tGU" id="qIA-uK-C3O"/>
+                        <outlet property="submitButtonContainer" destination="lBJ-Qx-IkM" id="hRv-KZ-afx"/>
                         <outlet property="textLabel" destination="YGt-0k-DWu" id="Zwo-MS-g6i"/>
                         <outlet property="topCoverView" destination="1bx-52-Qc6" id="W9r-mz-vDG"/>
                         <outlet property="urlTextView" destination="z2h-dP-5k6" id="gYu-QP-o4j"/>
