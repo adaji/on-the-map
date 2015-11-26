@@ -15,13 +15,11 @@ extension ParseClient {
     // MARK: (All) Student Information
     
     // Function: getAllStudentInformation
-    // Parameters:
-    // - optionalParameters: ["limit": 100, "skip": 400, "order": -updatedAt]
-    // - completionHandler
     //
     // GETting an array of StudentInformation
-    // Optional parameters: "limit", "skip", "order"
-    func getAllStudentInformation(optionalParameters: [String: AnyObject]?, completionHandler: (success: Bool, allStudentInformation: [StudentInformation]?, errorString: String?) -> Void) {
+    // Optional parameters: ["limit": 100, "skip": 400, "order": -updatedAt]
+    func getAllStudentInformation(completionHandler: (success: Bool, allStudentInformation: [StudentInformation]?, errorString: String?) -> Void) {
+        let optionalParameters = [ParseClient.ParameterKeys.LimitKey: 100, ParseClient.ParameterKeys.SkipKey: 0, ParseClient.ParameterKeys.OrderKey: "-updatedAt"]
         startTaskForGETMethod(nil, parameters: optionalParameters) { (result, error) -> Void in
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
@@ -107,14 +105,12 @@ extension ParseClient {
     }
     
     // Function: queryForStudentInformation
-    // Parameters:
-    // - parameters: [where: "\"uniqueKey\":\"<uniqueKey>\""]
-    // - completionHandler
     //
     // Querying for a StudentInformation
-    // Required parameters: "where"
+    // Required parameters: [where: "\"uniqueKey\":\"<uniqueKey>\""]
     //
-    func queryForStudentInformation(parameters: [String: AnyObject], completionHandler: (success: Bool, studentInformation: StudentInformation?, errorString: String?) -> Void) {
+    func queryForStudentInformation(completionHandler: (success: Bool, studentInformation: StudentInformation?, errorString: String?) -> Void) {
+        let parameters = [ParseClient.ParameterKeys.WhereKey: "{\"\(ParseClient.ParameterKeys.UniqueKey)\":\"\(UdacityClient.sharedInstance().userID!)\"}"]
         startTaskForGETMethod(nil, parameters: parameters) { (result, error) -> Void in
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")

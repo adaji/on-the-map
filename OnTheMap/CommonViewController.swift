@@ -91,13 +91,13 @@ class CommonViewController: UIViewController {
     // If so, ask user whether to overwrite
     // If not, present post view controller
     func post(sender: UIBarButtonItem) {
-        checkIfHasPosted { (hasPosted, studentInformation, errorString) -> Void in
+        checkIfHasPosted { (hasPosted, errorString) -> Void in
             if let errorString = errorString {
                 self.showAlert(errorString)
             } else {
                 // If user has posted information before, ask user whether to overwrite
                 if hasPosted {                    
-                    let message = "User \"\(studentInformation!.fullName())\" has already posted a Student Location. Would you like to overwrite the location?"
+                    let message = "User \"\(self.model.myStudentInformation!.fullName())\" has already posted a Student Location. Would you like to overwrite the location?"
                     let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
                     alertController.addAction(UIAlertAction(title: "Overwrite", style: .Default, handler: { (action) -> Void in
                         self.presentPostViewController()
@@ -144,21 +144,16 @@ class CommonViewController: UIViewController {
         MBProgressHUD.hideAllHUDsForView(view, animated: true)
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
         
-        let parameters = [ParseClient.ParameterKeys.LimitKey: 100, ParseClient.ParameterKeys.SkipKey: 0, ParseClient.ParameterKeys.OrderKey: "-updatedAt"]
-        ParseClient.sharedInstance().getAllStudentInformation(parameters) { (success, allStudentInformation, errorString) -> Void in
+        ParseClient.sharedInstance().getAllStudentInformation() { (success, allStudentInformation, errorString) -> Void in
             if success {
-                if let allStudentInformation = allStudentInformation {
-                    // Update student data saved in tab bar controller
-                    self.model.allStudentInformation = allStudentInformation
-                    
-                    dispatch_async(dispatch_get_main_queue(), {
-                        hud.hide(true)
-                    })
-                    
-                    completionHandler(success: true, errorString: nil)
-                } else {
-                    completionHandler(success: false, errorString: "No student data returned.")
-                }
+                // Update student data saved in tab bar controller
+                self.model.allStudentInformation = allStudentInformation
+                
+                dispatch_async(dispatch_get_main_queue(), {
+                    hud.hide(true)
+                })
+                
+                completionHandler(success: true, errorString: nil)
             } else {
                 completionHandler(success: false, errorString: errorString)
             }
@@ -168,31 +163,25 @@ class CommonViewController: UIViewController {
     // Check if user has posted information before
     // - If user's information has not been saved in StudentInformation
     // (as myStudentInformation), query for user's information
-    func checkIfHasPosted(completionHandler: (hasPosted: Bool, studentInformation: StudentInformation?, errorString: String?) -> Void) {
+    func checkIfHasPosted(completionHandler: (hasPosted: Bool, errorString: String?) -> Void) {
         if model.myStudentInformation != nil {
-            completionHandler(hasPosted: true, studentInformation: model.myStudentInformation!, errorString: nil)
+            completionHandler(hasPosted: true, errorString: nil)
         } else {
             MBProgressHUD.hideAllHUDsForView(view, animated: true)
             let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
             
-            let parameters = [ParseClient.ParameterKeys.WhereKey: "{\"\(ParseClient.ParameterKeys.UniqueKey)\":\"\(UdacityClient.sharedInstance().userID!)\"}"]
-            ParseClient.sharedInstance().queryForStudentInformation(parameters) { (success, studentInformation, errorString) -> Void in
+            ParseClient.sharedInstance().queryForStudentInformation({ (success, studentInformation, errorString) -> Void in
                 dispatch_async(dispatch_get_main_queue(), {
                     hud.hide(true)
                 })
                 
                 if success {
-                    if let studentInformation = studentInformation {
-                        self.model.myStudentInformation = studentInformation
-                        
-                        completionHandler(hasPosted: true, studentInformation: studentInformation, errorString: nil)
-                    } else {
-                        completionHandler(hasPosted: false, studentInformation: nil, errorString: "No student data returned.")
-                    }
+                    self.model.myStudentInformation = studentInformation
+                    completionHandler(hasPosted: true, errorString: nil)
                 } else {
-                    completionHandler(hasPosted: false, studentInformation: nil, errorString: errorString)
+                    completionHandler(hasPosted: false, errorString: errorString)
                 }
-            }
+            })
         }
     }
     
