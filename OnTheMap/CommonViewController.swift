@@ -100,7 +100,7 @@ class CommonViewController: UIViewController {
                     let message = "User \"\(self.model.myStudentInformation!.fullName())\" has already posted a Student Location. Would you like to overwrite the location?"
                     let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
                     alertController.addAction(UIAlertAction(title: "Overwrite", style: .Default, handler: { (action) -> Void in
-                        self.presentPostViewController()
+                        self.presentInfomationPosterViewController()
                     }))
                     alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
                     
@@ -108,15 +108,15 @@ class CommonViewController: UIViewController {
                         self.presentViewController(alertController, animated: true, completion: nil)
                     })
                 } else {
-                    self.presentPostViewController()
+                    self.presentInfomationPosterViewController()
                 }
             }
         }
     }
     
     // Present post view controller
-    func presentPostViewController() {
-        let postVC = self.storyboard!.instantiateViewControllerWithIdentifier("PostViewController") as! PostViewController
+    func presentInfomationPosterViewController() {
+        let postVC = self.storyboard!.instantiateViewControllerWithIdentifier("InfomationPosterViewController") as! InfomationPosterViewController
         postVC.delegate = self
         postVC.studentInformation = model.myStudentInformation
         presentViewController(postVC, animated: true, completion: nil)
@@ -252,15 +252,17 @@ class CommonViewController: UIViewController {
     
 }
 
-// MARK: - CommonViewController: PostViewControllerDelegate
+// MARK: - CommonViewController: InfomationPosterViewControllerDelegate
 
-extension CommonViewController: PostViewControllerDelegate {
+extension CommonViewController: InfomationPosterViewControllerDelegate {
     
-    // If user has just successfully submitted StudentInformation in PostViewController,
+    // If user has just successfully submitted StudentInformation in InfomationPosterViewController,
     // reload AllStudentInformation data when the view appears
-    func didSubmitStudentInformation(studentInformation: StudentInformation) {
-        model.myStudentInformation = studentInformation
-        didSubmitStudentInformation = true
+    func informationPoster(informationPoster: InfomationPosterViewController, didPostInformation information: StudentInformation?) {
+        if let submittedInformation = information {
+            model.myStudentInformation = submittedInformation
+            didSubmitStudentInformation = true
+        }
     }
     
 }

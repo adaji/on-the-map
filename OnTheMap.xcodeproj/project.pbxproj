@@ -14,7 +14,7 @@
 		6040A9E51C0497EE00B6234D /* ParseConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6040A9E41C0497EE00B6234D /* ParseConvenience.swift */; };
 		6042093B1C01C18500BF1E4C /* CommonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6042093A1C01C18500BF1E4C /* CommonViewController.swift */; };
 		6042093F1C0222ED00BF1E4C /* StudentInformationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6042093E1C0222ED00BF1E4C /* StudentInformationCell.swift */; };
-		60533FB01BFE327E00B33F92 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60533FAF1BFE327E00B33F92 /* PostViewController.swift */; };
+		60533FB01BFE327E00B33F92 /* InformationPosterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60533FAF1BFE327E00B33F92 /* InformationPosterViewController.swift */; };
 		606AFAD01C025109002010A0 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 606AFACF1C025109002010A0 /* WebViewController.swift */; };
 		60B1FCBE1C042BEE00CB7F0A /* OnTheMapTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B1FCBD1C042BEE00CB7F0A /* OnTheMapTabBarController.swift */; };
 		60B1FCC01C042C9200CB7F0A /* OnTheMapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B1FCBF1C042C9200CB7F0A /* OnTheMapModel.swift */; };
@@ -63,7 +63,7 @@
 		6040A9E41C0497EE00B6234D /* ParseConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseConvenience.swift; sourceTree = "<group>"; };
 		6042093A1C01C18500BF1E4C /* CommonViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonViewController.swift; sourceTree = "<group>"; };
 		6042093E1C0222ED00BF1E4C /* StudentInformationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StudentInformationCell.swift; path = OnTheMap/StudentInformationCell.swift; sourceTree = "<group>"; };
-		60533FAF1BFE327E00B33F92 /* PostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
+		60533FAF1BFE327E00B33F92 /* InformationPosterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InformationPosterViewController.swift; sourceTree = "<group>"; };
 		606AFACF1C025109002010A0 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		60B11E7F1BFE84CF0002196A /* OnTheMap-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OnTheMap-Bridging-Header.h"; sourceTree = "<group>"; };
 		60B1FCBD1C042BEE00CB7F0A /* OnTheMapTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnTheMapTabBarController.swift; sourceTree = "<group>"; };
@@ -229,7 +229,7 @@
 				6042093A1C01C18500BF1E4C /* CommonViewController.swift */,
 				60ECE9101BFCFEF500D5B165 /* MapViewController.swift */,
 				60ECE9121BFD094200D5B165 /* ListViewController.swift */,
-				60533FAF1BFE327E00B33F92 /* PostViewController.swift */,
+				60533FAF1BFE327E00B33F92 /* InformationPosterViewController.swift */,
 				606AFACF1C025109002010A0 /* WebViewController.swift */,
 				60ECE8FE1BFC7D3700D5B165 /* KeyboardHandlingViewController.swift */,
 			);
@@ -479,7 +479,7 @@
 				6040A9DE1C04929400B6234D /* ParseClient.swift in Sources */,
 				60ECE9111BFCFEF500D5B165 /* MapViewController.swift in Sources */,
 				60F1E7C31BFDB1A20070F8FE /* NetworkingDataHandler.swift in Sources */,
-				60533FB01BFE327E00B33F92 /* PostViewController.swift in Sources */,
+				60533FB01BFE327E00B33F92 /* InformationPosterViewController.swift in Sources */,
 				6040A9E11C04930100B6234D /* ParseConstants.swift in Sources */,
 				60ECE8FB1BFC542300D5B165 /* BorderedButton.swift in Sources */,
 				6040A9DA1C048B2B00B6234D /* OnTheMapConstants.swift in Sources */,

@@ -168,10 +168,10 @@
             </objects>
             <point key="canvasLocation" x="2629" y="337"/>
         </scene>
-        <!--Post View Controller-->
+        <!--Infomation Poster View Controller-->
         <scene sceneID="Wrp-vh-jbW">
             <objects>
-                <viewController storyboardIdentifier="PostViewController" id="CeH-Ry-pNb" customClass="PostViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="InfomationPosterViewController" id="CeH-Ry-pNb" customClass="InfomationPosterViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="fNa-vH-6sZ"/>
                         <viewControllerLayoutGuide type="bottom" id="BAf-zR-lVR"/>

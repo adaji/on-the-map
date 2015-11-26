@@ -1,5 +1,5 @@
 //
-//  PostViewController.swift
+//  InfomationPosterViewController.swift
 //  OnTheMap
 //
 //  Created by Ada Ji on 11/20/15.
@@ -10,17 +10,15 @@ import UIKit
 import MapKit
 import MBProgressHUD
 
-// MARK: - PostViewControllerDelegate
+// MARK: - InfomationPosterViewControllerDelegate
 
-protocol PostViewControllerDelegate {
-    
-    func didSubmitStudentInformation(studentInformation: StudentInformation)
-    
+protocol InfomationPosterViewControllerDelegate {
+    func informationPoster(informationPoster: InfomationPosterViewController, didPostInformation information: StudentInformation?)
 }
 
-// MARK: - PostViewController: UIViewController
+// MARK: - InfomationPosterViewController: UIViewController
 
-class PostViewController: UIViewController {
+class InfomationPosterViewController: UIViewController {
     
     // Properties
     
@@ -40,7 +38,7 @@ class PostViewController: UIViewController {
     
     var tapRecognizer: UITapGestureRecognizer? = nil
     
-    var delegate: PostViewControllerDelegate?
+    var delegate: InfomationPosterViewControllerDelegate?
     
     var hasPosted: Bool = false // Whether user has posted information before
     var studentInformation: StudentInformation? = nil
@@ -101,6 +99,7 @@ class PostViewController: UIViewController {
     }
     
     @IBAction func cancelButtonTouchUp(sender: UIButton) {
+        delegate?.informationPoster(self, didPostInformation: nil)
         view.endEditing(true)
         dismissViewControllerAnimated(true, completion: nil)
     }
@@ -127,7 +126,7 @@ class PostViewController: UIViewController {
     func initData() {
         if studentInformation == nil {
             hasPosted = false
-            studentInformation = StudentInformation(dictionary: [ParseClient.StudentInformationKeys.UniqueKey: UdacityClient.sharedInstance().userID!])
+            studentInformation = StudentInformation(dictionary: [StudentInformation.Keys.UniqueKey: UdacityClient.sharedInstance().userID!])
         } else {
             hasPosted = true
         }
@@ -239,7 +238,7 @@ class PostViewController: UIViewController {
         let informationDictionary = studentInformation!.dictionary()
         ParseClient.sharedInstance().submitStudentInformation(studentInformation!.objectId, informationDictionary: informationDictionary) { (success, errorString) -> Void in
             if success {
-                self.delegate!.didSubmitStudentInformation(self.studentInformation!)
+                self.delegate?.informationPoster(self, didPostInformation: self.studentInformation)
                 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     hud.hide(true)
@@ -308,9 +307,9 @@ class PostViewController: UIViewController {
     
 }
 
-// MARK: - PostViewController: UITextViewDelegate
+// MARK: - InfomationPosterViewController: UITextViewDelegate
 
-extension PostViewController: UITextViewDelegate {
+extension InfomationPosterViewController: UITextViewDelegate {
     
     func textViewDidBeginEditing(textView: UITextView) {
         if textView.text == locationPlaceholderText || textView.text == urlPlaceholderText {

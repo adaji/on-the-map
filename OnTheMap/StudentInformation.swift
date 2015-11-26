@@ -12,6 +12,21 @@ import Foundation
 
 struct StudentInformation {
     
+    // MARK: Keys
+    
+    struct Keys {
+        static let ObjectId = "objectId"
+        static let UniqueKey = "uniqueKey"
+        static let FirstName = "firstName"
+        static let LastName = "lastName"
+        static let MapString = "mapString"
+        static let MediaURL = "mediaURL"
+        static let Latitude = "latitude"
+        static let Longitude = "longitude"
+        static let CreatedAt = "createdAt"
+        static let UpdatedAt = "updatedAt"
+    }
+    
     // MARK: Properties
     
     var objectId = "" // StudentLocation object id on Parse
@@ -28,38 +43,38 @@ struct StudentInformation {
     // MARK: Initializers
     
     init(dictionary: [String: AnyObject]) {
-        if let objectId = dictionary[ParseClient.StudentInformationKeys.ObjectId] as? String {
+        if let objectId = dictionary[Keys.ObjectId] as? String {
             self.objectId = objectId
         }
-        if let uniqueKey = dictionary[ParseClient.StudentInformationKeys.UniqueKey] as? String {
+        if let uniqueKey = dictionary[Keys.UniqueKey] as? String {
             self.uniqueKey = uniqueKey
         }
-        if let firstName = dictionary[ParseClient.StudentInformationKeys.FirstName] as? String {
+        if let firstName = dictionary[Keys.FirstName] as? String {
             self.firstName = firstName
         }
-        if let lastName = dictionary[ParseClient.StudentInformationKeys.LastName] as? String {
+        if let lastName = dictionary[Keys.LastName] as? String {
             self.lastName = lastName
         }
-        if let mapString = dictionary[ParseClient.StudentInformationKeys.MapString] as? String {
+        if let mapString = dictionary[Keys.MapString] as? String {
             self.mapString = mapString
         }
-        if let mediaURL = dictionary[ParseClient.StudentInformationKeys.MediaURL] as? String {
+        if let mediaURL = dictionary[Keys.MediaURL] as? String {
             self.mediaURL = mediaURL
         }
-        if let latitude = dictionary[ParseClient.StudentInformationKeys.Latitude] as? Double {
+        if let latitude = dictionary[Keys.Latitude] as? Double {
             self.latitude = latitude
         }
-        if let longitude = dictionary[ParseClient.StudentInformationKeys.Longitude] as? Double {
+        if let longitude = dictionary[Keys.Longitude] as? Double {
             self.longitude = longitude
         }
         
         // Parse date
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        if let createdAtString = dictionary[ParseClient.StudentInformationKeys.CreatedAt] as? String {
+        if let createdAtString = dictionary[Keys.CreatedAt] as? String {
             createdAt = dateFormatter.dateFromString(createdAtString)!
         }
-        if let updatedAtString = dictionary[ParseClient.StudentInformationKeys.UpdatedAt] as? String {
+        if let updatedAtString = dictionary[Keys.UpdatedAt] as? String {
             updatedAt = dateFormatter.dateFromString(updatedAtString)!
         }
     }
@@ -80,13 +95,13 @@ struct StudentInformation {
     // Return the dictionary version of StudentInformation (for posting/updating student information, etc.)
     func dictionary() -> [String: AnyObject] {
         return [
-            ParseClient.StudentInformationKeys.UniqueKey: uniqueKey,
-            ParseClient.StudentInformationKeys.FirstName: firstName,
-            ParseClient.StudentInformationKeys.LastName: lastName,
-            ParseClient.StudentInformationKeys.MapString: mapString,
-            ParseClient.StudentInformationKeys.MediaURL: mediaURL,
-            ParseClient.StudentInformationKeys.Latitude: latitude,
-            ParseClient.StudentInformationKeys.Longitude: longitude
+            Keys.UniqueKey: uniqueKey,
+            Keys.FirstName: firstName,
+            Keys.LastName: lastName,
+            Keys.MapString: mapString,
+            Keys.MediaURL: mediaURL,
+            Keys.Latitude: latitude,
+            Keys.Longitude: longitude
         ]
     }
     
