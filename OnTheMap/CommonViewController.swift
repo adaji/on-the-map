@@ -7,18 +7,20 @@
 //
 
 import UIKit
+import CoreData
 import MBProgressHUD
 import FBSDKLoginKit
 
-// MARK: - CommonViewController: UIViewController
+// MARK: - CommonViewController: UIViewController, NSFetchedResultsControllerDelegate
 
 // Extract common navigation bar for MapViewController and ListViewController
 
-class CommonViewController: UIViewController {
+class CommonViewController: UIViewController, NSFetchedResultsControllerDelegate {
     
     // MARK: Properties
         
-    var model: OnTheMapModel!
+    // Save/update user's student information every time it's queried, posted or updated
+    var myStudentInformation: StudentInformation? = nil
     var didSubmitStudentInformation: Bool = false
 
     // MARK: Life Cycle
@@ -26,15 +28,16 @@ class CommonViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        model = (tabBarController as! OnTheMapTabBarController).model
-        
         configureNavigationBar()
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
         
-        fetchAndShowAllStudentInformation()
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            print("Unresolved error: \(error)")
+            abort()
+        }
+        
+        fetchedResultsController.delegate = self
     }
     
     // MARK: Configure Navigation Bar
@@ -57,18 +60,6 @@ class CommonViewController: UIViewController {
         let postButtonItem = UIBarButtonItem(image: UIImage(named: "marker"), style: .Plain, target: self, action: "post:")
         let refreshButtonItem = UIBarButtonItem(image: UIImage(named: "refresh"), style: .Plain, target: self, action: "refresh:")
         navigationItem.rightBarButtonItems = [refreshButtonItem, postButtonItem]
-    }
-    
-    // MARK: Show All Student Information
-    
-    // Show all student information (in either a map view or a table view)
-    //
-    // Implement in subclasses
-    // Note: This method is used in both the refresh and the viewWillAppear methods.
-    // And it is the only part in these two methods that is different for the two view controllers.
-    // It makes sense to implement only the different part in subclasses.
-    func showAllStudentInformation() {
-        
     }
     
     // MARK: Actions
@@ -96,8 +87,8 @@ class CommonViewController: UIViewController {
                 self.showAlert(errorString)
             } else {
                 // If user has posted information before, ask user whether to overwrite
-                if hasPosted {                    
-                    let message = "User \"\(self.model.myStudentInformation!.fullName())\" has already posted a Student Location. Would you like to overwrite the location?"
+                if hasPosted {
+                    let message = "User \"\(self.myStudentInformation!.fullName())\" has already posted a Student Location. Would you like to overwrite the location?"
                     let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
                     alertController.addAction(UIAlertAction(title: "Overwrite", style: .Default, handler: { (action) -> Void in
                         self.presentInfomationPosterViewController()
@@ -118,15 +109,49 @@ class CommonViewController: UIViewController {
     func presentInfomationPosterViewController() {
         let postVC = self.storyboard!.instantiateViewControllerWithIdentifier("InfomationPosterViewController") as! InfomationPosterViewController
         postVC.delegate = self
-        postVC.studentInformation = model.myStudentInformation
+        postVC.studentInformation = myStudentInformation
         presentViewController(postVC, animated: true, completion: nil)
     }
     
+    // MARK: Core Data Convenience
+    
+    lazy var sharedContext: NSManagedObjectContext = {
+        return CoreDataStackManager.sharedInstance().managedObjectContext
+    }()
+    
+    func saveContext() {
+        CoreDataStackManager.sharedInstance().saveContext()
+    }
+    
+    lazy var fetchedResultsController: NSFetchedResultsController = {
+        let fetchRequest = NSFetchRequest(entityName: "StudentInformation")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: StudentInformation.Keys.UpdatedAt, ascending: true)]
+        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.sharedContext, sectionNameKeyPath: nil, cacheName: nil)
+    }()
+    
+    // MARK: Manipulate Data
+    
     func refresh(sender: UIBarButtonItem) {
+        deleteAllStudentInformation()
         fetchAndShowAllStudentInformation()
     }
     
-    // MARK: Manipulate Data
+    func deleteAllStudentInformation() {
+        for studentInformation in fetchedResultsController.fetchedObjects as! [StudentInformation] {
+            sharedContext.deleteObject(studentInformation)
+        }
+        
+        // Use NSBatchDeleteRequest
+        // Note that the changes are not reflected in the context, but rather in the persistent storage
+//        let fetchRequest = NSFetchRequest(entityName: "StudentInformation")
+//        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+//        
+//        do {
+//            try sharedContext.executeRequest(deleteRequest)
+//        } catch let error as NSError {
+//            print("Unable to delete: \(error)")
+//        }
+    }
     
     func fetchAndShowAllStudentInformation() {
         fetchAllStudentInformation { (success, errorString) -> Void in
@@ -142,16 +167,11 @@ class CommonViewController: UIViewController {
     // TODO: Implement "load more" (skip > 0)
     func fetchAllStudentInformation(completionHandler: (success: Bool, errorString: String?) -> Void) {
         MBProgressHUD.hideAllHUDsForView(view, animated: true)
-        let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
-        
+        MBProgressHUD.showHUDAddedTo(view, animated: true)
+
         ParseClient.sharedInstance().getAllStudentInformation() { (success, allStudentInformation, errorString) -> Void in
             if success {
                 // Update student data saved in tab bar controller
-                self.model.allStudentInformation = allStudentInformation
-                
-                dispatch_async(dispatch_get_main_queue(), {
-                    hud.hide(true)
-                })
                 
                 completionHandler(success: true, errorString: nil)
             } else {
@@ -164,7 +184,7 @@ class CommonViewController: UIViewController {
     // - If user's information has not been saved in StudentInformation
     // (as myStudentInformation), query for user's information
     func checkIfHasPosted(completionHandler: (hasPosted: Bool, errorString: String?) -> Void) {
-        if model.myStudentInformation != nil {
+        if myStudentInformation != nil {
             completionHandler(hasPosted: true, errorString: nil)
         } else {
             MBProgressHUD.hideAllHUDsForView(view, animated: true)
@@ -176,7 +196,7 @@ class CommonViewController: UIViewController {
                 })
                 
                 if success {
-                    self.model.myStudentInformation = studentInformation
+                    self.myStudentInformation = studentInformation
                     completionHandler(hasPosted: true, errorString: nil)
                 } else {
                     completionHandler(hasPosted: false, errorString: errorString)
@@ -185,17 +205,23 @@ class CommonViewController: UIViewController {
         }
     }
     
-    // Clear saved data (student data, password, etc.) on logout
-    func clearSavedData() {
+    // Delete all saved data (student data, password, etc.) on logout
+    func deleteAllData() {
         UdacityClient.sharedInstance().sessionID = nil
         UdacityClient.sharedInstance().userID = nil
-        model.allStudentInformation = nil
-        model.myStudentInformation = nil
-        
+        myStudentInformation = nil
+        deleteAllStudentInformation()
         // Delete password when logout
         let userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.setValue("", forKey: "password")
         userDefaults.synchronize()
+    }
+    
+    // MARK: Show All Student Information
+    
+    // Implement in sub-classes
+    func showAllStudentInformation() {
+        
     }
     
     // MARK: Helper Functions
@@ -235,7 +261,7 @@ class CommonViewController: UIViewController {
             self.dismissViewControllerAnimated(true, completion: nil)
         })
 
-        clearSavedData()
+        deleteAllData()
     }
     
     // Show alert
@@ -260,7 +286,7 @@ extension CommonViewController: InfomationPosterViewControllerDelegate {
     // reload AllStudentInformation data when the view appears
     func informationPoster(informationPoster: InfomationPosterViewController, didPostInformation information: StudentInformation?) {
         if let submittedInformation = information {
-            model.myStudentInformation = submittedInformation
+            myStudentInformation = submittedInformation
             didSubmitStudentInformation = true
         }
     }

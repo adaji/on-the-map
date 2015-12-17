@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import CoreData
 import MBProgressHUD
 import FBSDKLoginKit
 
@@ -19,6 +20,20 @@ class MapViewController: CommonViewController {
     
     @IBOutlet weak var mapView: MKMapView!
     
+    // MARK: Life Cycle
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if fetchedResultsController.fetchedObjects!.isEmpty {
+            fetchAndShowAllStudentInformation()
+        } else if mapView.annotations.isEmpty {
+            showAllStudentInformation()
+        }
+    }
+    
+//    func r
+    
     // MARK: Show All Student Information (Override)
     
     // Show all student information on map
@@ -28,7 +43,7 @@ class MapViewController: CommonViewController {
     override func showAllStudentInformation() {
         var annotations = [MKPointAnnotation]()
         
-        for studentInformation in model.allStudentInformation! {
+        for studentInformation in self.fetchedResultsController.fetchedObjects as! [StudentInformation] {
             let lat = CLLocationDegrees(studentInformation.latitude)
             let lon = CLLocationDegrees(studentInformation.longitude)
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
@@ -36,17 +51,52 @@ class MapViewController: CommonViewController {
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
             annotation.title = studentInformation.fullName()
-            annotation.subtitle = studentInformation.mediaURL
-            
+            annotation.subtitle = studentInformation.mediaUrl
             annotations.append(annotation)
         }
         
         dispatch_async(dispatch_get_main_queue()) { () -> Void in
             self.mapView.removeAnnotations(self.mapView.annotations)
             self.mapView.addAnnotations(annotations)
+            MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
         }
     }
     
+}
+
+// MARK: - MapViewController (FetchedResultsControllerDelegate)
+
+extension MapViewController {
+    
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    }
+    
+    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+        
+    }
+    
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        if let annotation = anObject as? MKAnnotation {
+            switch type {
+            case .Insert:
+                mapView.addAnnotation(annotation)
+            case .Delete:
+                mapView.removeAnnotation(annotation)
+            case .Update:
+                mapView.removeAnnotation(annotation)
+                mapView.addAnnotation(annotation)
+            default:
+                return
+            }
+            
+        }
+    }
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+    }
+
 }
 
 // MARK: - MapViewController: MKMapViewDelegate

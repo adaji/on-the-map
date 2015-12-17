@@ -16,10 +16,10 @@
 		6042093F1C0222ED00BF1E4C /* StudentInformationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6042093E1C0222ED00BF1E4C /* StudentInformationCell.swift */; };
 		60533FB01BFE327E00B33F92 /* InformationPosterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60533FAF1BFE327E00B33F92 /* InformationPosterViewController.swift */; };
 		606AFAD01C025109002010A0 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 606AFACF1C025109002010A0 /* WebViewController.swift */; };
-		60B1FCBE1C042BEE00CB7F0A /* OnTheMapTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B1FCBD1C042BEE00CB7F0A /* OnTheMapTabBarController.swift */; };
-		60B1FCC01C042C9200CB7F0A /* OnTheMapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B1FCBF1C042C9200CB7F0A /* OnTheMapModel.swift */; };
 		60BDA8221C02E377006D4320 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60BDA8201C02E377006D4320 /* FBSDKCoreKit.framework */; };
 		60BDA8231C02E377006D4320 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60BDA8211C02E377006D4320 /* FBSDKLoginKit.framework */; };
+		60C2F26D1C214CC0001740A6 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 60C2F26B1C214CC0001740A6 /* Model.xcdatamodeld */; };
+		60C2F26F1C215058001740A6 /* CoreDataStackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C2F26E1C215058001740A6 /* CoreDataStackManager.swift */; };
 		60ECE8C11BFC32F600D5B165 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ECE8C01BFC32F600D5B165 /* AppDelegate.swift */; };
 		60ECE8C61BFC32F600D5B165 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60ECE8C41BFC32F600D5B165 /* Main.storyboard */; };
 		60ECE8C81BFC32F600D5B165 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60ECE8C71BFC32F600D5B165 /* Assets.xcassets */; };
@@ -66,10 +66,10 @@
 		60533FAF1BFE327E00B33F92 /* InformationPosterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InformationPosterViewController.swift; sourceTree = "<group>"; };
 		606AFACF1C025109002010A0 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		60B11E7F1BFE84CF0002196A /* OnTheMap-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OnTheMap-Bridging-Header.h"; sourceTree = "<group>"; };
-		60B1FCBD1C042BEE00CB7F0A /* OnTheMapTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnTheMapTabBarController.swift; sourceTree = "<group>"; };
-		60B1FCBF1C042C9200CB7F0A /* OnTheMapModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnTheMapModel.swift; sourceTree = "<group>"; };
 		60BDA8201C02E377006D4320 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		60BDA8211C02E377006D4320 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		60C2F26C1C214CC0001740A6 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		60C2F26E1C215058001740A6 /* CoreDataStackManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStackManager.swift; sourceTree = "<group>"; };
 		60ECE8BD1BFC32F600D5B165 /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60ECE8C01BFC32F600D5B165 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		60ECE8C51BFC32F600D5B165 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -170,6 +170,7 @@
 		60ECE8BF1BFC32F600D5B165 /* OnTheMap */ = {
 			isa = PBXGroup;
 			children = (
+				60C2F26E1C215058001740A6 /* CoreDataStackManager.swift */,
 				60ECE9021BFC874500D5B165 /* Model */,
 				60ECE8F61BFC529500D5B165 /* View */,
 				60ECE8FD1BFC785D00D5B165 /* Controller */,
@@ -224,7 +225,6 @@
 		60ECE8FD1BFC785D00D5B165 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				60B1FCBD1C042BEE00CB7F0A /* OnTheMapTabBarController.swift */,
 				60ECE8EE1BFC44A900D5B165 /* LoginViewController.swift */,
 				6042093A1C01C18500BF1E4C /* CommonViewController.swift */,
 				60ECE9101BFCFEF500D5B165 /* MapViewController.swift */,
@@ -239,8 +239,8 @@
 		60ECE9021BFC874500D5B165 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				60C2F26B1C214CC0001740A6 /* Model.xcdatamodeld */,
 				60ECE90C1BFC8E8E00D5B165 /* StudentInformation.swift */,
-				60B1FCBF1C042C9200CB7F0A /* OnTheMapModel.swift */,
 				6040A9D91C048B2B00B6234D /* OnTheMapConstants.swift */,
 				60F1E7C21BFDB1A20070F8FE /* NetworkingDataHandler.swift */,
 				60ECE9031BFC875C00D5B165 /* Clients */,
@@ -351,7 +351,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0710;
 				LastUpgradeCheck = 0710;
-				ORGANIZATIONNAME = "Ada Ji";
+				ORGANIZATIONNAME = Superada;
 				TargetAttributes = {
 					60ECE8BC1BFC32F600D5B165 = {
 						CreatedOnToolsVersion = 7.1.1;
@@ -467,9 +467,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				60ECE9091BFC87C900D5B165 /* UdacityClient.swift in Sources */,
+				60C2F26D1C214CC0001740A6 /* Model.xcdatamodeld in Sources */,
 				6040A9E51C0497EE00B6234D /* ParseConvenience.swift in Sources */,
-				60B1FCBE1C042BEE00CB7F0A /* OnTheMapTabBarController.swift in Sources */,
-				60B1FCC01C042C9200CB7F0A /* OnTheMapModel.swift in Sources */,
 				60ECE8EF1BFC44A900D5B165 /* LoginViewController.swift in Sources */,
 				60ECE90B1BFC8A8300D5B165 /* UdacityConvenience.swift in Sources */,
 				60ECE9071BFC879A00D5B165 /* UdacityConstants.swift in Sources */,
@@ -482,6 +481,7 @@
 				60533FB01BFE327E00B33F92 /* InformationPosterViewController.swift in Sources */,
 				6040A9E11C04930100B6234D /* ParseConstants.swift in Sources */,
 				60ECE8FB1BFC542300D5B165 /* BorderedButton.swift in Sources */,
+				60C2F26F1C215058001740A6 /* CoreDataStackManager.swift in Sources */,
 				6040A9DA1C048B2B00B6234D /* OnTheMapConstants.swift in Sources */,
 				60ECE8C11BFC32F600D5B165 /* AppDelegate.swift in Sources */,
 				606AFAD01C025109002010A0 /* WebViewController.swift in Sources */,
@@ -749,6 +749,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		60C2F26B1C214CC0001740A6 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				60C2F26C1C214CC0001740A6 /* Model.xcdatamodel */,
+			);
+			currentVersion = 60C2F26C1C214CC0001740A6 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 60ECE8B51BFC32F600D5B165 /* Project object */;
 }

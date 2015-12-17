@@ -7,10 +7,11 @@
 //
 
 import Foundation
+import CoreData
 
-// MARK: - StudentInformation
+// MARK: - StudentInformation: NSManagedObject
 
-struct StudentInformation {
+class StudentInformation: NSManagedObject {
     
     // MARK: Keys
     
@@ -20,7 +21,7 @@ struct StudentInformation {
         static let FirstName = "firstName"
         static let LastName = "lastName"
         static let MapString = "mapString"
-        static let MediaURL = "mediaURL"
+        static let MediaUrl = "mediaURL"
         static let Latitude = "latitude"
         static let Longitude = "longitude"
         static let CreatedAt = "createdAt"
@@ -29,20 +30,27 @@ struct StudentInformation {
     
     // MARK: Properties
     
-    var objectId = "" // StudentLocation object id on Parse
-    var uniqueKey = "" // Udacity account (user) id
-    var firstName = ""
-    var lastName = ""
-    var mapString = ""
-    var mediaURL = ""
-    var latitude = 0.0
-    var longitude = 0.0
-    var createdAt = NSDate()
-    var updatedAt = NSDate()
+    @NSManaged var objectId: String // StudentLocation object id on Parse
+    @NSManaged var uniqueKey: String // Udacity account (user) id
+    @NSManaged var firstName: String
+    @NSManaged var lastName: String
+    @NSManaged var mapString: String
+    @NSManaged var mediaUrl: String
+    @NSManaged var latitude: Double
+    @NSManaged var longitude: Double
+    @NSManaged var createdAt: NSDate
+    @NSManaged var updatedAt: NSDate
     
     // MARK: Initializers
     
-    init(dictionary: [String: AnyObject]) {
+    override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
+        super.init(entity: entity, insertIntoManagedObjectContext: context)
+    }
+    
+    init(dictionary: [String: AnyObject], context: NSManagedObjectContext) {
+        let entity = NSEntityDescription.entityForName("StudentInformation", inManagedObjectContext: context)!
+        super.init(entity: entity, insertIntoManagedObjectContext: context)
+        
         if let objectId = dictionary[Keys.ObjectId] as? String {
             self.objectId = objectId
         }
@@ -58,8 +66,8 @@ struct StudentInformation {
         if let mapString = dictionary[Keys.MapString] as? String {
             self.mapString = mapString
         }
-        if let mediaURL = dictionary[Keys.MediaURL] as? String {
-            self.mediaURL = mediaURL
+        if let mediaUrl = dictionary[Keys.MediaUrl] as? String {
+            self.mediaUrl = mediaUrl
         }
         if let latitude = dictionary[Keys.Latitude] as? Double {
             self.latitude = latitude
@@ -84,8 +92,9 @@ struct StudentInformation {
         var allStudentInformation = [StudentInformation]()
         
         for result in results {
-            allStudentInformation.append(StudentInformation(dictionary: result))
+            allStudentInformation.append(StudentInformation(dictionary: result, context: CoreDataStackManager.sharedInstance().managedObjectContext))
         }
+        CoreDataStackManager.sharedInstance().saveContext()
         
         return allStudentInformation
     }
@@ -99,7 +108,7 @@ struct StudentInformation {
             Keys.FirstName: firstName,
             Keys.LastName: lastName,
             Keys.MapString: mapString,
-            Keys.MediaURL: mediaURL,
+            Keys.MediaUrl: mediaUrl,
             Keys.Latitude: latitude,
             Keys.Longitude: longitude
         ]

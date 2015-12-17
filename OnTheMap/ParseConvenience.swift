@@ -58,7 +58,7 @@ extension ParseClient {
     
     // Function: postStudentInformation
     // Parameters:
-    // - informationDictionary: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaURL": "<mediaURL>", "latitude": "<latitude>", "longitude": "<longitude>"] (studentInformation.dictionary())
+    // - informationDictionary: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaUrl": "<mediaUrl>", "latitude": "<latitude>", "longitude": "<longitude>"] (studentInformation.dictionary())
     // - completionHandler
     //
     // POSTing a StudentInformation
@@ -78,7 +78,7 @@ extension ParseClient {
     
     // Function: updateStudentInformation
     // Parameters:
-    // - informationDictionary: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaURL": "<mediaURL>", "latitude": "<latitude>", "longitude": "<longitude>"] (studentInformation.dictionary())
+    // - informationDictionary: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaUrl": "<mediaUrl>", "latitude": "<latitude>", "longitude": "<longitude>"] (studentInformation.dictionary())
     // - completionHandler
     //
     // PUTting a StudentInformation
@@ -130,7 +130,7 @@ extension ParseClient {
                 return
             }
             
-            let studentInformation = StudentInformation(dictionary: results[0])
+            let studentInformation = StudentInformation(dictionary: results[0], context: CoreDataStackManager.sharedInstance().managedObjectContext)
             completionHandler(success: true, studentInformation: studentInformation, errorString: nil)
         }
     }

@@ -84,7 +84,7 @@ class InfomationPosterViewController: UIViewController {
     //
     // Check if user has entered some text
     // If so, 
-    // - save the text in myStudentInformation (as mediaURL)
+    // - save the text in myStudentInformation (as mediaUrl)
     // - submit myStudentInformation
     // If not, alert user
     // TODO: Check if the text is a valid URL string
@@ -92,7 +92,7 @@ class InfomationPosterViewController: UIViewController {
         if urlTextView.text == urlPlaceholderText {
             showAlert("Please enter a link.")
         } else {
-            studentInformation!.mediaURL = urlTextView.text
+            studentInformation!.mediaUrl = urlTextView.text
             
             submitStudentInformation()
         }
@@ -126,7 +126,7 @@ class InfomationPosterViewController: UIViewController {
     func initData() {
         if studentInformation == nil {
             hasPosted = false
-            studentInformation = StudentInformation(dictionary: [StudentInformation.Keys.UniqueKey: UdacityClient.sharedInstance().userID!])
+            studentInformation = StudentInformation(dictionary: [StudentInformation.Keys.UniqueKey: UdacityClient.sharedInstance().userID!], context: CoreDataStackManager.sharedInstance().managedObjectContext)
         } else {
             hasPosted = true
         }
