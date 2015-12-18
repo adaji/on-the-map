@@ -81,22 +81,26 @@ class StudentInformation: NSManagedObject {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         if let createdAtString = dictionary[Keys.CreatedAt] as? String {
             createdAt = dateFormatter.dateFromString(createdAtString)!
+        } else {
+            createdAt = NSDate()
         }
         if let updatedAtString = dictionary[Keys.UpdatedAt] as? String {
             updatedAt = dateFormatter.dateFromString(updatedAtString)!
+        } else {
+            updatedAt = NSDate()
         }
     }
     
     // Given an array of dictionaries, convert them to an array of StudentInformation objects
-    static func allStudentInformationFromResults(results: [[String: AnyObject]]) -> [StudentInformation] {
-        var allStudentInformation = [StudentInformation]()
+    static func studentInformationArrayFromDictionaries(dictionaries: [[String: AnyObject]]) -> [StudentInformation] {
+        var studentInformationArray = [StudentInformation]()
         
-        for result in results {
-            allStudentInformation.append(StudentInformation(dictionary: result, context: CoreDataStackManager.sharedInstance().managedObjectContext))
+        for dictionary in dictionaries {
+            studentInformationArray.append(StudentInformation(dictionary: dictionary, context: CoreDataStackManager.sharedInstance().managedObjectContext))
         }
         CoreDataStackManager.sharedInstance().saveContext()
         
-        return allStudentInformation
+        return studentInformationArray
     }
     
     // MARK: Convenient Methods

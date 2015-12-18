@@ -21,7 +21,6 @@ class CommonViewController: UIViewController, NSFetchedResultsControllerDelegate
         
     // Save/update user's student information every time it's queried, posted or updated
     var myStudentInformation: StudentInformation? = nil
-    var didSubmitStudentInformation: Bool = false
 
     // MARK: Life Cycle
     
@@ -44,7 +43,7 @@ class CommonViewController: UIViewController, NSFetchedResultsControllerDelegate
     
     // Configure the common navigation bar
     func configureNavigationBar() {
-        navigationItem.title = "On the Map"
+//        navigationItem.title = "On the Map"
         
         var logoutButtonItem: UIBarButtonItem
         if (UIApplication.sharedApplication().delegate as! AppDelegate).loggedInWithFB {
@@ -57,12 +56,50 @@ class CommonViewController: UIViewController, NSFetchedResultsControllerDelegate
         }
         navigationItem.leftBarButtonItem = logoutButtonItem
         
-        let postButtonItem = UIBarButtonItem(image: UIImage(named: "marker"), style: .Plain, target: self, action: "post:")
+        let searchButton = UIBarButtonItem(image: UIImage(named: "search"), style: .Plain, target: self, action: "search:")
         let refreshButtonItem = UIBarButtonItem(image: UIImage(named: "refresh"), style: .Plain, target: self, action: "refresh:")
-        navigationItem.rightBarButtonItems = [refreshButtonItem, postButtonItem]
+        let postButtonItem = UIBarButtonItem(image: UIImage(named: "marker"), style: .Plain, target: self, action: "post:")
+        navigationItem.rightBarButtonItems = [searchButton, refreshButtonItem, postButtonItem]
     }
     
     // MARK: Actions
+    
+    // Check if user has posted information before
+    // If so, ask user whether to overwrite
+    // If not, present post view controller
+    func post(sender: UIBarButtonItem) {
+        MBProgressHUD.hideAllHUDsForView(view, animated: true)
+        let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
+        
+        ParseClient.sharedInstance().queryForStudentInformation({ (success, studentInformationDictionary, errorString) -> Void in
+            dispatch_async(dispatch_get_main_queue(), {
+                hud.hide(true)
+            })
+            
+            if success {
+                let message = "User \"\(studentInformationDictionary![StudentInformation.Keys.FirstName] as! String) \(studentInformationDictionary![StudentInformation.Keys.LastName] as! String)\" has already posted a Student Location. Would you like to overwrite the location?"
+                let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                alertController.addAction(UIAlertAction(title: "Overwrite", style: .Default, handler: { (action) -> Void in
+                    let postVC = self.storyboard!.instantiateViewControllerWithIdentifier("InfomationPosterViewController") as! InfomationPosterViewController
+                    postVC.delegate = self
+                    postVC.studentInformationDictionary = studentInformationDictionary
+                    self.presentViewController(postVC, animated: true, completion: nil)
+                }))
+                alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+                
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.presentViewController(alertController, animated: true, completion: nil)
+                }
+
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    let postVC = self.storyboard!.instantiateViewControllerWithIdentifier("InfomationPosterViewController") as! InfomationPosterViewController
+                    postVC.delegate = self
+                    self.presentViewController(postVC, animated: true, completion: nil)
+                }
+            }
+        })
+    }
     
     func logout(sender: UIBarButtonItem) {
         MBProgressHUD.hideAllHUDsForView(view, animated: true)
@@ -78,39 +115,14 @@ class CommonViewController: UIViewController, NSFetchedResultsControllerDelegate
         }
     }
     
-    // Check if user has posted information before
-    // If so, ask user whether to overwrite
-    // If not, present post view controller
-    func post(sender: UIBarButtonItem) {
-        checkIfHasPosted { (hasPosted, errorString) -> Void in
-            if let errorString = errorString {
-                self.showAlert(errorString)
-            } else {
-                // If user has posted information before, ask user whether to overwrite
-                if hasPosted {
-                    let message = "User \"\(self.myStudentInformation!.fullName())\" has already posted a Student Location. Would you like to overwrite the location?"
-                    let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-                    alertController.addAction(UIAlertAction(title: "Overwrite", style: .Default, handler: { (action) -> Void in
-                        self.presentInfomationPosterViewController()
-                    }))
-                    alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
-                    
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        self.presentViewController(alertController, animated: true, completion: nil)
-                    })
-                } else {
-                    self.presentInfomationPosterViewController()
-                }
-            }
-        }
+    func refresh(sender: UIBarButtonItem) {
+        deleteAllStudentInformation()
+        fetchDataAndUpdateView()
     }
     
-    // Present post view controller
-    func presentInfomationPosterViewController() {
-        let postVC = self.storyboard!.instantiateViewControllerWithIdentifier("InfomationPosterViewController") as! InfomationPosterViewController
-        postVC.delegate = self
-        postVC.studentInformation = myStudentInformation
-        presentViewController(postVC, animated: true, completion: nil)
+    func search(sender: UIBarButtonItem) {
+        let searchVC = storyboard!.instantiateViewControllerWithIdentifier("SearchViewController") as! SearchViewController
+        presentViewController(searchVC, animated: true, completion: nil)
     }
     
     // MARK: Core Data Convenience
@@ -125,16 +137,11 @@ class CommonViewController: UIViewController, NSFetchedResultsControllerDelegate
     
     lazy var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: "StudentInformation")
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: StudentInformation.Keys.UpdatedAt, ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: StudentInformation.Keys.UpdatedAt, ascending: false)]
         return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.sharedContext, sectionNameKeyPath: nil, cacheName: nil)
     }()
     
     // MARK: Manipulate Data
-    
-    func refresh(sender: UIBarButtonItem) {
-        deleteAllStudentInformation()
-        fetchAndShowAllStudentInformation()
-    }
     
     func deleteAllStudentInformation() {
         for studentInformation in fetchedResultsController.fetchedObjects as! [StudentInformation] {
@@ -153,63 +160,56 @@ class CommonViewController: UIViewController, NSFetchedResultsControllerDelegate
 //        }
     }
     
-    func fetchAndShowAllStudentInformation() {
-        fetchAllStudentInformation { (success, errorString) -> Void in
+    // Fetch and show student information data
+    // TODO: Implement "load more" (skip > 0)
+    func fetchDataAndUpdateView() {
+        MBProgressHUD.hideAllHUDsForView(view, animated: true)
+        MBProgressHUD.showHUDAddedTo(view, animated: true)
+
+        ParseClient.sharedInstance().getStudentInformationData() { (success, studentInformationDictionaries, errorString) -> Void in
             if success {
-                self.showAllStudentInformation()
+                
+                // Create an array of StudentInformation instances from the dictionaries asynchronously
+                self.sharedContext.performBlock {
+                    let _ = studentInformationDictionaries!.map() {
+                        StudentInformation(dictionary: $0, context: self.sharedContext)
+                    }
+                    
+                    // Update view on the main thread
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.updateView()
+                    }
+                }
+
             } else {
                 self.showAlert(errorString)
             }
         }
     }
     
-    // Fetch all student information data
-    // TODO: Implement "load more" (skip > 0)
-    func fetchAllStudentInformation(completionHandler: (success: Bool, errorString: String?) -> Void) {
-        MBProgressHUD.hideAllHUDsForView(view, animated: true)
-        MBProgressHUD.showHUDAddedTo(view, animated: true)
-
-        ParseClient.sharedInstance().getAllStudentInformation() { (success, allStudentInformation, errorString) -> Void in
-            if success {
-                // Update student data saved in tab bar controller
-                
-                completionHandler(success: true, errorString: nil)
-            } else {
-                completionHandler(success: false, errorString: errorString)
-            }
-        }
-    }
-    
     // Check if user has posted information before
-    // - If user's information has not been saved in StudentInformation
-    // (as myStudentInformation), query for user's information
     func checkIfHasPosted(completionHandler: (hasPosted: Bool, errorString: String?) -> Void) {
-        if myStudentInformation != nil {
-            completionHandler(hasPosted: true, errorString: nil)
-        } else {
-            MBProgressHUD.hideAllHUDsForView(view, animated: true)
-            let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
-            
-            ParseClient.sharedInstance().queryForStudentInformation({ (success, studentInformation, errorString) -> Void in
-                dispatch_async(dispatch_get_main_queue(), {
-                    hud.hide(true)
-                })
-                
-                if success {
-                    self.myStudentInformation = studentInformation
-                    completionHandler(hasPosted: true, errorString: nil)
-                } else {
-                    completionHandler(hasPosted: false, errorString: errorString)
-                }
+        MBProgressHUD.hideAllHUDsForView(view, animated: true)
+        let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
+        
+        ParseClient.sharedInstance().queryForStudentInformation({ (success, studentInformationDictionary, errorString) -> Void in
+            dispatch_async(dispatch_get_main_queue(), {
+                hud.hide(true)
             })
-        }
+            
+            if success {
+                
+                completionHandler(hasPosted: true, errorString: nil)
+            } else {
+                completionHandler(hasPosted: false, errorString: errorString)
+            }
+        })
     }
     
     // Delete all saved data (student data, password, etc.) on logout
     func deleteAllData() {
         UdacityClient.sharedInstance().sessionID = nil
         UdacityClient.sharedInstance().userID = nil
-        myStudentInformation = nil
         deleteAllStudentInformation()
         // Delete password when logout
         let userDefaults = NSUserDefaults.standardUserDefaults()
@@ -220,7 +220,7 @@ class CommonViewController: UIViewController, NSFetchedResultsControllerDelegate
     // MARK: Show All Student Information
     
     // Implement in sub-classes
-    func showAllStudentInformation() {
+    func updateView() {
         
     }
     
@@ -241,25 +241,14 @@ class CommonViewController: UIViewController, NSFetchedResultsControllerDelegate
         }
     }
     
-    // Open URL with web view
-//    func openURL(urlString: String) {
-//        if let url = NSURL(string: urlString) {
-//            let webVC = storyboard!.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
-//            webVC.urlRequest = NSURLRequest(URL: url)
-//            navigationController!.pushViewController(webVC, animated: true)
-//        } else {
-//            showAlert("Invalid Link")
-//        }
-//    }
-    
     // Complete logout
     // - Clear saved data
     // - Show login view
     func completeLogout() {
-        dispatch_async(dispatch_get_main_queue(), {
+        dispatch_async(dispatch_get_main_queue()) {
             MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
             self.dismissViewControllerAnimated(true, completion: nil)
-        })
+        }
 
         deleteAllData()
     }
@@ -282,12 +271,12 @@ class CommonViewController: UIViewController, NSFetchedResultsControllerDelegate
 
 extension CommonViewController: InfomationPosterViewControllerDelegate {
     
-    // If user has just successfully submitted StudentInformation in InfomationPosterViewController,
-    // reload AllStudentInformation data when the view appears
-    func informationPoster(informationPoster: InfomationPosterViewController, didPostInformation information: StudentInformation?) {
-        if let submittedInformation = information {
-            myStudentInformation = submittedInformation
-            didSubmitStudentInformation = true
+    // If user has just successfully submitted student information in InfomationPosterViewController,
+    // create a new StudentInformation instance
+    func informationPoster(informationPoster: InfomationPosterViewController, didPostStudentInformationDictionary dictionary: [String: AnyObject]?) {
+        if let dictionary = dictionary {
+            let _ = StudentInformation(dictionary: dictionary, context: sharedContext)
+            saveContext()
         }
     }
     

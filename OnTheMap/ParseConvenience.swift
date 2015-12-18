@@ -12,60 +12,59 @@ import Foundation
 
 extension ParseClient {
     
-    // MARK: (All) Student Information
+    // MARK: Student Information Data
     
-    // Function: getAllStudentInformation
+    // Function: getStudentInformationDictionaries
     //
-    // GETting an array of StudentInformation
+    // GET an array of StudentInformation dictionaries
     // Optional parameters: ["limit": 100, "skip": 400, "order": -updatedAt]
-    func getAllStudentInformation(completionHandler: (success: Bool, allStudentInformation: [StudentInformation]?, errorString: String?) -> Void) {
+    func getStudentInformationData(completionHandler: (success: Bool, studentInformationDictionaries: [[String: AnyObject]]?, errorString: String?) -> Void) {
         let optionalParameters = [ParseClient.ParameterKeys.LimitKey: 100, ParseClient.ParameterKeys.SkipKey: 0, ParseClient.ParameterKeys.OrderKey: "-updatedAt"]
         startTaskForGETMethod(nil, parameters: optionalParameters) { (result, error) -> Void in
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
-                completionHandler(success: false, allStudentInformation: nil, errorString: "There was an error retrieving student data.")
+                completionHandler(success: false, studentInformationDictionaries: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             
             guard let result = result else {
                 print("No result returned.")
-                completionHandler(success: false, allStudentInformation: nil, errorString: "There was an error retrieving student data.")
+                completionHandler(success: false, studentInformationDictionaries: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             
-            guard let results = result[JSONResponseKeys.Results] as? [[String: AnyObject]] else {
+            guard let studentInformationDictionaries = result[JSONResponseKeys.Results] as? [[String: AnyObject]] else {
                 print("Could not find key \(JSONResponseKeys.Results) in \(result)")
-                completionHandler(success: false, allStudentInformation: nil, errorString: "There was an error retrieving student data.")
+                completionHandler(success: false, studentInformationDictionaries: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             
-            let allStudentInformation = StudentInformation.allStudentInformationFromResults(results)
-            completionHandler(success: true, allStudentInformation: allStudentInformation, errorString: nil)
+            completionHandler(success: true, studentInformationDictionaries: studentInformationDictionaries, errorString: nil)
         }
     }
     
     // Submit StudentInformation
     // If user has posted information before, update the information
     // If not, post it
-    func submitStudentInformation(objectId: String, informationDictionary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
-        if objectId.isEmpty {
-            postStudentInformation(informationDictionary, completionHandler: completionHandler)
+    func submitStudentInformation(update: Bool, dictionary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
+        if update {
+            updateStudentInformation(dictionary, completionHandler: completionHandler)
         }
         else {
-            updateStudentInformation(objectId, informationDicationary: informationDictionary, completionHandler: completionHandler)
+            postStudentInformation(dictionary, completionHandler: completionHandler)
         }
     }
     
     // Function: postStudentInformation
     // Parameters:
-    // - informationDictionary: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaUrl": "<mediaUrl>", "latitude": "<latitude>", "longitude": "<longitude>"] (studentInformation.dictionary())
+    // - dictionary: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaUrl": "<mediaUrl>", "latitude": "<latitude>", "longitude": "<longitude>"] (studentInformation.dictionary())
     // - completionHandler
     //
-    // POSTing a StudentInformation
+    // POST a StudentInformation
     // Required parameters (in HTTPBody): parameters
     //
-    func postStudentInformation(informationDictionary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
-        startTaskForPOSTMethod(informationDictionary) { (result, error) -> Void in
+    func postStudentInformation(dictionary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
+        startTaskForPOSTMethod(dictionary) { (result, error) -> Void in
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
                 completionHandler(success: false, errorString: "There was an error posting student data.")
@@ -78,15 +77,15 @@ extension ParseClient {
     
     // Function: updateStudentInformation
     // Parameters:
-    // - informationDictionary: ["uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaUrl": "<mediaUrl>", "latitude": "<latitude>", "longitude": "<longitude>"] (studentInformation.dictionary())
+    // - dictionary: ["objectId": "<objectId>", "uniqueKey": "<uniqueKey>", "firstName": "<firstName>", "lastName": "<lastName>", "mapString": "<mapString>", "mediaUrl": "<mediaUrl>", "latitude": "<latitude>", "longitude": "<longitude>"] (studentInformation.dictionary())
     // - completionHandler
     //
-    // PUTting a StudentInformation
+    // PUT a StudentInformation
     // Required parameters (in HTTPBody): parameters
     //
-    func updateStudentInformation(objectId: String, informationDicationary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
-        let method = substituteKeyInMethod(Methods.UpdateStudentInformation, key: URLKeys.ObjectId, value: objectId)
-        startTaskForPUTMethod(method, jsonBody: informationDicationary) { (result, error) -> Void in
+    func updateStudentInformation(dictionary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
+        let method = substituteKeyInMethod(Methods.UpdateStudentInformation, key: URLKeys.ObjectId, value: dictionary[StudentInformation.Keys.ObjectId] as! String)
+        startTaskForPUTMethod(method, jsonBody: dictionary) { (result, error) -> Void in
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
                 completionHandler(success: false, errorString: "There was an error updating student data.")
@@ -106,33 +105,46 @@ extension ParseClient {
     
     // Function: queryForStudentInformation
     //
-    // Querying for a StudentInformation
+    // Query for (GET) a StudentInformation
     // Required parameters: [where: "\"uniqueKey\":\"<uniqueKey>\""]
     //
-    func queryForStudentInformation(completionHandler: (success: Bool, studentInformation: StudentInformation?, errorString: String?) -> Void) {
+    func queryForStudentInformation(completionHandler: (success: Bool, studentInformationDictionary: [String: AnyObject]?, errorString: String?) -> Void) {
         let parameters = [ParseClient.ParameterKeys.WhereKey: "{\"\(ParseClient.ParameterKeys.UniqueKey)\":\"\(UdacityClient.sharedInstance().userID!)\"}"]
         startTaskForGETMethod(nil, parameters: parameters) { (result, error) -> Void in
             guard error == nil else {
                 print("There was an error processing request. Error: \(error)")
-                completionHandler(success: false, studentInformation: nil, errorString: "There was an error retrieving student data.")
+                completionHandler(success: false, studentInformationDictionary: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             
             guard let result = result else {
                 print("No result returned.")
-                completionHandler(success: false, studentInformation: nil, errorString: "There was an error retrieving student data.")
+                completionHandler(success: false, studentInformationDictionary: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             
             guard let results = result[JSONResponseKeys.Results] as? [[String: AnyObject]] else {
                 print("Could not find key \(JSONResponseKeys.Results) in \(result).")
-                completionHandler(success: false, studentInformation: nil, errorString: "There was an error retrieving student data.")
+                completionHandler(success: false, studentInformationDictionary: nil, errorString: "There was an error retrieving student data.")
                 return
             }
             
-            let studentInformation = StudentInformation(dictionary: results[0], context: CoreDataStackManager.sharedInstance().managedObjectContext)
-            completionHandler(success: true, studentInformation: studentInformation, errorString: nil)
+            completionHandler(success: true, studentInformationDictionary: results[0], errorString: nil)
         }
+    }
+    
+    // Function: searchForStudentInformation
+    //
+    // Search for an array of StudentInformation
+    // Required parameters:
+    // - ?
+    //
+    // TODO: To implement
+    // Need search API
+    func searchForStudentInformationData(completeHandler: (success: Bool, studentInformationDictionaries: [[String: AnyObject]]?, errorString: String?) -> Void) -> NSURLSessionDataTask {
+        return startTaskForGETMethod("", parameters: [String: AnyObject](), completionHandler: { (result, error) -> Void in
+            // Handle search result
+        })
     }
     
     // MARK: Helper Functions

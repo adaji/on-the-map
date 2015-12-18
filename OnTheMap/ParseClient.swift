@@ -25,12 +25,12 @@ class ParseClient: NSObject {
     
     // MARK: Tasks for HTTP Methods
     
-    func startTaskForGETMethod(method: String?, parameters: [String: AnyObject]?, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
+    func startTaskForGETMethod(method: String?, parameters: [String: AnyObject]?, completionHandler: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
         let request = NSMutableURLRequest(URL: NSURL(string: getUrlString(method, parameters: parameters))!)
         request.addValue(ParseClient.Constants.AppID, forHTTPHeaderField: ParseClient.HTTPHeaderKeys.ParseAppIdKey)
         request.addValue(ParseClient.Constants.APIKey, forHTTPHeaderField: ParseClient.HTTPHeaderKeys.ParseAPIKey)
         
-        startTaskForHTTPMethod(request, completionHandler: completionHandler)
+        return startTaskForHTTPMethod(request, completionHandler: completionHandler)
     }
     
     func startTaskForPOSTMethod(jsonBody: [String: AnyObject], completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
@@ -57,7 +57,7 @@ class ParseClient: NSObject {
         startTaskForHTTPMethod(request, completionHandler: completionHandler)
     }
     
-    func startTaskForHTTPMethod(request: NSURLRequest, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
+    func startTaskForHTTPMethod(request: NSURLRequest, completionHandler: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
         let task = session.dataTaskWithRequest(request) { data, response, error in
             guard error == nil else {
                 completionHandler(result: nil, error: error)
@@ -75,6 +75,8 @@ class ParseClient: NSObject {
         }
         
         task.resume()
+        
+        return task
     }
     
     // MARK: Helper Functions

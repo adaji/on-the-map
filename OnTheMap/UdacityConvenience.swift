@@ -100,7 +100,6 @@ extension UdacityClient {
     // GETting Public User Data
     // Method: users/<userId>
     //
-    // TODO: Find its usage
     func getUserDictionary(userId: String, completionHandler: (success: Bool, userDictionary: [String: AnyObject]?, errorString: String?) -> Void) {
         let method = substituteKeyInMethod(Methods.UserData, key: URLKeys.UserId, value: userId)
         startTaskForGETMethod(method, parameters: nil) { (result, error) -> Void in
@@ -122,7 +121,6 @@ extension UdacityClient {
                 return
             }
             
-            print("user dictionary: \(user)")
             completionHandler(success: true, userDictionary: user, errorString: nil)
         }
     }

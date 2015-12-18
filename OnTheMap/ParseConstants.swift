@@ -44,7 +44,7 @@ extension ParseClient {
     }
     
     struct JSONResponseKeys {
-        // (All) Student Information
+        // Student Information data
         static let Results = "results"
     }
     

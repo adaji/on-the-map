@@ -24,7 +24,7 @@ class ListViewController: CommonViewController {
         super.viewWillAppear(animated)
         
         if fetchedResultsController.fetchedObjects!.isEmpty {
-            fetchAndShowAllStudentInformation()
+            fetchDataAndUpdateView()
         }
     }
     
@@ -34,7 +34,7 @@ class ListViewController: CommonViewController {
     //
     // Note: implement this method here to avoid re-implementing the refresh method
     // which is extracted in the CommonViewController and uses this method which cannot be extracted
-    override func showAllStudentInformation() {
+    override func updateView() {
         dispatch_async(dispatch_get_main_queue(), {
             self.tableView.reloadData()
             MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
@@ -101,9 +101,7 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     // MARK: UITableViewDataSource
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let nRows = fetchedResultsController.sections![section].numberOfObjects
-        print("number of rows: \(nRows)")
-        return nRows
+        return fetchedResultsController.sections![section].numberOfObjects
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {

@@ -26,21 +26,20 @@ class MapViewController: CommonViewController {
         super.viewWillAppear(animated)
         
         if fetchedResultsController.fetchedObjects!.isEmpty {
-            fetchAndShowAllStudentInformation()
-        } else if mapView.annotations.isEmpty {
-            showAllStudentInformation()
+            fetchDataAndUpdateView()
+        } else {
+            // Note: map view doesn't update automatically
+            updateView()
         }
     }
     
-//    func r
+    // MARK: Update View (Override)
     
-    // MARK: Show All Student Information (Override)
-    
-    // Show all student information on map
+    // Show student information data on map
     //
     // Note: implement this method here to avoid re-implementing the refresh method
     // which is extracted in the CommonViewController and uses this method which cannot be extracted
-    override func showAllStudentInformation() {
+    override func updateView() {
         var annotations = [MKPointAnnotation]()
         
         for studentInformation in self.fetchedResultsController.fetchedObjects as! [StudentInformation] {

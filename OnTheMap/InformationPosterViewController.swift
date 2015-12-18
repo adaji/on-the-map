@@ -13,7 +13,7 @@ import MBProgressHUD
 // MARK: - InfomationPosterViewControllerDelegate
 
 protocol InfomationPosterViewControllerDelegate {
-    func informationPoster(informationPoster: InfomationPosterViewController, didPostInformation information: StudentInformation?)
+    func informationPoster(informationPoster: InfomationPosterViewController, didPostStudentInformationDictionary dictionary: [String: AnyObject]?)
 }
 
 // MARK: - InfomationPosterViewController: UIViewController
@@ -40,12 +40,61 @@ class InfomationPosterViewController: UIViewController {
     
     var delegate: InfomationPosterViewControllerDelegate?
     
-    var hasPosted: Bool = false // Whether user has posted information before
-    var studentInformation: StudentInformation? = nil
+    var studentInformationDictionary: [String: AnyObject]? = nil
+    var update: Bool = false
     
     let locationPlaceholderText = "Enter Your Location Here"
     let urlPlaceholderText = "Enter a Link to Share Here"
     let lightGrayColor = UIColor(red: 217/255.0, green: 217/255.0, blue: 213/255.0, alpha: 1)
+    
+    // MARK: Life Cycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        configureUI()
+        
+        initData()
+        
+        tapRecognizer = UITapGestureRecognizer(target: self, action: "handleSingleTap:")
+        tapRecognizer?.numberOfTapsRequired = 1
+        
+        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .White)
+        activityIndicator!.center = view.center
+    }
+    
+    func initData() {
+        if studentInformationDictionary == nil {
+            update = false
+            
+            // Initialize studentInformationDictionary
+            studentInformationDictionary = [StudentInformation.Keys.UniqueKey: UdacityClient.sharedInstance().userID!]
+            UdacityClient.sharedInstance().getUserDictionary(UdacityClient.sharedInstance().userID!, completionHandler: { (success, userDictionary, errorString) -> Void in
+                if success {
+                    self.studentInformationDictionary![StudentInformation.Keys.FirstName] = userDictionary![UdacityClient.JSONResponseKeys.FirstName] as! String
+                    self.studentInformationDictionary![StudentInformation.Keys.LastName] = userDictionary![UdacityClient.JSONResponseKeys.LastName] as! String
+                } else {
+                    self.showAlert("Unable to fetch user data")
+                }
+            })
+        } else {
+            update = true
+        }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        configureUIForEnteringLocation()
+        
+        addKeyboardDismissRecognizer()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        removeKeyboardDismissRecognizer()
+    }
     
     // MARK: Actions
     
@@ -68,9 +117,9 @@ class InfomationPosterViewController: UIViewController {
                         })
                         
                         let coordinates = placemark.location!.coordinate
-                        self.studentInformation!.latitude = coordinates.latitude
-                        self.studentInformation!.longitude = coordinates.longitude
-                        self.studentInformation!.mapString = self.locationTextView.text
+                        self.studentInformationDictionary![StudentInformation.Keys.Latitude] = coordinates.latitude
+                        self.studentInformationDictionary![StudentInformation.Keys.Longitude] = coordinates.longitude
+                        self.studentInformationDictionary![StudentInformation.Keys.MapString] = self.locationTextView.text
                     }
                 } else {
                     self.showAlert("Could not find the location.")
@@ -92,58 +141,16 @@ class InfomationPosterViewController: UIViewController {
         if urlTextView.text == urlPlaceholderText {
             showAlert("Please enter a link.")
         } else {
-            studentInformation!.mediaUrl = urlTextView.text
+            studentInformationDictionary![StudentInformation.Keys.MediaUrl] = urlTextView.text
             
             submitStudentInformation()
         }
     }
     
     @IBAction func cancelButtonTouchUp(sender: UIButton) {
-        delegate?.informationPoster(self, didPostInformation: nil)
+        delegate?.informationPoster(self, didPostStudentInformationDictionary: nil)
         view.endEditing(true)
         dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    // MARK: Life Cycle
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        configureUI()
-
-        initData()
-        
-        tapRecognizer = UITapGestureRecognizer(target: self, action: "handleSingleTap:")
-        tapRecognizer?.numberOfTapsRequired = 1
-        
-        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .White)
-        activityIndicator!.center = view.center
-    }
-    
-    // Initialize data (myStudentInformation, hasPosted)
-    // If user's student information has been saved locally, set myStudentInformation to this information
-    // If not, create a new StudentInformation with user's Udacity account (user) id
-    func initData() {
-        if studentInformation == nil {
-            hasPosted = false
-            studentInformation = StudentInformation(dictionary: [StudentInformation.Keys.UniqueKey: UdacityClient.sharedInstance().userID!], context: CoreDataStackManager.sharedInstance().managedObjectContext)
-        } else {
-            hasPosted = true
-        }
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        configureUIForEnteringLocation()
-        
-        addKeyboardDismissRecognizer()
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        removeKeyboardDismissRecognizer()
     }
     
     // MARK: Configure UI
@@ -235,23 +242,22 @@ class InfomationPosterViewController: UIViewController {
     func submitStudentInformation() {
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
         
-        let informationDictionary = studentInformation!.dictionary()
-        ParseClient.sharedInstance().submitStudentInformation(studentInformation!.objectId, informationDictionary: informationDictionary) { (success, errorString) -> Void in
+        ParseClient.sharedInstance().submitStudentInformation(update, dictionary: studentInformationDictionary!) { (success, errorString) -> Void in
             if success {
-                self.delegate?.informationPoster(self, didPostInformation: self.studentInformation)
+                self.delegate?.informationPoster(self, didPostStudentInformationDictionary: self.studentInformationDictionary)
                 
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                dispatch_async(dispatch_get_main_queue()) {
                     hud.hide(true)
                     self.dismissViewControllerAnimated(true, completion: nil)
-                })
+                }
                 
-                print("Update Location Succeed.")
+                print("Submit Location Succeed.")
             }
             else {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                dispatch_async(dispatch_get_main_queue()) {
                     hud.hide(true)
                     self.showAlert(errorString)
-                })
+                }
                 
                 print(errorString)
             }
