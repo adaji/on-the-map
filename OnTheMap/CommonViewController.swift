@@ -16,12 +16,7 @@ import FBSDKLoginKit
 // Extract common navigation bar for MapViewController and ListViewController
 
 class CommonViewController: UIViewController, NSFetchedResultsControllerDelegate {
-    
-    // MARK: Properties
-        
-    // Save/update user's student information every time it's queried, posted or updated
-    var myStudentInformation: StudentInformation? = nil
-
+            
     // MARK: Life Cycle
     
     override func viewDidLoad() {

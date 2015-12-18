@@ -102,7 +102,7 @@ class InfomationPosterViewController: UIViewController {
     //
     // Check if user has entered a valid location
     // If so,
-    // - save latitude and longitude of the location in myStudentInformation
+    // - save latitude, longitude and map string
     // - configure UI for entering URL and submitting StudentInformation
     // If not, alert user
     @IBAction func findButtonTouchUp(sender: UIButton) {
@@ -133,8 +133,8 @@ class InfomationPosterViewController: UIViewController {
     //
     // Check if user has entered some text
     // If so, 
-    // - save the text in myStudentInformation (as mediaUrl)
-    // - submit myStudentInformation
+    // - save mediaUrl
+    // - submit StudentInformation
     // If not, alert user
     // TODO: Check if the text is a valid URL string
     @IBAction func submitButtonTouchUp(sender: UIButton) {
@@ -232,13 +232,8 @@ class InfomationPosterViewController: UIViewController {
         })
     }
     
-    // MARK: Submit StudentInformation
+    // MARK: Submit Student Information
     
-    // Submit myStudentInformation
-    // If user has posted location before, update the location
-    // If not, post it (as a new StudentInformation object)
-    //
-    // If submission succeeds, update myStudentInformation stored in UdacityClient
     func submitStudentInformation() {
         let hud = MBProgressHUD.showHUDAddedTo(view, animated: true)
         

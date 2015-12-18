@@ -43,7 +43,7 @@ extension ParseClient {
         }
     }
     
-    // Submit StudentInformation
+    // Submit student information
     // If user has posted information before, update the information
     // If not, post it
     func submitStudentInformation(update: Bool, dictionary: [String: AnyObject], completionHandler: (success: Bool, errorString: String?) -> Void) {
